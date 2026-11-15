@@ -47,7 +47,7 @@ Read these when you reach the situation, not before:
 - feature newer than the Python target: `workflow/checking-apis-and-python-versions.md`; docstring, comment: `code/minimalism-reuse-names.md`; logging: `code/errors-validation-logging.md` (last section); script or CLI: `code/scripts-and-cli.md`
 - data frames, arrays, models, notebooks, large files: `code/dataframes-arrays-large-files.md`; threads, processes, pools: `code/threads-processes-pools.md`; slow code: `performance/performance-profiling.md`
 - scope: `workflow/planning-scope-and-shipping.md`; restructuring: `workflow/refactoring.md`; unsure API: `workflow/checking-apis-and-python-versions.md`; about to report: `workflow/planning-scope-and-shipping.md` (last section)
-- pattern, layers: `architecture/design-patterns-and-layers.md`; data structure or algorithm: `architecture/data-structure-and-algorithm-fit.md` (worked examples at its end); design under real limits, `unsafe`: `architecture/design-under-real-limits.md`; habits from systems projects (fault injection, shared-nothing, narrow ABIs, subtracting surface): `architecture/systems-project-lessons.md`
+- pattern, layers: `architecture/design-patterns-and-layers.md`; data structure or algorithm: `architecture/data-structure-and-algorithm-fit.md`; design under real limits, `unsafe`: `architecture/design-under-real-limits.md`; habits from systems projects (fault injection, shared-nothing, narrow ABIs, subtracting surface): `architecture/systems-project-lessons.md`
 
 By kind of project (`project-kind-detection.md` names it; read only the line for the kind, and the `-smells.md` page of that kind (`library-smells.md`, `native-smells.md`, `service-smells.md`) before finishing):
 
