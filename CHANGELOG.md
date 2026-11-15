@@ -14,6 +14,7 @@
 - `tabby-debt` skill (user-invoked, `/tabby:debt`): `scripts/shortcuts.py` lists every `# shortcut: <limit>, <trigger>` comment as a ledger and flags the ones with no trigger; `--check` exits 1 for CI.
 - Intensity modes for the hooks: `full`, `lite` (core rules and diff check only) and `off`, set with `TABBY_MODE` or `.claude/tabby.json`.
 - `detect.py` notices a monorepo, lists the nested Python projects and nested AGENTS.md files; the `tabby` skill says the nearest AGENTS.md wins and a package section holds only what differs.
+- `tools/install.py` writes the read-only `tabby-reviewer` agent for the claude, opencode and github targets (`--no-agent` skips it). The OpenCode and Copilot file formats follow their public docs and have not been run.
 
 ## 0.1.0
 
