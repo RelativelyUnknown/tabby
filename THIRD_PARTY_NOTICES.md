@@ -16,7 +16,6 @@ The rest of this repository is MIT (see `LICENSE`).
 | `python-type-safety` | `tabby/development/code/type-annotations.md` |
 | `uv-package-manager` | `tabby/development/dependencies/uv-workflows-ci-docker.md` |
 | `async-python-patterns` | `tabby/development/application/shared/async-io-and-patterns.md` |
-| `python-background-jobs` | `tabby/development/application/workers/background-jobs-and-queues.md` |
 | `python-observability` | `tabby/development/application/shared/logging-metrics-tracing.md` |
 | `python-configuration` | `tabby/development/application/shared/settings-and-secrets.md` |
 | `python-resilience` | `tabby/development/application/shared/retries-timeouts-circuit-breakers.md` |

@@ -18,4 +18,4 @@ Choose by what the work waits on, then keep the shared state small. `asyncio` ha
 - Do not fork a process that already holds threads or open connections (database, HTTP clients, locks); create them after the fork, in each worker's initializer. Use `multiprocessing.get_context("spawn")` when unsure.
 - Daemon threads are killed at exit mid-write; give a thread you started a way to stop and `join()` it. A `with` block on the executor waits for everything on exit.
 - Test the concurrent code path: with the pool size at 1 for determinism, and at least once with several workers and a barrier or a deliberately slow task to expose ordering assumptions. Do not use `sleep` to order events.
-- A queue with consumers and retries is a worker system, not a pool: see [background-jobs-and-queues.md](../application/workers/background-jobs-and-queues.md).
+- A queue with consumers and retries is a worker system, not a pool: delivery is at least once, so tasks are idempotent ([service-smells.md](../application/service-smells.md)).

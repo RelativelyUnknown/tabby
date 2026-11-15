@@ -5,7 +5,7 @@ Read once per project. Save the matching paths, comma-separated, as `kind:` in t
 - `[project]` with a build backend and `src/`; others import it: `library/shared`
 - `[project]` plus `Cargo.toml` (maturin), `ext_modules`, `CMakeLists.txt`, `meson.build` or `.pyx` files: `library/native`
 - FastAPI, Django REST, Flask JSON or similar HTTP service: `application/apis/http`
-- A queue client, worker or scheduler: `application/workers`
+- A queue client, worker or scheduler: `application/service-smells.md` and `application/shared/retries-timeouts-circuit-breakers.md`
 - Async handlers, caches, other service code: `application/shared`
 - A question about boundaries, patterns, layers or extension points: `architecture`
 - Anything else, or unsure: `code`

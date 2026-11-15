@@ -54,7 +54,7 @@ By kind of project (`project-kind-detection.md` names it; read only the line for
 - **library** others import: `library/library-smells.md`, `library/shared/public-api-design.md` for any public name, `package-layout-and-versioning.md` (also layout, entry points, versioning), `build-and-lint-tooling.md`, `release-process.md` (all in `library/shared/`; templates in `development/assets/`)
 - **native extension** (Rust, C, C++ or Zig behind Python): `library/native/native-overview.md`, then only the language page the task touches, `native-extension-architecture.md` to decide whether and where, `native-porting-a-function.md` to move a function, `native-ci-wheels.md` for wheels, `smells.md` before finishing
 - **HTTP service**: `application/service-smells.md`, `application/apis/http/http-service-design.md`, then `fastapi-services.md` or `django-services.md`; `application/apis/shared/api-security-owasp.md`; `application/shared/` for `async-io-and-patterns.md`, `settings-and-secrets.md`, `logging-metrics-tracing.md`, `database-and-migrations.md`, `deployment-and-containers.md`, `retries-timeouts-circuit-breakers.md` (retries, timeouts, circuit breakers)
-- **worker or scheduler**: `application/workers/background-jobs-and-queues.md` (with its patterns), and `application/shared/retries-timeouts-circuit-breakers.md`
+- **worker or scheduler**: `application/service-smells.md` and `application/shared/retries-timeouts-circuit-breakers.md`
 
 ## Other Tabby skills
 

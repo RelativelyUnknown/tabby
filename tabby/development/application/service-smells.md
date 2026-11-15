@@ -17,6 +17,7 @@ Read when the code is async, serves requests, caches data, runs background work,
 - Check-then-act across an `await` (`if key not in cache: value = await load(); cache[key] = value`): another task can enter between the two. Make it atomic at the authoritative store, or coalesce per key. Add a lock only to protect a real invariant.
 - An `asyncio.Lock` coordinates tasks in one loop, not threads or workers: enforce cross-worker invariants in the database.
 - Do not hold a lock across a remote call; scope it to the resource.
+- A job enqueued inside the transaction that writes the data it reads (a fast worker runs before the commit) → enqueue after the commit (`transaction.on_commit` in Django, or an outbox row written in the same transaction); pass ids, not model instances, so the task reads current state
 - A retry that repeats a charge, order or email needs an idempotency key: claim it atomically, store and replay the outcome, bound the retries, back off with jitter, and retry at one layer only.
 - Work the API calls "accepted" must survive a restart: use a durable queue or job table. An in-process task suits best-effort work only.
 - One deadline per request: pass the remaining budget to each downstream call, measured with a monotonic clock.

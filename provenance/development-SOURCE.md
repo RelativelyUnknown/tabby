@@ -18,7 +18,6 @@ Paths below are under `development/`.
 | `application/shared/settings-and-secrets.md` | `python-configuration` |
 | `application/shared/retries-timeouts-circuit-breakers.md` | `python-resilience` |
 | `application/shared/async-io-and-patterns.md` | `async-python-patterns` |
-| `application/workers/background-jobs-and-queues.md` | `python-background-jobs` |
 
 ## What changed
 
