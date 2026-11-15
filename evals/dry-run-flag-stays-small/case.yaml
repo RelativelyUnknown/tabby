@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: dry-run-flag-stays-small
+expected_outcome: |
+  Adds --dry-run with a small change to the existing CLI: no new class, no new module, nothing deleted in dry-run.
+context:
+  scaffold_script: fixture.sh

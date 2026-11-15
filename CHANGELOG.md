@@ -7,7 +7,7 @@
 - Skill descriptions no longer say "MUST be your first tool call"; `interview` is user-invoked only; the optional reminder hook is removed.
 - `tabby` reads reference pages when the task touches an area, not all before the first edit; new `code/shortcut-examples.md` with before and after pairs.
 - `detect.py` reports house rules (ruff families, type-checker and pytest strictness, python floor, `src/` layout) and existing helper modules.
-- Four new headroom eval cases; `summarise.py` separates ceiling cases and prints a bootstrap interval and the regression list.
+- Five new headroom eval cases, four with hidden tests; `summarise.py` separates ceiling cases and prints a bootstrap interval and the regression list; `quality.py` counts tests weakened; `judge.py` scores testable structure; `make_arms.py` builds ablation arms.
 
 ## 0.1.0
 
