@@ -29,7 +29,7 @@ A test is evidence about behaviour. Ask of any test: if the behaviour broke, wou
 ## Rigor levels (`rigor`, default `full`)
 
 - `lite`: The rules above. Nothing else is required.
-- `full`: Everything in "Full" below, and read [mocking.md](mocking.md) and [fixtures.md](fixtures.md).
+- `full`: Everything in "Full" below, and read [mocking.md](mocking.md).
 - `ultra`: `full`, plus read [rigor.md](rigor.md) (property-based tests, mutation testing, release gates) and apply it. Their examples use `uv`; with another runner, use its equivalents.
 
 ## Full
@@ -44,3 +44,33 @@ A test is evidence about behaviour. Ask of any test: if the behaviour broke, wou
 ## Report
 
 Say which tests you added, changed or removed (with the reason for each change or removal), the commands you ran with their results, and anything you noticed and left alone.
+
+## Fixtures
+
+A fixture should make a test easier to read, not hide what it depends on. Ask: can a reader see what state this test starts from? Keep scope and sharing as small as the cost allows, so one test cannot change another's outcome.
+
+- Smallest scope that works: the default `function` scope. Widen to `module` or `session` only for something expensive and read-only.
+- Shared fixtures live in the `conftest.py` nearest to their users. A fixture used by one file stays in that file.
+- Yield for cleanup:
+
+```python
+@pytest.fixture
+def db(tmp_path):
+    conn = connect(tmp_path / "test.db")
+    yield conn
+    conn.close()
+```
+
+- Factory fixtures build variations without one fixture per case:
+
+```python
+@pytest.fixture
+def make_user():
+    def make(name="ada", *, admin=False):
+        return User(name=name, admin=admin)
+    return make
+```
+
+- No `autouse=True` fixture that changes behavior the test does not mention. Autouse is acceptable for isolation only (for example, clearing an environment variable).
+- Parametrize inputs, not setup: if every case needs different setup, they are different tests.
+- A fixture that returns a value the test never uses should be `@pytest.mark.usefixtures("name")`.

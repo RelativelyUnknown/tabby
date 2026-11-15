@@ -9,3 +9,19 @@ Planning is cheap compared with undoing a wrong change. Ask: what is the smalles
 - Prefix commands with the project's `runner`. Keep the project's existing tools (poetry, black, pyright, ...); never add a second tool for the same job. Never install a tool or dependency silently.
 - **Stop and report** instead of working around a problem when a test contradicts the spec or task; the task cannot be done properly with the code and dependencies available; the fix needs a new dependency, a public API change or a deleted file; or you catch yourself justifying test-specific behavior with a reason like "backward compatibility".
 - Do not commit, push or run destructive commands (`git reset --hard`, `rm -rf`, force-push, dropping tables) unless asked. Never skip hooks with `--no-verify`. Deleting data or files, dropping columns, changing a public API or irreversible migrations need approval first.
+
+## Shipping and reporting
+
+Done means the real problem is solved, verified by running the code, and explainable. Passing tests are evidence, not the goal. Before you report done (for a multi-part request, run the gates from `workflow/gates.md` first): run the full suite and the project's check command, list every new dependency and every changed or removed test, and check the diff once for anything you did not mean to change (an unrelated edit, a scratch file, a leftover print). Write against [smells.md](../code/smells.md) as you go; do not rely on a cleanup pass.
+
+### Report (`report`, default `normal`)
+
+Plain and factual. No "production-ready", "robust" or "comprehensive", no celebration, no emojis. Show the exact command and its real output; separate what you verified from what should work.
+
+- `terse`: Verdict, commands run with pass/fail counts, deviations. At most 10 lines. A new dependency, a changed or removed test, or a stopped task always counts as a deviation.
+- `normal`: What changed and why, commands with real output, verified vs unverified, every new dependency, every test changed or removed with the reason.
+- `audit`: `normal`, plus every shortcut, assumption, skipped check and known limitation (or "none"), everything noticed and left alone, and any rule conflict and which rule won.
+
+### When short is wrong
+
+Short means no filler, never a missing fact. Write full sentences for: a security warning, an action that cannot be undone (confirm before doing it), steps whose order matters, a question you ask the user, and anything a reader repeats back as not understood. Quote an error by its one decisive line, exactly. Text that outlives the conversation (comments, commits, docs, issues) follows the `documentation` module, not the reply style.

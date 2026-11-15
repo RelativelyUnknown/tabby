@@ -62,6 +62,6 @@ List the `# shortcut:` comments the change adds or touches (`git grep -nE "# ?sh
 
 Number the findings, ordered by severity, so the author can answer "fix 2 and 5". For each: `file:line`, what is wrong, the input or situation where it fails, and the smallest fix. Then one line: `Checked, no findings: <areas>`. End with a verdict: `request changes` or `no findings`.
 
-A diff with no findings: the verdict plus the `Checked` line, nothing more (at most 10 lines). Format the final report as the `report` default asks (`terse`, `normal`, `audit`; see `development/workflow/shipping.md`).
+A diff with no findings: the verdict plus the `Checked` line, nothing more (at most 10 lines). Format the final report as the `report` default asks (`terse`, `normal`, `audit`; see `development/workflow/planning.md`).
 
 Where the guidance says to decline findings, say once why you declined, so the author does not wonder whether it was missed.

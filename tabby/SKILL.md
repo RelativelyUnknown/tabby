@@ -38,23 +38,23 @@ Open leaves with Read at the path given; do not search for them. A one-line fix,
 - raises, catches or retries an error: `code/errors.md` (also input validation); adds annotations: `code/typing.md`
 - Rust, C, C++ or Zig behind a Python API, including moving a function into one: `library/native/index.md`, then the language page it names (`rust.md`, `c.md`, `cpp.md`, `zig.md`), and `library/native/porting.md` to move a function
 - opens files, connections, locks, subprocesses or streams: `code/resources.md`
-- writes or changes tests: `testing/testing.md`, `testing/smells.md`; with mocks `testing/mocking.md`, fixtures `testing/fixtures.md`, property-based or release-grade `testing/rigor.md`
+- writes or changes tests: `testing/testing.md`, `testing/smells.md`; with mocks `testing/mocking.md`, fixtures (in `testing/testing.md`), property-based or release-grade `testing/rigor.md`
 - three or more outcomes, or "all"/"every": `workflow/gates.md` (a short list, then start); several readings: `workflow/specs-and-slices.md`
 - removes or replaces something: `workflow/deprecation-and-migration.md`
 
 Read these when you reach the situation, not before:
 
-- feature newer than the Python target: `code/python-versions.md`; docstring, comment: `code/minimalism.md`; logging: `code/logging.md`; script or CLI: `code/scripts.md`
+- feature newer than the Python target: `workflow/checking-apis.md`; docstring, comment: `code/minimalism.md`; logging: `code/errors.md` (last section); script or CLI: `code/scripts.md`
 - data frames, arrays, models, notebooks, large files: `code/data.md`; threads, processes, pools: `code/concurrency.md`; slow code: `performance/index.md`
-- scope: `workflow/planning.md`; restructuring: `workflow/refactoring.md`; unsure API: `workflow/checking-apis.md`; about to report: `workflow/shipping.md`
-- pattern, layers: `architecture/design-patterns.md`; data structure or algorithm: `architecture/fit.md` (worked examples `fit-examples.md`); design under real limits, `unsafe`: `architecture/senior-engineering.md`; habits from systems projects (fault injection, shared-nothing, narrow ABIs, subtracting surface): `architecture/systems-lessons.md`
+- scope: `workflow/planning.md`; restructuring: `workflow/refactoring.md`; unsure API: `workflow/checking-apis.md`; about to report: `workflow/planning.md` (last section)
+- pattern, layers: `architecture/design-patterns.md`; data structure or algorithm: `architecture/fit.md` (worked examples at its end); design under real limits, `unsafe`: `architecture/senior-engineering.md`; habits from systems projects (fault injection, shared-nothing, narrow ABIs, subtracting surface): `architecture/systems-lessons.md`
 
 By kind of project (`which-type.md` names it; read only the line for the kind, and `smells.md` of that kind before finishing):
 
-- **library** others import: `library/smells.md`, `library/shared/api-design.md` for any public name, `package-setup.md`, `layout.md`, `tooling.md`, `entry-points.md`, `versioning.md`, `release.md` (all in `library/shared/`; templates in `development/assets/`)
+- **library** others import: `library/smells.md`, `library/shared/api-design.md` for any public name, `package-setup.md` (also layout, entry points, versioning), `tooling.md`, `release.md` (all in `library/shared/`; templates in `development/assets/`)
 - **native extension** (Rust, C, C++ or Zig behind Python): `library/native/index.md`, then only the language page the task touches, `architecture.md` to decide whether and where, `porting.md` to move a function, `ci-wheels.md` for wheels, `smells.md` before finishing
-- **HTTP service**: `application/smells.md`, `application/apis/http/services.md`, then `fastapi.md` or `django.md`; `application/apis/shared/security.md`; `application/shared/` for `async.md`, `async-patterns.md`, `configuration.md`, `observability.md`, `persistence.md`, `deployment.md`, `resilience.md` (retries, timeouts, circuit breakers)
-- **worker or scheduler**: `application/workers/background-jobs.md`, `background-jobs-patterns.md`, and `application/shared/resilience.md`
+- **HTTP service**: `application/smells.md`, `application/apis/http/services.md`, then `fastapi.md` or `django.md`; `application/apis/shared/security.md`; `application/shared/` for `async.md`, `configuration.md`, `observability.md`, `persistence.md`, `deployment.md`, `resilience.md` (retries, timeouts, circuit breakers)
+- **worker or scheduler**: `application/workers/background-jobs.md` (with its patterns), and `application/shared/resilience.md`
 
 ## Other Tabby skills
 

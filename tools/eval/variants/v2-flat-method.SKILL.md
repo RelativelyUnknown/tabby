@@ -34,14 +34,14 @@ Project memory is the `## Tabby` section of AGENTS.md. Claude Code reads CLAUDE.
 ## Read on demand
 
 
-Read `development/code/smells.md` first, then only the leaf for the main thing the task does (a second only if clearly needed); others when you reach a situation they cover. `development/workflow/shipping.md` when about to report. Paths start at `development/`. Open each with Read; do not search.
+Read `development/code/smells.md` first, then only the leaf for the main thing the task does (a second only if clearly needed); others when you reach a situation they cover. `development/workflow/planning.md` when about to report. Paths start at `development/`. Open each with Read; do not search.
 
 - new function, class, option, constant, name: `development/code/minimalism.md`
 - what exists for a job: `development/ecosystem.md`; hand-rolled utility, new package: `development/code/minimalism.md`, `development/dependencies/dependencies.md`
 - errors: `development/code/errors.md`; parsing input: `development/code/errors.md`; annotations: `development/code/typing.md`
 - files, connections, locks, subprocesses, streams: `development/code/resources.md`
-- feature newer than the Python target: `development/code/python-versions.md`; docstring, comment: `development/code/minimalism.md`
-- logging, secrets, SQL, `eval`, `pickle`: `development/code/logging.md`, `development/code/security-basics.md`; script or CLI: `development/code/scripts.md`
+- feature newer than the Python target: `development/code/checking-apis.md`; docstring, comment: `development/code/minimalism.md`
+- logging, secrets, SQL, `eval`, `pickle`: `development/code/errors.md`, `development/code/security-basics.md`; script or CLI: `development/code/scripts.md`
 - tests: `development/testing/testing.md`, `development/testing/smells.md`; slow code: `development/performance/index.md`
 - retries, timeouts, circuit breakers: `development/application/shared/resilience.md`
 - scope: `development/workflow/planning.md`; bug: `development/workflow/debugging.md`; restructuring: `development/workflow/refactoring.md`; unsure API: `development/workflow/checking-apis.md`; three or more outcomes, or "all"/"every": `development/workflow/gates.md` (a short list, then start); several readings: `development/workflow/specs-and-slices.md`; removing or replacing: `development/workflow/deprecation-and-migration.md`

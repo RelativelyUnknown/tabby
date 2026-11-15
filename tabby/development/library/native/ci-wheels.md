@@ -31,7 +31,7 @@ One canonical check command (for example `nox -e local`, `make check` or a `uv r
 
 ## Release checks
 
-- Version in one place ([versioning.md](../shared/versioning.md)); the native crate version follows it or is documented as separate.
+- Version in one place ([package-setup.md](../shared/package-setup.md)); the native crate version follows it or is documented as separate.
 - The wheel imports on a machine with no compiler; the fallback path still works when the native module is absent.
 - `pip install` from the sdist works with a compiler; the error message when the toolchain is missing says what to install.
 - Publish with trusted publishing; do not store tokens ([release.md](../shared/release.md)).

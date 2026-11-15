@@ -4,7 +4,7 @@ Use the stack the project already has (stdlib `logging`, structlog, Prometheus, 
 
 ## Logs
 
-- Configure logging once, at the application entry point (`logging.config.dictConfig`), as JSON lines on stdout. Never at import and never in library code ([logging.md](../../code/logging.md)).
+- Configure logging once, at the application entry point (`logging.config.dictConfig`), as JSON lines on stdout. Never at import and never in library code ([errors.md](../../code/errors.md)).
 - Put the request or job id in a `contextvars.ContextVar` set at the edge, and add it to every record with a `logging.Filter`. It follows `await`, `gather` tasks and `asyncio.to_thread`, so concurrent requests keep their own ids.
 - `extra={...}` keys must not collide with record attributes: `extra={"message": ...}` raises `KeyError: "Attempt to overwrite 'message' in LogRecord"`. Prefix them (`order_id`, `job_attempt`).
 - Lazy arguments (`log.info("loaded %s rows", n)`), `log.exception(...)` inside `except`, and one line per event. Levels: DEBUG internals; INFO a business event or state change; WARNING something abnormal that was handled; ERROR an operation failed and someone should look (a client's 4xx is not an error).

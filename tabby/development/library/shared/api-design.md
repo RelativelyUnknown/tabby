@@ -46,7 +46,7 @@ Callers come to depend on everything they can observe, promised or not: the orde
 ## Typing and logging
 
 - Ship `py.typed`, fully annotate public functions, type-check the package in CI.
-- `logging.getLogger(__name__)` ([logging.md](../../code/logging.md)); never configure handlers or call `basicConfig`. Only the top-level `__init__.py` adds a `NullHandler`.
+- `logging.getLogger(__name__)` ([errors.md](../../code/errors.md)); never configure handlers or call `basicConfig`. Only the top-level `__init__.py` adds a `NullHandler`.
 
 ## Changing a public name
 

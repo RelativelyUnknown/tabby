@@ -30,7 +30,7 @@ Default to **advisory** (warn, document, leave it working). **Compulsory** (a re
 
 ## Removing
 
-Only when callers are gone, the deprecation has lasted the stated releases, and the changelog has a "Removed" entry with the migration. A breaking removal follows the version rules in [versioning.md](../library/shared/versioning.md).
+Only when callers are gone, the deprecation has lasted the stated releases, and the changelog has a "Removed" entry with the migration. A breaking removal follows the version rules in [package-setup.md](../library/shared/package-setup.md).
 
 ## Code nobody owns
 

@@ -58,7 +58,7 @@ Rung 3 or rung 4? Signals, not a list: the ecosystem's own documentation points 
 - Untrusted nested JSON, many models, coercion, error lists, schema output: pydantic, or the project's validator
 - Config file: `tomllib` and a dataclass. Command-line arguments: argparse `type=` and `choices=`
 
-Version-gated features follow [python-versions.md](python-versions.md).
+Version-gated features follow [checking-apis.md](../workflow/checking-apis.md).
 
 ## Docstrings and comments
 

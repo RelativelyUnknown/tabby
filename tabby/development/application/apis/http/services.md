@@ -45,4 +45,4 @@ New project with no framework chosen: FastAPI for a typed JSON API; Django when 
 
 ## Report
 
-Report as in [shipping.md](../../../workflow/shipping.md). List endpoints added or changed with their auth requirement, models and migrations created, settings added (names only) and tests added. Name anything that needs approval or a person: secrets, DNS, migrations on shared databases.
+Report as in [planning.md](../../../workflow/planning.md). List endpoints added or changed with their auth requirement, models and migrations created, settings added (names only) and tests added. Name anything that needs approval or a person: secrets, DNS, migrations on shared databases.

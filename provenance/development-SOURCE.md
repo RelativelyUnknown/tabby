@@ -12,13 +12,13 @@ Paths below are under `development/`.
 | `testing/mocking.md` (retries section) | `python-testing-patterns` |
 | `performance/index.md` | `python-performance-optimization` |
 | `dependencies/uv.md` | `uv-package-manager` |
-| `library/shared/versioning.md`, `entry-points.md`, `tooling.md` (build backends) | `python-packaging`, `python-project-structure` |
+| `library/shared/package-setup.md`, `tooling.md` (build backends) | `python-packaging`, `python-project-structure` |
 | `architecture/design-patterns.md` (three principles) | `python-design-patterns` |
 | `application/shared/observability.md` | `python-observability` |
 | `application/shared/configuration.md` | `python-configuration` |
 | `application/shared/resilience.md` | `python-resilience` |
-| `application/shared/async.md`, `async-patterns.md` | `async-python-patterns` |
-| `application/workers/background-jobs.md`, `background-jobs-patterns.md` | `python-background-jobs` |
+| `application/shared/async.md` | `async-python-patterns` |
+| `application/workers/background-jobs.md` | `python-background-jobs` |
 
 ## What changed
 

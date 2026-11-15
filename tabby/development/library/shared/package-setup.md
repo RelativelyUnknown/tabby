@@ -17,3 +17,39 @@
 7. `.gitignore` covers `.venv/`, `__pycache__/`, `dist/`, `.pytest_cache/`, `.mypy_cache/`, `.ruff_cache/`.
 
 Run `make check` on the result and show its output. A scaffold you did not run is not done.
+
+## Package layout
+
+Packages are organized by component; dependencies point one way. Look at the tree before adding a file.
+
+Layout is a map of who may know about whom. Ask where a new piece belongs by what it owns and what depends on it, not by what kind of code it is; a circular import is the map telling you a boundary is in the wrong place.
+
+- Name packages for what they own (`billing/`, `ingest/`, `auth/`), never for the shape of the code (`models/`, `utils/`, `common/`, `misc/`, `base/`).
+- A component is a subpackage with its own `__init__.py` and tests that mirror it. Nest only when a package has distinct components, to about three levels below the source root.
+- Each package has a public face: its `__init__.py` re-exports what others may use, and other packages import from it, not from internal modules. Layers point one way (`api` to `services` to `domain`); a circular import means the boundary is in the wrong place, so move the boundary instead of hiding the import inside a function.
+- Shared types live in a leaf package that imports nothing internal.
+- One primary concept per module. Name files for their contents, without repeating the package name. A module past a few hundred lines is a signal to split by concept.
+- **Each fact has one home**: the version, the dependency list, a schema, a default config value. Other files read or link to it. The version lives in `pyproject.toml`; code that needs it uses `importlib.metadata.version("<pkg>")` instead of a second literal.
+- Give each kind of content one home: docstrings for API behavior, the README for install and usage, `docs/` for concepts, commit messages for history, config comments for config.
+- Never hand-edit generated files; edit the source and regenerate. A new top-level directory needs a reason. Update an architecture file if one exists; do not create one unasked.
+
+## Entry points
+
+Built with uv 0.11.32 on 7 November 2026.
+
+A command is `[project.scripts]` with `name = "pkg.cli:main"`. `main()` returns `None` or an exit code; the generated script calls `sys.exit(main())`. After `uv sync`, `uv run name` works, and the wheel's `entry_points.txt` lists it under `[console_scripts]`. Check it in the built wheel, not in the source tree (`unzip -p dist/*.whl '*/entry_points.txt'`).
+
+## Versioning
+
+Built with uv 0.11.32 on 7 November 2026.
+
+Pick one and read it everywhere else with `importlib.metadata.version("<dist-name>")`; never type the number twice.
+
+- Static: `version = "2.0.0"` in `[project]` (`uv_build` and `hatchling` both build it). Bump it in the release commit.
+- From a file: `dynamic = ["version"]` with `[tool.hatch.version]` and `path = "src/<pkg>/__init__.py"`; hatchling reads `__version__`. Built `0.4.0` from `__version__ = "0.4.0"`.
+- From git tags: `requires = ["hatchling", "hatch-vcs"]`, `dynamic = ["version"]`, `[tool.hatch.version] source = "vcs"`, and optionally `[tool.hatch.build.hooks.vcs] version-file = "src/<pkg>/_version.py"` (git-ignored). A build at the tag `v1.2.3` gave `1.2.3`; one commit later it gave `1.2.4.dev1+g<sha>`.
+
+Consequences to plan for:
+
+- A version with a `+g<sha>` part is a local version, and PyPI rejects it. Publish only from a tagged commit, and make CI fetch the tags (a full clone, not a shallow one).
+- `importlib.metadata.version(...)` reports the version recorded at install time. In an editable install it stayed `1.2.3` after a new commit until the package was reinstalled.

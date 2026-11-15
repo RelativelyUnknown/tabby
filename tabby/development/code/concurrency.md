@@ -1,6 +1,6 @@
 # Threads, processes and pools
 
-Choose by what the work waits on, then keep the shared state small. `asyncio` has its own pages ([async.md](../application/shared/async.md), [async-patterns.md](../application/shared/async-patterns.md)).
+Choose by what the work waits on, then keep the shared state small. `asyncio` has its own pages ([async.md](../application/shared/async.md)).
 
 | The work is | Use | Watch for |
 | --- | --- | --- |
