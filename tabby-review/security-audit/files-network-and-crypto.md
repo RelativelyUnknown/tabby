@@ -1,6 +1,6 @@
 # Audit classes: files, network and cryptography
 
-Every hit needs the trace from attacker-controlled input to the sink ([process.md](process.md)). Settings, environment variables and the project's own constants are server-controlled: they are not a path, URL or command source unless a secret is committed or the value is built from user input. Fixes are in `tabby/development/code/security-basics.md`.
+Every hit needs the trace from attacker-controlled input to the sink ([process.md](process.md)). Settings, environment variables and the project's own constants are server-controlled: they are not a path, URL or command source unless a secret is committed or the value is built from user input. Fixes are in `tabby/development/code/input-and-secrets-security.md`.
 
 ## Paths, uploads, archives
 
@@ -24,6 +24,6 @@ Every hit needs the trace from attacker-controlled input to the sink ([process.m
 - TLS: `verify=False`, `ssl._create_unverified_context`, `check_hostname = False`, `urllib3.disable_warnings()`. Use `ssl.create_default_context()` and leave the cipher list alone.
 - Key and secret handling (Python cannot wipe an immutable `str` or `bytes`; a `bytearray` can be overwritten, and the honest control is a short lifetime and no copies into logs, errors or exceptions' `repr`): committed `.env` and keys, secrets in logs, URLs, error pages, container images or a settings object's `repr`; one key for every purpose; no way to rotate (tag ciphertext with a key version).
 - Timing: `==`, `startswith` or `in` on tokens, MACs or password hashes (use `hmac.compare_digest`; `secrets.compare_digest` is the same function). Give it `bytes`: two `str` that contain a non-ASCII character raise `TypeError` (checked), which a login handler turns into a 500 or, worse, a skipped check. Python's `int`, `//`, `%` and `pow` are not written to be constant-time, so a key-dependent computation in pure Python (a hand-written RSA, a modular reduction of a secret) is a finding; use a library built for it.
-- Timing in native code: see [../native-boundary.md](../native-boundary.md); a static scan is a worklist, and a clean result holds only for the compiler, architecture and optimisation level you checked.
+- Timing in native code: see [native-boundary.md](../native-boundary.md); a static scan is a worklist, and a clean result holds only for the compiler, architecture and optimisation level you checked.
 - A hash is not a key-derivation function (`sha256(password)` as a key is fast to brute force; use `hashlib.scrypt`, PBKDF2 or Argon2), and encryption is not password storage (one stolen master key exposes every password; store a salted one-way hash).
 - Decryption that tells the caller *why* it failed ("invalid padding" against "MAC mismatch") is a padding oracle; fail with one error, and prefer authenticated encryption.

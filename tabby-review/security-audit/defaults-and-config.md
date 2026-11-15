@@ -1,6 +1,6 @@
 # Audit classes: defaults, configuration and exposure
 
-Every hit needs the trace from attacker-controlled input or a reachable deployment state to the decision it affects ([process.md](process.md)). Settings, environment variables and the project's own constants are server-controlled: they are not a path, URL or command source on their own, but what they default to is the question here. Fixes are in `tabby/development/code/security-basics.md`.
+Every hit needs the trace from attacker-controlled input or a reachable deployment state to the decision it affects ([process.md](process.md)). Settings, environment variables and the project's own constants are server-controlled: they are not a path, URL or command source on their own, but what they default to is the question here. Fixes are in `tabby/development/code/input-and-secrets-security.md`.
 
 ## Fail-open defaults
 

@@ -8,14 +8,14 @@ How the code reaches its data today (plain SQL, a query builder, an ORM), the sh
 
 ## 2. Two or three options for each real fork
 
-Name them, the criterion that decides, and what this project's evidence says. Candidates come from [ecosystem.md](../development/ecosystem.md) and the ladder in [minimalism.md](../development/code/minimalism.md); check installed and current versions first. Typical criteria: plain SQL for few tables and a handful of hot queries, a query builder when filters are built dynamically, an ORM for many related entities, frequent schema change or several clients; async only when many requests wait on I/O and the driver is async; a cache only after a measurement, when reads dominate and may be stale; a queue when work must survive a restart or outlast a request.
+Name them, the criterion that decides, and what this project's evidence says. Candidates come from [stdlib-vs-community-libraries.md](../development/stdlib-vs-community-libraries.md) and the ladder in [minimalism-reuse-names.md](../development/code/minimalism-reuse-names.md); check installed and current versions first. Typical criteria: plain SQL for few tables and a handful of hot queries, a query builder when filters are built dynamically, an ORM for many related entities, frequent schema change or several clients; async only when many requests wait on I/O and the driver is async; a cache only after a measurement, when reads dominate and may be stale; a queue when work must survive a restart or outlast a request.
 
 ## 3. Choose for today, make the next one cheap
 
 | Growth item | Build now | Leave unbuilt |
 | --- | --- | --- |
 | A hot path may move to Rust or C | The function behind one module with a fully typed signature and a pure-Python implementation; one import site; a test that runs the reference on real inputs; a recorded benchmark | Cargo workspace, maturin, wheels, C sources |
-| A public API others will depend on | `__all__`, flat imports, `py.typed`, one root exception, the version in one place, keyword-only options ([api-design.md](../development/library/shared/api-design.md)) | A plugin system, registries, deprecation machinery |
+| A public API others will depend on | `__all__`, flat imports, `py.typed`, one root exception, the version in one place, keyword-only options ([public-api-design.md](../development/library/shared/public-api-design.md)) | A plugin system, registries, deprecation machinery |
 | It may become a service | Core logic as functions that take values (including time and config); a thin outer layer that reads the clock, environment and network | A web framework, auth, a database layer |
 | An ORM later | Data access in functions that take a connection and return typed rows; no SQL in handlers or views; one place builds connections | An ORM, a model layer, a migration tool |
 | Async later | I/O at the edges, a pure core, no module-level state; handlers that only parse, call and return | Async drivers, an async rewrite of the core |
@@ -37,8 +37,8 @@ In the reply: what you found, the options and why you chose this one, what you k
 ## When an item becomes real
 
 1. Re-read `out-of-scope:` and `constraints:`. Ask if the task conflicts.
-2. Read the leaf for that kind of work: `development/library/native/index.md` for a first Rust, C or C++ module (`porting.md` to move an existing function), `development/application/apis/http/services.md` for a first endpoint, `development/library/shared/api-design.md` for a first public release.
-3. For a first data structure, representation or algorithm choice, read `development/architecture/fit.md`.
+2. Read the leaf for that kind of work: `development/library/native/native-overview.md` for a first Rust, C or C++ module (`native-porting-a-function.md` to move an existing function), `development/application/apis/http/http-service-design.md` for a first endpoint, `development/library/shared/public-api-design.md` for a first public release.
+3. For a first data structure, representation or algorithm choice, read `development/architecture/data-structure-and-algorithm-fit.md`.
 4. Write one ADR (`history/adr.md` in the `tabby-docs` skill): the decision, the alternatives, what would change it.
 5. Move the item from `growth:` to `goals:` or delete it. Update `reviewed:`.
 

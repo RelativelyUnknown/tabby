@@ -7,7 +7,7 @@ RESULT_DIR holds <case>.json written by tools/eval/run.py with --keep-temp and b
 and run index it takes the with-skill and without-skill final working directories, builds each one's diff against its base
 commit, and asks a judge model which solution a senior reviewer would rather merge. Every pair is judged twice with A and B
 swapped. The prompt never names the skill, the arm or Tabby; the rubric is plain language drawn from common code-quality
-catalogs and tabby/development/architecture/senior-engineering.md.
+catalogs and tabby/development/architecture/design-under-real-limits.md.
 
 Reported: wins, losses and ties for the with-skill arm over the pairs where both orderings agree, how many pairs the two
 orderings disagreed on (order bias), and mean 1 to 5 scores per criterion. Disagreeing pairs count as ties. Needs `claude`

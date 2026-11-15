@@ -17,14 +17,14 @@ Run `python3 scripts/detect.py` from this skill's folder (the harness names the 
 - Done means the real problem is solved and verified by running the code. Passing tests are evidence, not the goal. Quote the result of the final run in the reply; if you could not run it, say that instead of saying it works.
 - Never edit, delete, skip or loosen an existing test to get green. A test that contradicts the spec: leave it, finish the rest, report it.
 - A bug, failing or flaky test, red CI, crash or wrong output: read `development/workflow/debugging.md` before the first edit.
-- Code that takes a URL, a file path or name, an upload, SQL or shell input, a password or token, or handles a secret: read `development/code/security-basics.md` before the first edit.
+- Code that takes a URL, a file path or name, an upload, SQL or shell input, a password or token, or handles a secret: read `development/code/input-and-secrets-security.md` before the first edit.
 - Find the cause before the fix. No special-casing inputs, no sleeps or retries to hide a symptom. Do not silence tools (`# type: ignore`, `# noqa`, `Any`, looser config). Asked to raise a timeout, limit or retry count so a failure stops: first read what the failing code does; if it is slow or failing for a fixable reason (a query per row, a loop, a missing index), say so and fix it or offer the fix, then do what was asked.
 - A request you cannot state as one change ("make the reports better") gets one to three short questions with suggested answers before any edit. A request that names the change is done, not discussed. A feature with several readings gets a one-page spec and its first slice (`development/workflow/specs-and-slices.md`).
 - "Get rid of" a public name is a deprecation unless nothing outside this repository can use it (`development/workflow/deprecation-and-migration.md`).
-- Do not hand-roll what the standard library or the community's standard library does well (an HTTP call with retries and pooling, dates, validation, argument parsing, retries): climb the ladder in `development/code/minimalism.md` first, and say in the reply which rung you took and why.
-- Write it clean the first time, so nothing needs cleaning up afterwards: no narrating comments, no defensive checks on data your own code produced, no casts or ignores to get past a checker, no helper that already exists (`git grep` before writing one), the style of the file around it ([minimalism](development/code/minimalism.md)).
+- Do not hand-roll what the standard library or the community's standard library does well (an HTTP call with retries and pooling, dates, validation, argument parsing, retries): climb the ladder in `development/code/minimalism-reuse-names.md` first, and say in the reply which rung you took and why.
+- Write it clean the first time, so nothing needs cleaning up afterwards: no narrating comments, no defensive checks on data your own code produced, no casts or ignores to get past a checker, no helper that already exists (`git grep` before writing one), the style of the file around it ([minimalism](development/code/minimalism-reuse-names.md)).
 - Smallest diff that solves it properly. A new dependency is chosen by the ladder and named in the reply (rung and reason), and needs a yes first when `ask-first:` says so. A public API change, a commit or a push only when asked.
-- Use the project's own tools, runner and Python target, found from its lock file, `Makefile` or CI (`development/which-type.md`): never swap one, add a second for a job one does, or install silently. Commands in the leaves are written for uv; use the project's equivalent.
+- Use the project's own tools, runner and Python target, found from its lock file, `Makefile` or CI (`development/project-kind-detection.md`): never swap one, add a second for a job one does, or install silently. Commands in the leaves are written for uv; use the project's equivalent.
 - If Bash says `Read-only file system`, the Write and Edit tools still work: make the change with them, run what you can, and say which command could not run. Never end by pasting the code into the reply.
 - Replies, comments and docs are short: what is not obvious, no filler. Never drop "not", "never", "only", "except".
 
@@ -32,29 +32,29 @@ Run `python3 scripts/detect.py` from this skill's folder (the harness names the 
 
 Open leaves with Read at the path given; do not search for them. A one-line fix, a question or a command to run needs no leaf. Otherwise read the one leaf per area that the task touches, when you reach it, and skip the rest (paths start at `development/`). The core rules already apply without any leaf. A bug or a security-sensitive input is covered by the two rules above.
 
-- changes more than a few lines: `code/smells.md`; `code/examples.md` shows the common shortcuts (suppressions, weakened tests, swallowed errors, a second helper, over-building, `Any`, Pydantic v1 on v2) as before and after
-- a new function, class, option, constant or name: `code/minimalism.md`
-- a hand-rolled utility, a new package, or a job a library may already do: `code/minimalism.md`, `ecosystem.md`, `dependencies/dependencies.md` (the runner is uv: `dependencies/uv.md`, which also covers CI and Docker)
-- raises, catches or retries an error: `code/errors.md` (also input validation); adds annotations: `code/typing.md`
-- Rust, C, C++ or Zig behind a Python API, including moving a function into one: `library/native/index.md`, then the language page it names (`rust.md`, `c.md`, `cpp.md`, `zig.md`), and `library/native/porting.md` to move a function
-- opens files, connections, locks, subprocesses or streams: `code/resources.md`
-- writes or changes tests: `testing/testing.md`, `testing/smells.md`; with mocks `testing/mocking.md`, fixtures (in `testing/testing.md`), property-based or release-grade `testing/rigor.md`
-- three or more outcomes, or "all"/"every": `workflow/gates.md` (a short list, then start); several readings: `workflow/specs-and-slices.md`
+- changes more than a few lines: `code/code-smells.md`; `code/shortcut-examples.md` shows the common shortcuts (suppressions, weakened tests, swallowed errors, a second helper, over-building, `Any`, Pydantic v1 on v2) as before and after
+- a new function, class, option, constant or name: `code/minimalism-reuse-names.md`
+- a hand-rolled utility, a new package, or a job a library may already do: `code/minimalism-reuse-names.md`, `stdlib-vs-community-libraries.md`, `dependencies/choosing-dependencies.md` (the runner is uv: `dependencies/uv-workflows-ci-docker.md`, which also covers CI and Docker)
+- raises, catches or retries an error: `code/errors-validation-logging.md` (also input validation); adds annotations: `code/type-annotations.md`
+- Rust, C, C++ or Zig behind a Python API, including moving a function into one: `library/native/native-overview.md`, then the language page it names (`native-rust.md`, `native-c.md`, `native-cpp.md`, `native-zig.md`), and `library/native/native-porting-a-function.md` to move a function
+- opens files, connections, locks, subprocesses or streams: `code/files-connections-locks.md`
+- writes or changes tests: `testing/testing-basics-and-fixtures.md`, `testing/test-smells.md`; with mocks `testing/test-mocking.md`, fixtures (in `testing/testing-basics-and-fixtures.md`), property-based or release-grade `testing/test-rigor-property-and-release.md`
+- three or more outcomes, or "all"/"every": `workflow/multi-outcome-gates.md` (a short list, then start); several readings: `workflow/specs-and-slices.md`
 - removes or replaces something: `workflow/deprecation-and-migration.md`
 
 Read these when you reach the situation, not before:
 
-- feature newer than the Python target: `workflow/checking-apis.md`; docstring, comment: `code/minimalism.md`; logging: `code/errors.md` (last section); script or CLI: `code/scripts.md`
-- data frames, arrays, models, notebooks, large files: `code/data.md`; threads, processes, pools: `code/concurrency.md`; slow code: `performance/index.md`
-- scope: `workflow/planning.md`; restructuring: `workflow/refactoring.md`; unsure API: `workflow/checking-apis.md`; about to report: `workflow/planning.md` (last section)
-- pattern, layers: `architecture/design-patterns.md`; data structure or algorithm: `architecture/fit.md` (worked examples at its end); design under real limits, `unsafe`: `architecture/senior-engineering.md`; habits from systems projects (fault injection, shared-nothing, narrow ABIs, subtracting surface): `architecture/systems-lessons.md`
+- feature newer than the Python target: `workflow/checking-apis-and-python-versions.md`; docstring, comment: `code/minimalism-reuse-names.md`; logging: `code/errors-validation-logging.md` (last section); script or CLI: `code/scripts-and-cli.md`
+- data frames, arrays, models, notebooks, large files: `code/dataframes-arrays-large-files.md`; threads, processes, pools: `code/threads-processes-pools.md`; slow code: `performance/performance-profiling.md`
+- scope: `workflow/planning-scope-and-shipping.md`; restructuring: `workflow/refactoring.md`; unsure API: `workflow/checking-apis-and-python-versions.md`; about to report: `workflow/planning-scope-and-shipping.md` (last section)
+- pattern, layers: `architecture/design-patterns-and-layers.md`; data structure or algorithm: `architecture/data-structure-and-algorithm-fit.md` (worked examples at its end); design under real limits, `unsafe`: `architecture/design-under-real-limits.md`; habits from systems projects (fault injection, shared-nothing, narrow ABIs, subtracting surface): `architecture/systems-project-lessons.md`
 
-By kind of project (`which-type.md` names it; read only the line for the kind, and `smells.md` of that kind before finishing):
+By kind of project (`project-kind-detection.md` names it; read only the line for the kind, and the `-smells.md` page of that kind (`library-smells.md`, `native-smells.md`, `service-smells.md`) before finishing):
 
-- **library** others import: `library/smells.md`, `library/shared/api-design.md` for any public name, `package-setup.md` (also layout, entry points, versioning), `tooling.md`, `release.md` (all in `library/shared/`; templates in `development/assets/`)
-- **native extension** (Rust, C, C++ or Zig behind Python): `library/native/index.md`, then only the language page the task touches, `architecture.md` to decide whether and where, `porting.md` to move a function, `ci-wheels.md` for wheels, `smells.md` before finishing
-- **HTTP service**: `application/smells.md`, `application/apis/http/services.md`, then `fastapi.md` or `django.md`; `application/apis/shared/security.md`; `application/shared/` for `async.md`, `configuration.md`, `observability.md`, `persistence.md`, `deployment.md`, `resilience.md` (retries, timeouts, circuit breakers)
-- **worker or scheduler**: `application/workers/background-jobs.md` (with its patterns), and `application/shared/resilience.md`
+- **library** others import: `library/library-smells.md`, `library/shared/public-api-design.md` for any public name, `package-layout-and-versioning.md` (also layout, entry points, versioning), `build-and-lint-tooling.md`, `release-process.md` (all in `library/shared/`; templates in `development/assets/`)
+- **native extension** (Rust, C, C++ or Zig behind Python): `library/native/native-overview.md`, then only the language page the task touches, `native-extension-architecture.md` to decide whether and where, `native-porting-a-function.md` to move a function, `native-ci-wheels.md` for wheels, `smells.md` before finishing
+- **HTTP service**: `application/service-smells.md`, `application/apis/http/http-service-design.md`, then `fastapi-services.md` or `django-services.md`; `application/apis/shared/api-security-owasp.md`; `application/shared/` for `async-io-and-patterns.md`, `settings-and-secrets.md`, `logging-metrics-tracing.md`, `database-and-migrations.md`, `deployment-and-containers.md`, `retries-timeouts-circuit-breakers.md` (retries, timeouts, circuit breakers)
+- **worker or scheduler**: `application/workers/background-jobs-and-queues.md` (with its patterns), and `application/shared/retries-timeouts-circuit-breakers.md`
 
 ## Other Tabby skills
 
@@ -64,7 +64,7 @@ Review or audit: `tabby-review`. README, docstrings, changelog, ADR, commit mess
 
 If AGENTS.md has a `## Tabby` section, read it and follow `kind:`, `always:`, `ask-first:` and `never:`; respect `out-of-scope:`. If the task contradicts `goals:` or `out-of-scope:`, ask whether the section still fits, then update it. For new work (a feature, a refactor, a release) rather than a small fix, read `references/memory-check.md` first. A task that makes a `growth:` item real (a first Rust module, a first public API, a first endpoint): read `references/growth.md` before designing it. A task that needs an `open:` item: ask it now.
 
-If there is no section, do the task; missing project memory is not a reason to interview. Infer the scope and stack from the request and the repo (`development/which-type.md`), say it in one line (`Treating this as: library/native; stack: poetry, black, pytest`), and label guesses `(assumed)`. After the first task in a session add one line, once: "To save purpose, growth and limits for later tasks, run the interview skill." (`/tabby:interview` in Claude Code, `/interview` in Copilot, `@interview` in OpenCode.) The interview itself is a separate skill and never a condition for the work.
+If there is no section, do the task; missing project memory is not a reason to interview. Infer the scope and stack from the request and the repo (`development/project-kind-detection.md`), say it in one line (`Treating this as: library/native; stack: poetry, black, pytest`), and label guesses `(assumed)`. After the first task in a session add one line, once: "To save purpose, growth and limits for later tasks, run the interview skill." (`/tabby:interview` in Claude Code, `/interview` in Copilot, `@interview` in OpenCode.) The interview itself is a separate skill and never a condition for the work.
 
 ## Never
 

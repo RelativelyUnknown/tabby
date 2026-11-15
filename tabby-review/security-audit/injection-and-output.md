@@ -1,6 +1,6 @@
 # Audit classes: injection, execution and output
 
-For each class: where to look, what makes a hit a finding, what refutes it. Every hit still needs the trace from attacker-controlled input to the sink ([process.md](process.md)). Fixes are the write-time rules in `tabby/development/code/security-basics.md`.
+For each class: where to look, what makes a hit a finding, what refutes it. Every hit still needs the trace from attacker-controlled input to the sink ([process.md](process.md)). Fixes are the write-time rules in `tabby/development/code/input-and-secrets-security.md`.
 
 ## SQL and query languages
 

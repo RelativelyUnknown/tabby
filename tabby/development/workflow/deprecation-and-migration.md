@@ -2,7 +2,7 @@
 
 Every public behaviour has a user, and removing it is a migration you owe them. Ask before removing anything: who depends on this, what do they move to, and when? "Delete it" is a request to deprecate unless the code has no callers you can find and nothing outside the repository imports it.
 
-Removing or changing a public name needs approval (`ask-first: public API change`). The rules for the warning and the release are in [api-design.md](../library/shared/api-design.md) and [release.md](../library/shared/release.md); this page is the order of work.
+Removing or changing a public name needs approval (`ask-first: public API change`). The rules for the warning and the release are in [public-api-design.md](../library/shared/public-api-design.md) and [release-process.md](../library/shared/release-process.md); this page is the order of work.
 
 ## Before deprecating
 
@@ -24,13 +24,13 @@ Default to **advisory** (warn, document, leave it working). **Compulsory** (a re
 ## Moving callers
 
 - Put the new path beside the old one, move callers over in steps, and keep the tests green after each. Behind a flag or an adapter if the old and new must run together (strangler).
-- Schema changes: add, backfill, switch reads, then drop later ([persistence.md](../application/shared/persistence.md)).
+- Schema changes: add, backfill, switch reads, then drop later ([database-and-migrations.md](../application/shared/database-and-migrations.md)).
 - Replacing a dependency: put it behind one module first, migrate callers to that module, change the implementation, remove the dependency from `pyproject.toml` last and check what else it pulled in.
 - Dropping a Python version: raise `requires-python` in a minor release, update the CI matrix, delete the compatibility code, and say so in the changelog.
 
 ## Removing
 
-Only when callers are gone, the deprecation has lasted the stated releases, and the changelog has a "Removed" entry with the migration. A breaking removal follows the version rules in [package-setup.md](../library/shared/package-setup.md).
+Only when callers are gone, the deprecation has lasted the stated releases, and the changelog has a "Removed" entry with the migration. A breaking removal follows the version rules in [package-layout-and-versioning.md](../library/shared/package-layout-and-versioning.md).
 
 ## Code nobody owns
 

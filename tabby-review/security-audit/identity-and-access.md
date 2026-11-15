@@ -1,6 +1,6 @@
 # Audit classes: identity, access and business logic
 
-Every hit needs the trace from attacker-controlled input to the decision ([process.md](process.md)). Fixes are in `tabby/development/code/security-basics.md` and `tabby/development/application/apis/shared/security.md`.
+Every hit needs the trace from attacker-controlled input to the decision ([process.md](process.md)). Fixes are in `tabby/development/code/input-and-secrets-security.md` and `tabby/development/application/apis/shared/api-security-owasp.md`.
 
 ## Authorization (the commonest serious bug)
 
@@ -39,4 +39,4 @@ First learn how this project enforces access: decorators, middleware, base class
 - **Races:** check-then-write on money, stock, coupons and balances without one transaction and a lock or an atomic conditional `UPDATE`. A `threading.Lock` protects one process only; locks in a fixed order avoid deadlock. Test with two concurrent requests.
 - **Client-supplied values:** price, quantity, currency, discount or user ID taken from the request; negative quantities that refund; the same discount code applied twice or stacking below zero; overselling when stock is read first and decremented after payment.
 - **Idempotency keys** must be claimed by a unique insert; look-up-then-create lets two identical requests both run.
-- **Workflow:** later steps callable without the earlier ones. See [../state-machines.md](../state-machines.md).
+- **Workflow:** later steps callable without the earlier ones. See [state-machines.md](../state-machines.md).

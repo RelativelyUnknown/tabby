@@ -17,14 +17,14 @@ Find what an outside party can reach and report only what you can show. Techniqu
 
 | The code shows | Open |
 | --- | --- |
-| request data reaching `open`, `join`, `startswith`/`endswith`, a redirect, a `unquote` or `normalize`, an id copied into a queue message, job, cache key or log, `status =` assigned in several places, a flag read from the environment, a cache or limit key, read-then-call-then-write | [../two-places-agree.md](../two-places-agree.md) |
+| request data reaching `open`, `join`, `startswith`/`endswith`, a redirect, a `unquote` or `normalize`, an id copied into a queue message, job, cache key or log, `status =` assigned in several places, a flag read from the environment, a cache or limit key, read-then-call-then-write | [two-places-agree.md](../two-places-agree.md) |
 | `execute(`, f-string SQL, `subprocess`, `eval`, `pickle`, `yaml.load`, templates, `render` | [injection-and-output.md](injection-and-output.md) |
 | login, session, token, JWT, password reset, roles, `is_admin`, `setattr`/`vars(`/`update(**` on request data, ownership of a record | [identity-and-access.md](identity-and-access.md) |
 | uploads, archives, `open`, URLs fetched server-side, hashing, randomness, secrets, TLS | [files-network-and-crypto.md](files-network-and-crypto.md) |
 | `os.environ`, settings, feature flags, defaults, debug switches, empty or zero values | [defaults-and-config.md](defaults-and-config.md) |
 | `.github/workflows`, an AI agent in CI | [ci-workflows.md](ci-workflows.md), [ci-agents.md](ci-agents.md) |
 | lock files, indexes, release and publish steps, an advisory | [supply-chain.md](supply-chain.md) |
-| C, C++ or Rust beside Python | [../native-boundary.md](../native-boundary.md) |
+| C, C++ or Rust beside Python | [native-boundary.md](../native-boundary.md) |
 
 Attacker-controlled: request data, uploads, headers, cookies, messages from other parties, data lower-trust users write. Server-controlled: settings, environment, CLI flags, constants, the project's own output. For a value read from a database or file, find who writes it. Say how much control the attacker has and what is in the way (normalisation, truncation, type coercion).
 
@@ -50,4 +50,4 @@ The default is "refuted" until the evidence says otherwise; reviewers lean towar
 
 ## Limits
 
-Static reading first. Run target code only with no network, a scrubbed environment, dummy secrets and writes limited to a scratch directory; if you cannot isolate it, say so and do not run it. Never install a tool to audit. Facts outside the repository (proxy, identity provider, deployment) are not proof either way: `needs validation`, with who can answer. Write-time rules: `tabby/development/code/security-basics.md`.
+Static reading first. Run target code only with no network, a scrubbed environment, dummy secrets and writes limited to a scratch directory; if you cannot isolate it, say so and do not run it. Never install a tool to audit. Facts outside the repository (proxy, identity provider, deployment) are not proof either way: `needs validation`, with who can answer. Write-time rules: `tabby/development/code/input-and-secrets-security.md`.
