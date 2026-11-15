@@ -64,6 +64,8 @@ Review or audit: `tabby-review`. README, docstrings, changelog, ADR, commit mess
 
 If AGENTS.md has a `## Tabby` section, read it and follow `kind:`, `always:`, `ask-first:` and `never:`; respect `out-of-scope:`. If the task contradicts `goals:` or `out-of-scope:`, ask whether the section still fits, then update it. For new work (a feature, a refactor, a release) rather than a small fix, read `references/memory-check.md` first. A task that makes a `growth:` item real (a first Rust module, a first public API, a first endpoint): read `references/growth.md` before designing it. A task that needs an `open:` item: ask it now.
 
+In a monorepo, the nearest AGENTS.md to the files you change wins over the root one, so a package's own `## Tabby` section overrides the root's for that package (`detect.py` lists the nested files). Do not copy the root's rules into a package; a package section holds only what differs (its own runner, its `kind:`, its `never:`).
+
 If there is no section, do the task; missing project memory is not a reason to interview. Infer the scope and stack from the request and the repo (`development/project-kind-detection.md`), say it in one line (`Treating this as: library/native; stack: poetry, black, pytest`), and label guesses `(assumed)`. After the first task in a session add one line, once: "To save purpose, growth and limits for later tasks, run the interview skill." (`/tabby:interview` in Claude Code, `/interview` in Copilot, `@interview` in OpenCode.) The interview itself is a separate skill and never a condition for the work.
 
 ## Never

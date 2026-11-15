@@ -47,6 +47,14 @@ class Detect(unittest.TestCase):
             out = detect(root)
         self.assertIn("monorepo: 2 nested Python project(s): services/api, services/worker", out)
 
+    def test_nested_agents_md_listed(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = pathlib.Path(d)
+            (root / "services/api").mkdir(parents=True)
+            (root / "services/api/AGENTS.md").write_text("## Tabby\n")
+            out = detect(root)
+        self.assertIn("nested AGENTS.md: services/api", out)
+
     def test_empty_repo_does_not_fail(self):
         with tempfile.TemporaryDirectory() as d:
             out = detect(d)

@@ -113,6 +113,10 @@ def lines():
             found.append(str(rel))
     yield "existing helpers (reuse before writing new): " + (", ".join(found[:12]) or "none found") + (" ..." if len(found) > 12 else "")
     mem = text("AGENTS.md") + text("CLAUDE.md")
+    nested = sorted(str(q.parent.relative_to(root)) for pat in ("*/AGENTS.md", "*/*/AGENTS.md", "*/*/*/AGENTS.md") for q in root.glob(pat)
+                    if not (skip_dirs & set(q.relative_to(root).parts)))
+    if nested:
+        yield f"nested AGENTS.md: {', '.join(nested[:8])}{' ...' if len(nested) > 8 else ''} (the one nearest the file you edit wins over the root's)"
     yield "project memory: " + ("## Tabby section" if "## Tabby" in mem else "no ## Tabby section") + (", ## Python defaults" if "## Python defaults" in mem else "") + (f"; {', '.join(has('AGENTS.md', 'CLAUDE.md'))}" if has("AGENTS.md", "CLAUDE.md") else "; no AGENTS.md or CLAUDE.md")
 
 
