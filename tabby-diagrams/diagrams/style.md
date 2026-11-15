@@ -1,6 +1,6 @@
 # Visual style
 
-One quiet look for every picture, so a set of them reads as one. White ground, soft zones, tonal role fills, one accent. Depth comes from tone, not from outlines or shadows. Tokens below are the single source; `assets/diagram/make.mjs` and the animation templates read the same values. Choosing and checking a diagram: [choosing.md](choosing.md). Connector geometry: [connectors.md](connectors.md). Motion: [../animation/motion.md](../animation/motion.md).
+One quiet look for every picture, so a set of them reads as one. White ground, soft zones, tonal role fills, one accent. Depth comes from tone, not from outlines or shadows. Tokens below are the single source; `assets/diagram/make.mjs` and the animation templates read the same values. Choosing and checking a diagram: [choosing.md](choosing.md). Connector geometry: [connectors-and-icons.md](connectors-and-icons.md). Motion: [../animation/motion.md](../animation/motion.md).
 
 ## Build it, do not hand-place it
 

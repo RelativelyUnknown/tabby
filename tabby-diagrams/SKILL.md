@@ -10,7 +10,7 @@ Say one thing per picture. Delete a node or a line when the picture still works 
 
 - **A diagram:** read `diagrams/quickstart.md` and follow it.
 - **An animation:** read `animation/quickstart.md` and follow it.
-- **Only when a check finding or an unusual request needs it:** `diagrams/style.md` (look, tokens, the `design.md` mapping), `diagrams/connectors.md`, `diagrams/icons.md`, `diagrams/types/` (one page per type), `animation/motion.md`, `animation/pipeline.md`, `animation/formats.md` (video, only if asked).
+- **Only when a check finding or an unusual request needs it:** `diagrams/style.md` (look, tokens, the `design.md` mapping), `diagrams/connectors-and-icons.md`, `diagrams/types.md` (one section per type), `animation/motion.md`, `animation/pipeline-and-formats.md` (video, only if asked).
 
 Never miss:
 

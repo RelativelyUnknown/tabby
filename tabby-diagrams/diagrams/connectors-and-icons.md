@@ -1,8 +1,12 @@
-# Connectors and labels
+# Connectors and icons
+
+
+
+## Connectors and labels
 
 A connector says one thing: this part hands something to that part. Draw it so the eye follows it without effort. `assets/diagram/make.mjs` routes and labels connectors by these rules; `check.py` fails a diagonal (rule 1), a label touching a node or closer than 16 px to its arrowhead (rule 3) and a line behind a box (rule 4); rules 2, 5 and 6 are kept by the builder and checked by looking.
 
-## Rules
+### Rules
 
 1. **Right angles only.** A straight horizontal or vertical run, or a run with a rounded elbow (radius 12). No diagonals, no curves that wander.
 2. **A node is its box, not its tile.** Connect box edge to box edge, 4 px off the border, never through the text. The arrowhead tip is the path's end; it is 12 px long, so a label keeps 16 px clear of it.
@@ -11,7 +15,7 @@ A connector says one thing: this part hands something to that part. Draw it so t
 5. **Nothing overlaps.** Two connectors never share a stroke. Where several leave one box edge, each gets its own attach point at least 12 px apart.
 6. **Draw lines before boxes** so a box always sits on top of a line it hides a few pixels of.
 
-## Three kinds of connection, and no more
+### Three kinds of connection, and no more
 
 | Kind | Meaning | Look |
 | --- | --- | --- |
@@ -21,7 +25,7 @@ A connector says one thing: this part hands something to that part. Draw it so t
 
 If two connectors need different meanings, a legend is not the answer: label them, or split the picture.
 
-## Routes in the builder
+### Routes in the builder
 
 `h` (same row) and `v` (overlapping columns) are chosen automatically. `hv` and `vh` make one elbow. `below` and `above` draw a U that leaves and returns through the bottom or top edge, for a retry or a return path:
 
@@ -33,6 +37,22 @@ If two connectors need different meanings, a legend is not the answer: label the
 
 A connector that needs two elbows and a detour means the layout is wrong: move a node.
 
-## Labels
+### Labels
 
 One or two short words in capitals, naming the action (`POST`, `ENQUEUE`, `RETRY`), not repeating what the endpoints already say. A connector the reader can understand from position alone gets no label. Leave at least the pill width plus 40 px between two nodes on a row that carry a label.
+
+## Icons
+
+A node's icon says what kind of thing it is at a glance, so the reader finds the database before reading its name. The set is Tabler Icons outline (MIT, 5,233 icons, one consistent 24 px stroke), vendored as `assets/icons/tabler-outline.json`; the licence is next to it.
+
+### Choosing
+
+- Pick the icon for the **kind** of part, not the product: `database` for postgres, `server` for an http server, `stack-2` for a queue, `cpu` for a worker, `device-desktop` for a browser. A brand logo is not used: it would need the vendor's mark and a network fetch, and it breaks the single stroke style.
+- Search by word: `node assets/diagram/make.mjs --icons <word>` lists names containing it (`--icons cloud`). A name that does not exist stops the build and prints the nearest five.
+- Reuse one icon for one kind across a whole set of pictures. Two kinds never share an icon in the same picture.
+- Abstract nodes (a cron job, a cache, a webhook) get a pictogram too (`clock`, `bolt`, `webhook`), never text in the tile and never an emoji.
+- The tile is part of the node style: ordinary nodes get a `tile`, the focal node an `accent` tile with the icon in `on-accent`. Do not recolour an icon, add a second one, or scale it off 24 px × 0.667.
+
+### Refreshing the set
+
+`assets/icons/build-icons.mjs` regenerates the JSON from the npm package `@tabler/icons` (`node build-icons.mjs <path to the package>`). Installing the package is a new dependency: ask first, and do it in a scratch folder, not in the project.
