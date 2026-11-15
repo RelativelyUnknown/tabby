@@ -11,9 +11,11 @@ The plugin ships three hooks in [hooks.json](hooks.json), all run by `scripts/ga
 
 - **SessionStart** injects the core rules ([core/TABBY-CORE.md](../core/TABBY-CORE.md)) and the facts `detect.py` finds, so the rules are active on every session without a skill load.
 - **PostToolUse** (Edit, Write) runs the project's own `ruff format` and `ruff check --fix` on the edited `.py` file, only when the project configures ruff. Problems go back to the model.
-- **Stop** checks the diff made during the session for shortcuts (`scripts/guard.py`): added `# type: ignore` or `# noqa`, `Any`, `cast(`, skips without a reason, bare `except`, deleted tests, fewer assertions. It then runs the project's `make check|test|ci|verify` (or `just`) once if one exists. A failure goes back to the model once; it never loops.
+- **Stop** checks the diff made during the session for shortcuts (`scripts/guard.py`): added `# type: ignore` or `# noqa`, `Any`, `cast(`, skips without a reason, bare `except`, deleted tests, fewer assertions. It then runs the project's `make check|test|ci|verify` (or `just`) once if one exists. A failure goes back to the model once; it never loops. When the change is large (over 80 changed lines or more than 3 Python files), it asks once for the `tabby-reviewer` subagent ([agents/tabby-reviewer.md](../agents/tabby-reviewer.md)) to read the diff in a fresh context, on two separate axes: the repository's standards and the request.
 
 The hooks read the repo and run only the project's own tools. They never install anything and never edit a test.
+
+`.claude/tabby.json` also takes `{"review": false}` (no reviewer request), `review_lines` and `review_files` (thresholds).
 
 ## `/tabby:hooks off`
 

@@ -5,9 +5,11 @@
 
 session-start  prints the core rules and detect.py facts as context; records current violations as a baseline
 post-edit      runs the project's own ruff on the edited .py file; exit 2 with the problems if it complains
-stop           exit 2 if the diff added new shortcuts (guard.py) or the project's make/just check fails
+stop           exit 2 if the diff added new shortcuts (guard.py), the project's make/just check fails, or the diff is large
+               (over 80 lines or 3 files; once) and the tabby-reviewer subagent has not been asked to read it
 
-Opt out: set TABBY_GATE=off, or put {"gate": false} in .claude/tabby.json. Never loops: a stop already
+Opt out: set TABBY_GATE=off, or put {"gate": false} in .claude/tabby.json; {"review": false} turns off only the reviewer request
+(`review_lines` and `review_files` set its thresholds). Never loops: a stop already
 continued by this hook (stop_hook_active) passes. Any internal error exits 0, so a bug here never blocks work.
 """
 import json
@@ -19,6 +21,7 @@ import subprocess
 import sys
 import tempfile
 
+REVIEW_LINES, REVIEW_FILES = 80, 3
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(HERE))
@@ -43,6 +46,30 @@ def disabled(proj):
         return json.loads((proj / ".claude/tabby.json").read_text()).get("gate") is False
     except Exception:
         return False
+
+
+def settings(proj):
+    try:
+        return json.loads((proj / ".claude/tabby.json").read_text())
+    except Exception:
+        return {}
+
+
+def diff_size(proj):
+    """(changed lines, files) over tracked and untracked .py files."""
+    lines = files = 0
+    for ln in run(["git", "diff", "HEAD", "--numstat", "--", "*.py"], proj).stdout.splitlines():
+        a, r, _ = (ln.split("\t") + ["", "", ""])[:3]
+        if a.isdigit() and r.isdigit():
+            lines += int(a) + int(r)
+            files += 1
+    for f in run(["git", "ls-files", "--others", "--exclude-standard", "--", "*.py"], proj).stdout.split():
+        try:
+            lines += len((proj / f).read_text(errors="ignore").splitlines())
+            files += 1
+        except OSError:
+            pass
+    return lines, files
 
 
 def run(cmd, cwd, timeout=120):
@@ -139,6 +166,16 @@ def stop(data):
         if r.returncode != 0:
             tail = "\n".join((r.stdout + r.stderr).strip().splitlines()[-25:])
             print(f"Tabby gate: `{' '.join(cmd)}` failed. Fix the cause, do not weaken tests:\n{tail}", file=sys.stderr)
+            return 2
+    cfg = settings(proj)
+    if cfg.get("review") is not False and not state.get("review_asked"):
+        lines, files = diff_size(proj)
+        if lines > int(cfg.get("review_lines", REVIEW_LINES)) or files > int(cfg.get("review_files", REVIEW_FILES)):
+            state["review_asked"] = True
+            sf.write_text(json.dumps(state))
+            print(f"Tabby gate: this is a large change ({lines} changed lines in {files} Python files). Run the `tabby-reviewer` subagent once, "
+                  "giving it the task in the user's words and the command `git diff HEAD`. Fix what it confirms, say what you declined and why, then finish. "
+                  "Turn this off with {\"review\": false} in .claude/tabby.json.", file=sys.stderr)
             return 2
     return 0
 

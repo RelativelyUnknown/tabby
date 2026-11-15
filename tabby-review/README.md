@@ -19,6 +19,7 @@ security-audit/injection-files-crypto.md     SQL, commands, templates, deseriali
 security-audit/identity-and-config.md        authentication, authorization, fail-open defaults, configuration
 security-audit/ci-pipelines.md               workflows as authorization code; AI agents in workflows
 security-audit/supply-chain.md               package sources, dependency risk, advisories, the release path
+security-audit/findings.schema.json          the JSON shape of an audit report; scripts/validate_findings.py checks one
 ```
 
 The self-review checks a change against the rule and smells files in [`../tabby/development/`](../tabby/development/), so the two modules ship together. The audit approach is adapted in spirit from the Cloudflare security-audit skill (MIT, Cloudflare, Inc.) and written for Python; see `THIRD_PARTY_NOTICES.md` at the repository root.

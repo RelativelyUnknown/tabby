@@ -74,7 +74,11 @@ Rate **severity** (the damage if it is real) and **likelihood** (how easily it t
 
 Do not pad: a missing header or rate limit with no victim is a note at the end, not a finding. A clean audit says what was checked and found nothing.
 
-### Report shape
+### Machine-readable report
+
+When the user wants a report a tool can read (CI, a ticket import, a diff between two audits), write it as JSON in the shape of [findings.schema.json](findings.schema.json) and check it with `python3 ../scripts/validate_findings.py findings.json --root <repo>` (paths relative to this folder). It enforces what this page says: a confirmed finding has entry point, payload, mechanism, effect, fix and a regression test; only confirmed findings carry a severity; the overall severity never exceeds the worst confirmed one; every `file:line` exists; coverage lists what was read, run and not checked, and the state of every class walked. Fix what it reports before you hand the file over. The prose report still follows the shape below.
+
+## Report shape
 
 Short means no filler, never a missing fact. Verdict first, in one line. Then one entry per finding: `file:line`, the path from entry to sink in at most two sentences, the fix in one. No preamble, no restating the task, no announcing what you will do, no closing recap or offer, and no mention of this guide or of checks you skipped. Say each thing once; related observations go in one trailing line. Leave out clean code, stubs, style and "no tests"; a hardening note is one line each at the end. Coverage is three lines: read, ran, not checked. Never cut `not`, `never`, `no`, `only`, numbers, paths, function names or a quoted error; use full sentences for a warning about something irreversible. With `report: terse`, give only the verdict and one line per finding.
 

@@ -9,6 +9,9 @@
 - `detect.py` reports house rules (ruff families, type-checker and pytest strictness, python floor, `src/` layout) and existing helper modules.
 - Five new headroom eval cases, four with hidden tests; `summarise.py` separates ceiling cases and prints a bootstrap interval and the regression list; `quality.py` counts tests weakened; `judge.py` scores testable structure; `make_arms.py` builds ablation arms.
 
+- `tabby-reviewer` subagent (`agents/tabby-reviewer.md`): a read-only review in a fresh context, Standards and Spec reported apart. The Stop hook asks for it once when a change is large (over 80 lines or 3 Python files).
+- Security audit reports can be written as JSON (`security-audit/findings.schema.json`) and checked with `tabby-review/scripts/validate_findings.py`.
+
 ## 0.1.0
 
 First release.
