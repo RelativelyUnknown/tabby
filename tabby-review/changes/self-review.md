@@ -40,7 +40,7 @@ If you wrote the change yourself, none of this is cleaned up afterwards: it is p
 
 ## Closing the review
 
-Follow the report shape in [reporting.md](../security-audit/reporting.md): verdict first, one tight entry per finding, no preamble or recap.
+Follow the report shape in [process-and-reporting.md](../security-audit/process-and-reporting.md): verdict first, one tight entry per finding, no preamble or recap.
 
 
 Give the single most likely thing to break on the most common path, even if it is not the most severe finding. End with what you did not verify: paths you could not reproduce, anything that needs the app or a service running, lines you could not confirm. Never imply you checked more than you opened. Findings that were refuted on a second look ("it is guarded at line N") are worth one line, because they save the next reviewer the same check.

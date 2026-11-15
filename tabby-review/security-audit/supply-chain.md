@@ -1,6 +1,6 @@
 # Security audit: dependencies and release
 
-A finding needs the same four parts as any other ([process.md](process.md)): a lower-trust party, something they control, the trusted installer or job that consumes it, and what they gain. A floating version or a missing best practice with no such path is a hardening note. Workflows and AI agents in CI are in [ci-workflows.md](ci-workflows.md).
+A finding needs the same four parts as any other ([process-and-reporting.md](process-and-reporting.md)): a lower-trust party, something they control, the trusted installer or job that consumes it, and what they gain. A floating version or a missing best practice with no such path is a hardening note. Workflows and AI agents in CI are in [ci-pipelines.md](ci-pipelines.md).
 
 Read with [choosing-dependencies.md](../../tabby/development/dependencies/choosing-dependencies.md), which covers vetting and scanning packages. Registry settings, branch protection and environment rules are not in the repository, so a finding that depends on them is `needs validation`.
 
@@ -38,4 +38,4 @@ Wrongly dismissing: "only in debug mode" (check production), "needs local access
 - Secrets, `.env` files, test fixtures or local configuration inside the sdist or wheel: list the archive (`unzip -l dist/*.whl`, `tar tf dist/*.tar.gz`) and read it.
 - Generated files committed without the command that regenerates them, so a reviewer cannot tell an edited file from a generated one.
 
-Report as in [reporting.md](reporting.md).
+Report as in [process-and-reporting.md](process-and-reporting.md).
