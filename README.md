@@ -108,7 +108,13 @@ The same agent with and without Tabby on Claude Haiku 5.5, 98 eval cases, 3 runs
 | Turns per run | 11.4 | 14.8 |
 | Cost per run | $0.0131 | $0.0152 |
 
-Tabby scored higher on 23 cases, lower on 11 and the same on 64.
+Tabby scored higher on 23 cases, lower on 11 and the same on 64. These numbers predate version 0.2.0 (always-on core, quality-gate hooks, calmer descriptions, new headroom cases); they have not been re-measured.
+
+### Re-measuring
+
+`python3 tools/eval/summarise.py DIR` now splits the cases. Those where the agent without Tabby already scores 0.95 or more are reported as no-regression checks. The headline delta uses the rest, with a 95% bootstrap interval and the list of cases where Tabby is worse by 0.10 or more. Four cases added in 0.2.0 target known failure modes: `type-error-no-ignore`, `reuse-existing-slugify`, `vague-request-asks-first` and `pydantic-v2-model`.
+
+To see which part gives which gain, run the same cases against checkouts of the plugin with parts removed and compare with `--compare`: the full plugin; one with `hooks/hooks.json` deleted (core and skills, no gate); one with `hooks/` removed and the `tabby` skill's routing section cut (core only). Hidden tests, suppressions added and diff size come from `tools/eval/quality.py`; blind pairwise judging of the diffs comes from `tools/eval/judge.py`. Report the two separately: quality has parts a metric cannot see.
 
 ### What each case tests
 

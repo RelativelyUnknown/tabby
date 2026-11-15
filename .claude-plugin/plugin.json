@@ -1,6 +1,6 @@
 {
   "name": "tabby",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Skills that make Claude Code build, review and explain a Python project properly: a core development skill (with Rust, C, C++ and Zig extensions) plus review, docs, diagrams, frontend and an opt-in interview.",
   "author": {
     "name": "RelativelyUnknown",

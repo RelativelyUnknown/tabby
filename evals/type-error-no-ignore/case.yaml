@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: type-error-no-ignore
+expected_outcome: |
+  Adds email_for(user_id) that handles a missing user explicitly, with no type: ignore, cast or Any.
+context:
+  scaffold_script: fixture.sh

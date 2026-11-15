@@ -32,7 +32,7 @@ Run `python3 scripts/detect.py` from this skill's folder (the harness names the 
 
 Open leaves with Read at the path given; do not search for them. A one-line fix, a question or a command to run needs no leaf. Otherwise read the one leaf per area that the task touches, when you reach it, and skip the rest (paths start at `development/`). The core rules already apply without any leaf. A bug or a security-sensitive input is covered by the two rules above.
 
-- changes more than a few lines: `code/smells.md`
+- changes more than a few lines: `code/smells.md`; `code/examples.md` shows the common shortcuts (suppressions, weakened tests, swallowed errors, a second helper, over-building, `Any`, Pydantic v1 on v2) as before and after
 - a new function, class, option, constant or name: `code/minimalism.md`
 - a hand-rolled utility, a new package, or a job a library may already do: `code/reuse.md`, `ecosystem.md`, `dependencies/dependencies.md` (the runner is uv: `dependencies/uv.md`, `uv-ci.md`, `uv-docker.md`)
 - raises, catches or retries an error: `code/errors.md`; parses input: `code/validation.md`; adds annotations: `code/typing.md`
