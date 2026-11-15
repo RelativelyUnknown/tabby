@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """install.py: copy the Tabby skills to where OpenCode, GitHub Copilot or Claude Code read them.
 
-    python3 tools/install.py TARGET [--user] [--dest DIR] [--force] [--dry-run] [--with-hooks]
+    python3 tools/install.py TARGET [--user] [--dest DIR] [--force] [--dry-run] [--with-hooks] [--core FILE]
 
 TARGET picks the skills folder (project scope is relative to the current directory; --user uses your home folder):
 
@@ -12,7 +12,8 @@ TARGET picks the skills folder (project scope is relative to the current directo
 
 Claude Code users can install the plugin instead (see the README). Without --force an existing skill folder is left
 alone and reported; with --force files are overwritten in place and nothing is deleted. The `hooks` skill is Claude Code
-only and is copied only with --with-hooks. Stdlib only.
+only and is copied only with --with-hooks. --core FILE appends the always-on core rules (core/TABBY-CORE.md)
+to FILE (for example AGENTS.md) unless it already has them; the quality-gate hooks stay Claude Code only. Stdlib only.
 """
 import argparse
 import os
@@ -44,6 +45,7 @@ def main(argv=None):
     ap.add_argument("--force", action="store_true", help="overwrite files in skill folders that already exist")
     ap.add_argument("--dry-run", action="store_true", help="show what would be copied and change nothing")
     ap.add_argument("--with-hooks", action="store_true", help="also copy the Claude Code only hooks skill")
+    ap.add_argument("--core", metavar="FILE", help="append the always-on core rules to FILE (for example AGENTS.md)")
     a = ap.parse_args(argv)
 
     dest = a.dest or WHERE[a.target][1 if a.user else 0]
@@ -71,6 +73,18 @@ def main(argv=None):
     if done and not a.dry_run:
         print(NEXT[a.target])
         print("The skills point at each other by relative path, so keep the folders side by side.")
+    if a.core:
+        core = open(os.path.join(ROOT, "core", "TABBY-CORE.md")).read()
+        path = os.path.abspath(os.path.expanduser(a.core))
+        have = open(path).read() if os.path.exists(path) else ""
+        if "# Tabby core:" in have:
+            print(f"{path} already has the Tabby core rules")
+        elif a.dry_run:
+            print(f"would append the Tabby core rules to {path}")
+        else:
+            with open(path, "a") as f:
+                f.write(("\n" if have and not have.endswith("\n\n") else "") + core)
+            print(f"appended the Tabby core rules to {path}")
     return 0
 
 

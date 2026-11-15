@@ -28,9 +28,9 @@ Run `python3 scripts/detect.py` from this skill's folder (the harness names the 
 - If Bash says `Read-only file system`, the Write and Edit tools still work: make the change with them, run what you can, and say which command could not run. Never end by pasting the code into the reply.
 - Replies, comments and docs are short: what is not obvious, no filler. Never drop "not", "never", "only", "except".
 
-## Read before the first edit
+## Read when the task touches the area
 
-Open leaves with Read at the path given; do not search for them. A one-line fix, a question or a command to run needs no leaf. For anything else, before the first edit read every leaf below whose condition the task meets (paths start at `development/`). A bug or a security-sensitive input is already covered by the two rules above.
+Open leaves with Read at the path given; do not search for them. A one-line fix, a question or a command to run needs no leaf. Otherwise read the one leaf per area that the task touches, when you reach it, and skip the rest (paths start at `development/`). The core rules already apply without any leaf. A bug or a security-sensitive input is covered by the two rules above.
 
 - changes more than a few lines: `code/smells.md`
 - a new function, class, option, constant or name: `code/minimalism.md`

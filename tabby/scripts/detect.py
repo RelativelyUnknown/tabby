@@ -4,7 +4,7 @@
     python3 detect.py [PROJECT_DIR]
 
 Runner, build backend, Python target, tests, formatter and linter, type checker, the project's check command, CI, docs tool,
-native extension, and whether AGENTS.md has a `## Tabby` or `## Python defaults` section. A line says `none found` rather than
+native extension, house rules (ruff rule families, type-checker strictness, pytest strictness, src/ layout, python floor), existing helper modules, and whether AGENTS.md has a `## Tabby` or `## Python defaults` section. A line says `none found` rather than
 guessing. Stdlib only; Python 3.11 or later for tomllib (older: the pyproject lines are skipped).
 """
 import pathlib, re, sys
@@ -75,6 +75,38 @@ def lines():
     docs = has("mkdocs.yml") + (["sphinx (docs/conf.py)"] if has("docs/conf.py") else [])
     native = [n for n in ("Cargo.toml", "CMakeLists.txt", "meson.build", "build.zig") if (root / n).exists()] + (["ext_modules"] if "ext_modules" in all_text else []) + [str(p.name) for p in list(root.glob("**/*.pyx"))[:1]]
     yield "docs: " + (", ".join(docs) or "none found") + "; native: " + (", ".join(native) or "none")
+    ruff = tool.get("ruff", {}) or {}
+    lintcfg = ruff.get("lint", ruff) or {}
+    sel = lintcfg.get("select") or []
+    rules = []
+    if sel:
+        rules.append("ruff select " + ",".join(sel[:14]) + ("..." if len(sel) > 14 else ""))
+    if lintcfg.get("ignore"):
+        rules.append(f"{len(lintcfg['ignore'])} ruff ignores")
+    mypy = tool.get("mypy", {}) or {}
+    if mypy.get("strict"):
+        rules.append("mypy strict")
+    elif mypy:
+        rules.append("mypy configured (not strict)")
+    pyr = tool.get("pyright", {}) or {}
+    if pyr.get("typeCheckingMode"):
+        rules.append(f"pyright {pyr['typeCheckingMode']}")
+    pt = (tool.get("pytest", {}) or {}).get("ini_options", {}) or {}
+    if pt.get("xfail_strict"):
+        rules.append("pytest xfail_strict")
+    if "--strict" in str(pt.get("addopts", "")):
+        rules.append("pytest " + " ".join(a for a in str(pt["addopts"]).split() if a.startswith("--strict")))
+    if (root / "src").is_dir():
+        rules.append("src/ layout")
+    yield "house rules: " + ("; ".join(rules) or "none found") + (f"; no syntax newer than python {proj['requires-python']}" if proj.get("requires-python") else "")
+    skip = {".git", ".venv", "venv", "node_modules", "build", "dist", "__pycache__", ".tox", ".mypy_cache", ".ruff_cache"}
+    names = {"utils.py", "_utils.py", "helpers.py", "common.py", "_compat.py", "compat.py", "errors.py", "exceptions.py", "conftest.py"}
+    found = []
+    for p in sorted(root.glob("*/*.py")) + sorted(root.glob("*/*/*.py")) + sorted(root.glob("*/*/*/*.py")):
+        rel = p.relative_to(root)
+        if p.name in names and not (skip & set(rel.parts)):
+            found.append(str(rel))
+    yield "existing helpers (reuse before writing new): " + (", ".join(found[:12]) or "none found") + (" ..." if len(found) > 12 else "")
     mem = text("AGENTS.md") + text("CLAUDE.md")
     yield "project memory: " + ("## Tabby section" if "## Tabby" in mem else "no ## Tabby section") + (", ## Python defaults" if "## Python defaults" in mem else "") + (f"; {', '.join(has('AGENTS.md', 'CLAUDE.md'))}" if has("AGENTS.md", "CLAUDE.md") else "; no AGENTS.md or CLAUDE.md")
 
