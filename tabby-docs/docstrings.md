@@ -1,6 +1,6 @@
 # Docstrings and API reference
 
-Formats from PEP 257, numpydoc and the Google Python Style Guide. What to say and never say: `../tabby/development/code/comments.md`.
+Formats from PEP 257, numpydoc and the Google Python Style Guide. What to say and never say: `../tabby/development/code/minimalism.md`.
 
 ## Choosing a format
 

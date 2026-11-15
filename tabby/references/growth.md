@@ -8,7 +8,7 @@ How the code reaches its data today (plain SQL, a query builder, an ORM), the sh
 
 ## 2. Two or three options for each real fork
 
-Name them, the criterion that decides, and what this project's evidence says. Candidates come from [ecosystem.md](../development/ecosystem.md) and the ladder in [reuse.md](../development/code/reuse.md); check installed and current versions first. Typical criteria: plain SQL for few tables and a handful of hot queries, a query builder when filters are built dynamically, an ORM for many related entities, frequent schema change or several clients; async only when many requests wait on I/O and the driver is async; a cache only after a measurement, when reads dominate and may be stale; a queue when work must survive a restart or outlast a request.
+Name them, the criterion that decides, and what this project's evidence says. Candidates come from [ecosystem.md](../development/ecosystem.md) and the ladder in [minimalism.md](../development/code/minimalism.md); check installed and current versions first. Typical criteria: plain SQL for few tables and a handful of hot queries, a query builder when filters are built dynamically, an ORM for many related entities, frequent schema change or several clients; async only when many requests wait on I/O and the driver is async; a cache only after a measurement, when reads dominate and may be stale; a queue when work must survive a restart or outlast a request.
 
 ## 3. Choose for today, make the next one cheap
 

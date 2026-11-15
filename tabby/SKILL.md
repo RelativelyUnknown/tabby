@@ -21,7 +21,7 @@ Run `python3 scripts/detect.py` from this skill's folder (the harness names the 
 - Find the cause before the fix. No special-casing inputs, no sleeps or retries to hide a symptom. Do not silence tools (`# type: ignore`, `# noqa`, `Any`, looser config). Asked to raise a timeout, limit or retry count so a failure stops: first read what the failing code does; if it is slow or failing for a fixable reason (a query per row, a loop, a missing index), say so and fix it or offer the fix, then do what was asked.
 - A request you cannot state as one change ("make the reports better") gets one to three short questions with suggested answers before any edit. A request that names the change is done, not discussed. A feature with several readings gets a one-page spec and its first slice (`development/workflow/specs-and-slices.md`).
 - "Get rid of" a public name is a deprecation unless nothing outside this repository can use it (`development/workflow/deprecation-and-migration.md`).
-- Do not hand-roll what the standard library or the community's standard library does well (an HTTP call with retries and pooling, dates, validation, argument parsing, retries): climb the ladder in `development/code/reuse.md` first, and say in the reply which rung you took and why.
+- Do not hand-roll what the standard library or the community's standard library does well (an HTTP call with retries and pooling, dates, validation, argument parsing, retries): climb the ladder in `development/code/minimalism.md` first, and say in the reply which rung you took and why.
 - Write it clean the first time, so nothing needs cleaning up afterwards: no narrating comments, no defensive checks on data your own code produced, no casts or ignores to get past a checker, no helper that already exists (`git grep` before writing one), the style of the file around it ([minimalism](development/code/minimalism.md)).
 - Smallest diff that solves it properly. A new dependency is chosen by the ladder and named in the reply (rung and reason), and needs a yes first when `ask-first:` says so. A public API change, a commit or a push only when asked.
 - Use the project's own tools, runner and Python target, found from its lock file, `Makefile` or CI (`development/which-type.md`): never swap one, add a second for a job one does, or install silently. Commands in the leaves are written for uv; use the project's equivalent.
@@ -34,8 +34,8 @@ Open leaves with Read at the path given; do not search for them. A one-line fix,
 
 - changes more than a few lines: `code/smells.md`; `code/examples.md` shows the common shortcuts (suppressions, weakened tests, swallowed errors, a second helper, over-building, `Any`, Pydantic v1 on v2) as before and after
 - a new function, class, option, constant or name: `code/minimalism.md`
-- a hand-rolled utility, a new package, or a job a library may already do: `code/reuse.md`, `ecosystem.md`, `dependencies/dependencies.md` (the runner is uv: `dependencies/uv.md`, `uv-ci.md`, `uv-docker.md`)
-- raises, catches or retries an error: `code/errors.md`; parses input: `code/validation.md`; adds annotations: `code/typing.md`
+- a hand-rolled utility, a new package, or a job a library may already do: `code/minimalism.md`, `ecosystem.md`, `dependencies/dependencies.md` (the runner is uv: `dependencies/uv.md`, which also covers CI and Docker)
+- raises, catches or retries an error: `code/errors.md` (also input validation); adds annotations: `code/typing.md`
 - Rust, C, C++ or Zig behind a Python API, including moving a function into one: `library/native/index.md`, then the language page it names (`rust.md`, `c.md`, `cpp.md`, `zig.md`), and `library/native/porting.md` to move a function
 - opens files, connections, locks, subprocesses or streams: `code/resources.md`
 - writes or changes tests: `testing/testing.md`, `testing/smells.md`; with mocks `testing/mocking.md`, fixtures `testing/fixtures.md`, property-based or release-grade `testing/rigor.md`
@@ -44,7 +44,7 @@ Open leaves with Read at the path given; do not search for them. A one-line fix,
 
 Read these when you reach the situation, not before:
 
-- feature newer than the Python target: `code/python-versions.md`; docstring, comment: `code/comments.md`; logging: `code/logging.md`; script or CLI: `code/scripts.md`
+- feature newer than the Python target: `code/python-versions.md`; docstring, comment: `code/minimalism.md`; logging: `code/logging.md`; script or CLI: `code/scripts.md`
 - data frames, arrays, models, notebooks, large files: `code/data.md`; threads, processes, pools: `code/concurrency.md`; slow code: `performance/index.md`
 - scope: `workflow/planning.md`; restructuring: `workflow/refactoring.md`; unsure API: `workflow/checking-apis.md`; about to report: `workflow/shipping.md`
 - pattern, layers: `architecture/design-patterns.md`; data structure or algorithm: `architecture/fit.md` (worked examples `fit-examples.md`); design under real limits, `unsafe`: `architecture/senior-engineering.md`; habits from systems projects (fault injection, shared-nothing, narrow ABIs, subtracting surface): `architecture/systems-lessons.md`

@@ -14,13 +14,13 @@ The rest of this repository is MIT (see `LICENSE`).
 | --- | --- |
 | `python-resource-management` | `tabby/development/code/resources.md` |
 | `python-type-safety` | `tabby/development/code/typing.md` |
-| `uv-package-manager` | `tabby/development/dependencies/uv.md`, `uv-ci.md`, `uv-docker.md` |
+| `uv-package-manager` | `tabby/development/dependencies/uv.md` |
 | `async-python-patterns` | `tabby/development/application/shared/async.md`, `async-patterns.md` |
 | `python-background-jobs` | `tabby/development/application/workers/background-jobs.md`, `background-jobs-patterns.md` |
 | `python-observability` | `tabby/development/application/shared/observability.md` |
 | `python-configuration` | `tabby/development/application/shared/configuration.md` |
 | `python-resilience` | `tabby/development/application/shared/resilience.md` |
-| `python-error-handling` | `tabby/development/code/errors.md`, `validation.md` |
+| `python-error-handling` | `tabby/development/code/errors.md` |
 | `python-design-patterns` | `tabby/development/architecture/design-patterns.md` (three principles) |
 | `python-testing-patterns` | one section of `tabby/development/testing/mocking.md`; the rest was already covered (see `provenance/development-SOURCE.md`) |
 | `python-performance-optimization` | `tabby/development/performance/index.md`; the profiler tutorial was not copied (see `provenance/development-SOURCE.md`) |
@@ -35,7 +35,7 @@ The rest of this repository is MIT (see `LICENSE`).
 
 ## Ideas only (no text copied)
 
-- DietrichGebert/ponytail (MIT) and JuliusBrussee/caveman (Apache-2.0): the rules in the `tabby/development` front door and `code/comments.md` that comments say only what is not obvious, replies stay short, and negations ("not", "never", "only", "except") are never dropped. Names, installers, proxies and telemetry are not used.
+- DietrichGebert/ponytail (MIT) and JuliusBrussee/caveman (Apache-2.0): the rules in the `tabby/development` front door and `code/minimalism.md` that comments say only what is not obvious, replies stay short, and negations ("not", "never", "only", "except") are never dropped. Names, installers, proxies and telemetry are not used.
 
 ## Read, nothing taken
 
@@ -64,7 +64,7 @@ Every source was cloned again at the commit below and read for ideas Tabby did n
 | Source (commit) | Licence | Idea taken | Where it went |
 | --- | --- | --- | --- |
 | DietrichGebert/ponytail (`96608e0`) | MIT | ask first whether the code needs to exist; a list of what minimalism never cuts; moved code keeps its checks; review against the expected load; a marked shortcut is a decision | `development/code/minimalism.md`, `workflow/refactoring.md`, `review/changes/self-review.md` |
-| JuliusBrussee/caveman (`3dc497a`) | Apache-2.0 | when short replies must become full sentences; existing comments are not yours to shorten; why-first commit messages | `development/workflow/shipping.md`, `code/comments.md`, `documentation/commits.md` |
+| JuliusBrussee/caveman (`3dc497a`) | Apache-2.0 | when short replies must become full sentences; existing comments are not yours to shorten; why-first commit messages | `development/workflow/shipping.md`, `code/minimalism.md`, `documentation/commits.md` |
 | morganlinton/BeautifulRust (`b971843`) | MIT | rules for the PyO3-free core crate (error enum, invariants in types, trait contracts, lossy casts, map order) | `development/library/native/rust.md` |
 | cloudflare/security-audit-skill (`c1c8a8c`) | MIT | CI configuration as authorization code; integrity across build, test and publish | `review/security-audit/supply-chain.md` |
 | addyosmani/agent-skills (`301b02b`) | MIT | observable behaviour becomes contract; state-dependent fields as a union; when to write an ADR and matching the project's ADR convention; details that must survive an edit; a timeout is an unknown outcome | `library/shared/api-design.md`, `code/typing.md`, `documentation/history/adr.md`, `documentation/concision.md`, `application/shared/resilience.md` |

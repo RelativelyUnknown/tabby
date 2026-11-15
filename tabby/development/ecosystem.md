@@ -1,6 +1,6 @@
 # The ecosystem, job by job
 
-What a senior engineer knows without looking it up: for each job, what the language already provides, what the community treats as standard, and where each stops fitting. Use it with the ladder in [code/reuse.md](code/reuse.md), then check the installed versions and the Python target before relying on any of it ([workflow/checking-apis.md](workflow/checking-apis.md)).
+What a senior engineer knows without looking it up: for each job, what the language already provides, what the community treats as standard, and where each stops fitting. Use it with the ladder in [code/minimalism.md](code/minimalism.md), then check the installed versions and the Python target before relying on any of it ([workflow/checking-apis.md](workflow/checking-apis.md)).
 
 Python rows were run on Python 3.13.18 on 10 November 2026 where they say so; library names and the Rust, C++ and Zig lists are from knowledge of the ecosystem and were not run here.
 
@@ -20,7 +20,7 @@ Python rows were run on Python 3.13.18 on 10 November 2026 where they say so; li
 | HTTP in an application | | httpx (sync and async), requests (sync) | |
 | Retries with backoff | a loop with a cap and a named exception | tenacity, `urllib3.util.Retry` | several call sites or jitter |
 | Parse CLI arguments | `argparse` | click, typer | many subcommands, completion |
-| Validate input | `if ... raise`, frozen dataclass | pydantic | see the validation ladder in `code/reuse.md` |
+| Validate input | `if ... raise`, frozen dataclass | pydantic | see the validation ladder in `code/minimalism.md` |
 | Caching | `functools.cache` (run) | cachetools (expiry, size), Redis (shared) | several processes or workers |
 | Concurrency | `concurrent.futures`, `asyncio.TaskGroup` and `asyncio.timeout` (3.11+) | anyio | CPU-bound: processes; free-threaded builds |
 | Tokens, IDs, secrets | `secrets`, `uuid` | | passwords and encryption: argon2-cffi, bcrypt, cryptography |

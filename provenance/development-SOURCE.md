@@ -6,12 +6,12 @@ Paths below are under `development/`.
 
 | Leaf | Upstream skill (under `plugins/python-development/skills/`) |
 | --- | --- |
-| `code/errors.md`, `validation.md` | `python-error-handling`, `python-code-style` |
+| `code/errors.md` | `python-error-handling`, `python-code-style` |
 | `code/typing.md` | `python-type-safety` |
 | `code/resources.md` | `python-resource-management` |
 | `testing/mocking.md` (retries section) | `python-testing-patterns` |
 | `performance/index.md` | `python-performance-optimization` |
-| `dependencies/uv.md`, `uv-ci.md`, `uv-docker.md` | `uv-package-manager` |
+| `dependencies/uv.md` | `uv-package-manager` |
 | `library/shared/versioning.md`, `entry-points.md`, `tooling.md` (build backends) | `python-packaging`, `python-project-structure` |
 | `architecture/design-patterns.md` (three principles) | `python-design-patterns` |
 | `application/shared/observability.md` | `python-observability` |

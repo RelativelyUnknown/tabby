@@ -1,6 +1,6 @@
 # Worked examples: the shortcuts to avoid
 
-Each pair is a shortcut an agent takes to get past a checker or finish quickly, and the version to write instead. The rule behind each is in [smells.md](smells.md), [minimalism.md](minimalism.md) or [reuse.md](reuse.md).
+Each pair is a shortcut an agent takes to get past a checker or finish quickly, and the version to write instead. The rule behind each is in [smells.md](smells.md) or [minimalism.md](minimalism.md) (which also holds the reuse ladder).
 
 Contents: suppression · weakened test · swallowed error · reuse · over-building · defensive code · typing · Pydantic version
 

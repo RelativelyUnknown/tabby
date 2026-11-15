@@ -15,7 +15,7 @@ Project memory is the `## Tabby` section of AGENTS.md. Claude Code reads CLAUDE.
 - Find the cause before the fix. No special-casing inputs, no sleeps or retries to hide a symptom. Do not silence tools (`# type: ignore`, `# noqa`, `Any`, looser config).
 - A request you cannot state as one change ("make the reports better") gets one to three short questions with suggested answers before any edit. A request that names the change is done, not discussed. A feature with several readings gets a one-page spec and its first slice (`development/workflow/specs-and-slices.md`).
 - "Get rid of" a public name is a deprecation unless nothing outside this repository can use it (`development/workflow/deprecation-and-migration.md`).
-- Do not hand-roll what the standard library or the community's standard library does well (an HTTP call with retries and pooling, dates, validation, argument parsing, retries): climb the ladder in `development/code/reuse.md` first, and say in the reply which rung you took and why.
+- Do not hand-roll what the standard library or the community's standard library does well (an HTTP call with retries and pooling, dates, validation, argument parsing, retries): climb the ladder in `development/code/minimalism.md` first, and say in the reply which rung you took and why.
 - Smallest diff that solves it properly. A new dependency is chosen by the ladder and named in the reply (rung and reason), and needs a yes first when `ask-first:` says so. A public API change, a commit or a push only when asked.
 - Use the project's own tools, runner and Python target, found from its lock file, `Makefile` or CI (`development/which-type.md`): never swap one, add a second for a job one does, or install silently. Commands in the leaves are written for uv; use the project's equivalent.
 - Replies, comments and docs are short: what is not obvious, no filler. Never drop "not", "never", "only", "except".
@@ -26,10 +26,10 @@ Project memory is the `## Tabby` section of AGENTS.md. Claude Code reads CLAUDE.
 Read `development/code/smells.md` first, then only the leaf for the main thing the task does (a second only if clearly needed); others when you reach a situation they cover. `development/workflow/shipping.md` when about to report. Paths start at `development/`. Open each with Read; do not search.
 
 - new function, class, option, constant, name: `development/code/minimalism.md`
-- what exists for a job: `development/ecosystem.md`; hand-rolled utility, new package: `development/code/reuse.md`, `development/dependencies/dependencies.md`
-- errors: `development/code/errors.md`; parsing input: `development/code/validation.md`; annotations: `development/code/typing.md`
+- what exists for a job: `development/ecosystem.md`; hand-rolled utility, new package: `development/code/minimalism.md`, `development/dependencies/dependencies.md`
+- errors: `development/code/errors.md`; parsing input: `development/code/errors.md`; annotations: `development/code/typing.md`
 - files, connections, locks, subprocesses, streams: `development/code/resources.md`
-- feature newer than the Python target: `development/code/python-versions.md`; docstring, comment: `development/code/comments.md`
+- feature newer than the Python target: `development/code/python-versions.md`; docstring, comment: `development/code/minimalism.md`
 - logging, secrets, SQL, `eval`, `pickle`: `development/code/logging.md`, `development/code/security-basics.md`; script or CLI: `development/code/scripts.md`
 - tests: `development/testing/testing.md`, `development/testing/smells.md`; slow code: `development/performance/index.md`
 - retries, timeouts, circuit breakers: `development/application/shared/resilience.md`

@@ -19,7 +19,7 @@ troubleshooting/  symptom-fix-matrix.md                      fast fault isolatio
 governance/     contributing.md                              rules for collaborators
 ```
 
-Docstring content rules (no conversation residue, no restated signatures) live in [`../tabby/development/code/comments.md`](../tabby/development/code/comments.md).
+Docstring content rules (no conversation residue, no restated signatures) live in [`../tabby/development/code/minimalism.md`](../tabby/development/code/minimalism.md).
 
 ## Evals
 
