@@ -1,6 +1,6 @@
 ---
 name: tabby-diagrams
-description: "MUST be your first tool call, before drawing, for any picture of how a system works, as SVG or animated HTML: a diagram, flowchart, picture or layout of architecture, flow, sequence, state, entity-relationship (database tables), deployment (Kubernetes, AWS), data flow, module dependencies, or an explainer animation. It holds the builder and the checkers. Not for web pages or dashboards (tabby-frontend)."
+description: "Builds SVG diagrams and animated HTML explainers with a builder and checkers. Use for a picture of how a system works: architecture, flow, sequence, state, entity-relationship, deployment (Kubernetes, AWS), data flow, module dependencies. Not for web pages or dashboards (tabby-frontend)."
 license: MIT
 ---
 

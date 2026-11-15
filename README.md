@@ -53,7 +53,7 @@ Install Tabby only from `RelativelyUnknown/my-skills` on GitHub.
 | Skills load when the request matches | yes | yes | yes |
 | Run the interview | `/tabby:interview` | `@interview` | `/interview` |
 | Project memory file | `CLAUDE.md` containing `@AGENTS.md` | `AGENTS.md` | `AGENTS.md` or `.github/copilot-instructions.md` |
-| Reminder before each prompt | optional hook (`hooks` skill) | paste [`remind.txt`](hooks/remind.txt) into `AGENTS.md` | paste [`remind.txt`](hooks/remind.txt) into `.github/copilot-instructions.md` |
+| Core rules and quality gate | plugin hooks, on by default (`hooks/`) | paste [`core/TABBY-CORE.md`](core/TABBY-CORE.md) into `AGENTS.md` | paste [`core/TABBY-CORE.md`](core/TABBY-CORE.md) into `.github/copilot-instructions.md` |
 
 ## Example
 
@@ -83,7 +83,7 @@ The harness keeps the six descriptions in context (about 2,400 characters, rough
 | [`tabby-frontend`](tabby-frontend/) | build a page, dashboard, data app or docs site | A method, design tokens, a list of things it refuses to ship, and `ui-check` for contrast, focus, motion and layout |
 | [`interview`](interview/) | run `/tabby:interview` | Researches the repository read-only, asks at most three questions a round, and saves a `## Tabby` section to `AGENTS.md` |
 
-Skills load more reliably with a short reminder before each prompt. In Claude Code an optional hook in [`hooks/`](hooks/) prints it, and it is off by default; in the other tools the reminder lives in the instructions file (see the table above).
+The core rules in [`core/TABBY-CORE.md`](core/TABBY-CORE.md) are always on. In Claude Code, hooks in [`hooks/`](hooks/) inject them at session start, run the project's ruff on edited files, and at the end of a turn check the diff for shortcuts (added suppressions, skipped or weakened tests, bare `except`) and run the project's check command once. Turn them off with `TABBY_GATE=off` or `{"gate": false}` in `.claude/tabby.json`. In the other tools the core lives in the instructions file (see the table above).
 
 ## The rules it holds
 

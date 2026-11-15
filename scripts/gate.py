@@ -1,0 +1,155 @@
+#!/usr/bin/env python3
+"""gate.py: Claude Code hook dispatcher for Tabby. Stdlib only.
+
+    gate.py session-start | post-edit | stop      (hook JSON arrives on stdin)
+
+session-start  prints the core rules and detect.py facts as context; records current violations as a baseline
+post-edit      runs the project's own ruff on the edited .py file; exit 2 with the problems if it complains
+stop           exit 2 if the diff added new shortcuts (guard.py) or the project's make/just check fails
+
+Opt out: set TABBY_GATE=off, or put {"gate": false} in .claude/tabby.json. Never loops: a stop already
+continued by this hook (stop_hook_active) passes. Any internal error exits 0, so a bug here never blocks work.
+"""
+import json
+import os
+import pathlib
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+
+HERE = pathlib.Path(__file__).resolve().parent
+ROOT = HERE.parent
+sys.path.insert(0, str(HERE))
+import guard  # noqa: E402
+
+
+def read_input():
+    try:
+        return json.load(sys.stdin)
+    except Exception:
+        return {}
+
+
+def project(data):
+    return pathlib.Path(data.get("cwd") or os.environ.get("CLAUDE_PROJECT_DIR") or ".")
+
+
+def disabled(proj):
+    if os.environ.get("TABBY_GATE", "").lower() == "off":
+        return True
+    try:
+        return json.loads((proj / ".claude/tabby.json").read_text()).get("gate") is False
+    except Exception:
+        return False
+
+
+def run(cmd, cwd, timeout=120):
+    return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=timeout)
+
+
+def current_violations(proj):
+    r = run(["git", "diff", "HEAD", "-U0", "--no-color"], proj)
+    found = guard.check_diff(r.stdout) if r.returncode == 0 else []
+    untracked = run(["git", "ls-files", "--others", "--exclude-standard", "--", "*.py"], proj).stdout.split()
+    for f in untracked[:50]:
+        try:
+            body = (proj / f).read_text(errors="ignore")
+        except OSError:
+            continue
+        fake = f"diff --git a/{f} b/{f}\n--- /dev/null\n+++ b/{f}\n" + "".join("+" + ln + "\n" for ln in body.splitlines())
+        found += guard.check_diff(fake)
+    return list(dict.fromkeys(found))
+
+
+def state_file(data):
+    return pathlib.Path(tempfile.gettempdir()) / f"tabby-gate-{data.get('session_id', 'x')}.json"
+
+
+def ruff_configured(proj):
+    if (proj / "ruff.toml").exists() or (proj / ".ruff.toml").exists():
+        return True
+    try:
+        return "[tool.ruff" in (proj / "pyproject.toml").read_text(errors="ignore")
+    except OSError:
+        return False
+
+
+def session_start(data):
+    proj = project(data)
+    print((ROOT / "core/TABBY-CORE.md").read_text())
+    r = run([sys.executable, str(ROOT / "tabby/scripts/detect.py"), str(proj)], proj, 20)
+    print(r.stdout)
+    if not disabled(proj):
+        try:
+            state_file(data).write_text(json.dumps({"baseline": current_violations(proj), "checked": False}))
+        except Exception:
+            pass
+    return 0
+
+
+def post_edit(data):
+    proj = project(data)
+    path = (data.get("tool_input") or {}).get("file_path", "")
+    if disabled(proj) or not path.endswith(".py") or not ruff_configured(proj):
+        return 0
+    ruff = shutil.which("ruff")
+    if not ruff or not pathlib.Path(path).exists():
+        return 0
+    run([ruff, "format", path], proj)
+    r = run([ruff, "check", "--fix", "--output-format=concise", path], proj)
+    if r.returncode != 0:
+        print(f"ruff reports problems in {path}; fix them without adding noqa:\n{r.stdout.strip()[:1500]}", file=sys.stderr)
+        return 2
+    return 0
+
+
+def check_command(proj):
+    for mk, tool in (("Makefile", "make"), ("justfile", "just")):
+        try:
+            text = (proj / mk).read_text(errors="ignore")
+        except OSError:
+            continue
+        m = re.search(r"^(check|test|ci|verify)\s*:", text, re.M)
+        if m and shutil.which(tool):
+            return [tool, m.group(1)]
+    return None
+
+
+def stop(data):
+    proj = project(data)
+    if disabled(proj) or data.get("stop_hook_active"):
+        return 0
+    sf = state_file(data)
+    try:
+        state = json.loads(sf.read_text())
+    except Exception:
+        state = {"baseline": [], "checked": False}
+    new = [v for v in current_violations(proj) if v not in state["baseline"]]
+    if new:
+        print("Tabby gate: the diff added shortcuts. Fix each, then finish.\n- " + "\n- ".join(new[:10]), file=sys.stderr)
+        return 2
+    cmd = check_command(proj)
+    changed = run(["git", "status", "--porcelain", "--", "*.py"], proj).stdout.strip()
+    if cmd and changed and not state.get("checked"):
+        state["checked"] = True
+        sf.write_text(json.dumps(state))
+        r = run(cmd, proj, 540)
+        if r.returncode != 0:
+            tail = "\n".join((r.stdout + r.stderr).strip().splitlines()[-25:])
+            print(f"Tabby gate: `{' '.join(cmd)}` failed. Fix the cause, do not weaken tests:\n{tail}", file=sys.stderr)
+            return 2
+    return 0
+
+
+def main():
+    handlers = {"session-start": session_start, "post-edit": post_edit, "stop": stop}
+    try:
+        return handlers[sys.argv[1]](read_input())
+    except Exception:
+        return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
