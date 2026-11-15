@@ -75,6 +75,11 @@ def lines():
     docs = has("mkdocs.yml") + (["sphinx (docs/conf.py)"] if has("docs/conf.py") else [])
     native = [n for n in ("Cargo.toml", "CMakeLists.txt", "meson.build", "build.zig") if (root / n).exists()] + (["ext_modules"] if "ext_modules" in all_text else []) + [str(p.name) for p in list(root.glob("**/*.pyx"))[:1]]
     yield "docs: " + (", ".join(docs) or "none found") + "; native: " + (", ".join(native) or "none")
+    skip_dirs = {".git", ".venv", "venv", "node_modules", "build", "dist", "__pycache__", ".tox", "site-packages"}
+    subs = sorted(str(q.parent.relative_to(root)) for pat in ("*/pyproject.toml", "*/*/pyproject.toml", "*/*/*/pyproject.toml") for q in root.glob(pat)
+                  if not (skip_dirs & set(q.relative_to(root).parts)))
+    if len(subs) > 1 or (subs and has("pyproject.toml")):
+        yield f"monorepo: {len(subs)} nested Python project(s): {', '.join(subs[:8])}{' ...' if len(subs) > 8 else ''}; the facts above are for this folder, run detect.py on the one you change and use that project's tools"
     ruff = tool.get("ruff", {}) or {}
     lintcfg = ruff.get("lint", ruff) or {}
     sel = lintcfg.get("select") or []

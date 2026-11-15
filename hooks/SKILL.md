@@ -17,13 +17,21 @@ The hooks read the repo and run only the project's own tools. They never install
 
 `.claude/tabby.json` also takes `{"review": false}` (no reviewer request), `review_lines` and `review_files` (thresholds).
 
+## Modes
+
+- **full** (default): everything above.
+- **lite**: the core rules at session start and the diff check at the end only. No ruff on edits, no check command, no reviewer request. For a project where those would be noise.
+- **off**: nothing runs, and the core rules are not injected.
+
+Set `{"mode": "lite"}` in `.claude/tabby.json`, or `TABBY_MODE=lite` in the environment (the environment wins).
+
 ## `/tabby:hooks off`
 
-Create `.claude/tabby.json` with `{"gate": false}` (merge if it exists), or tell the user to set `TABBY_GATE=off` in the environment. Say that it takes effect on the next session.
+Create `.claude/tabby.json` with `{"mode": "off"}` (merge if it exists; `{"gate": false}` means the same), or tell the user to set `TABBY_GATE=off` in the environment. Say that it takes effect on the next session.
 
 ## `/tabby:hooks on`
 
-Remove the `gate` key from `.claude/tabby.json` (delete the file if it becomes empty) and unset `TABBY_GATE`.
+Remove the `gate` and `mode` keys from `.claude/tabby.json` (delete the file if it becomes empty) and unset `TABBY_GATE` and `TABBY_MODE`.
 
 ## `/tabby:hooks` with no word
 

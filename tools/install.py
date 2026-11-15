@@ -22,7 +22,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-SKILLS = ["tabby", "tabby-review", "tabby-docs", "tabby-diagrams", "tabby-frontend", "interview"]
+SKILLS = ["tabby", "tabby-review", "tabby-docs", "tabby-diagrams", "tabby-frontend", "interview", "tabby-debt"]
 WHERE = {
     "agents": (".agents/skills", "~/.agents/skills"),
     "claude": (".claude/skills", "~/.claude/skills"),

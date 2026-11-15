@@ -59,6 +59,23 @@ class Gate(unittest.TestCase):
             (d / f"m{i}.py").write_text("y = 1\n" * 30)
         self.assertEqual(stop(d, "s4")[0], 0)
 
+    def test_lite_mode_runs_the_diff_check_only(self):
+        d = self.repo()
+        (d / ".claude").mkdir()
+        (d / ".claude/tabby.json").write_text('{"mode": "lite"}')
+        for i in range(5):
+            (d / f"m{i}.py").write_text("y = 1\n" * 30)
+        self.assertEqual(stop(d, "s6")[0], 0)  # large, but lite asks for no reviewer
+        (d / "a.py").write_text("x = 2  # type: ignore\n")
+        self.assertEqual(stop(d, "s7")[0], 2)  # the diff check still runs
+
+    def test_off_mode_does_nothing(self):
+        d = self.repo()
+        (d / ".claude").mkdir()
+        (d / ".claude/tabby.json").write_text('{"mode": "off"}')
+        (d / "a.py").write_text("x = 2  # type: ignore\n")
+        self.assertEqual(stop(d, "s8")[0], 0)
+
     def test_stop_hook_active_never_blocks(self):
         d = self.repo()
         (d / "a.py").write_text("x = 2  # type: ignore\n")

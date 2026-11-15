@@ -8,7 +8,8 @@ post-edit      runs the project's own ruff on the edited .py file; exit 2 with t
 stop           exit 2 if the diff added new shortcuts (guard.py), the project's make/just check fails, or the diff is large
                (over 80 lines or 3 files; once) and the tabby-reviewer subagent has not been asked to read it
 
-Opt out: set TABBY_GATE=off, or put {"gate": false} in .claude/tabby.json; {"review": false} turns off only the reviewer request
+Modes: full (default), lite (core rules and the diff check; no ruff hook, no check command, no reviewer request) and off. Set TABBY_MODE,
+or {"mode": "lite"} in .claude/tabby.json. Off: TABBY_GATE=off, or {"gate": false} in .claude/tabby.json; {"review": false} turns off only the reviewer request
 (`review_lines` and `review_files` set its thresholds). Never loops: a stop already
 continued by this hook (stop_hook_active) passes. Any internal error exits 0, so a bug here never blocks work.
 """
@@ -39,13 +40,24 @@ def project(data):
     return pathlib.Path(data.get("cwd") or os.environ.get("CLAUDE_PROJECT_DIR") or ".")
 
 
-def disabled(proj):
+def mode(proj):
+    """full (default), lite (core rules and the diff check only) or off. TABBY_MODE overrides .claude/tabby.json; gate=false and TABBY_GATE=off mean off."""
     if os.environ.get("TABBY_GATE", "").lower() == "off":
-        return True
+        return "off"
+    env = os.environ.get("TABBY_MODE", "").lower()
+    cfg = {}
     try:
-        return json.loads((proj / ".claude/tabby.json").read_text()).get("gate") is False
+        cfg = json.loads((proj / ".claude/tabby.json").read_text())
     except Exception:
-        return False
+        pass
+    if cfg.get("gate") is False:
+        return "off"
+    m = env or str(cfg.get("mode", "full")).lower()
+    return m if m in ("full", "lite", "off") else "full"
+
+
+def disabled(proj):
+    return mode(proj) == "off"
 
 
 def settings(proj):
@@ -105,6 +117,8 @@ def ruff_configured(proj):
 
 def session_start(data):
     proj = project(data)
+    if disabled(proj):
+        return 0
     print((ROOT / "core/TABBY-CORE.md").read_text())
     r = run([sys.executable, str(ROOT / "tabby/scripts/detect.py"), str(proj)], proj, 20)
     print(r.stdout)
@@ -119,7 +133,7 @@ def session_start(data):
 def post_edit(data):
     proj = project(data)
     path = (data.get("tool_input") or {}).get("file_path", "")
-    if disabled(proj) or not path.endswith(".py") or not ruff_configured(proj):
+    if mode(proj) != "full" or not path.endswith(".py") or not ruff_configured(proj):
         return 0
     ruff = shutil.which("ruff")
     if not ruff or not pathlib.Path(path).exists():
@@ -157,6 +171,8 @@ def stop(data):
     if new:
         print("Tabby gate: the diff added shortcuts. Fix each, then finish.\n- " + "\n- ".join(new[:10]), file=sys.stderr)
         return 2
+    if mode(proj) == "lite":
+        return 0
     cmd = check_command(proj)
     changed = run(["git", "status", "--porcelain", "--", "*.py"], proj).stdout.strip()
     if cmd and changed and not state.get("checked"):

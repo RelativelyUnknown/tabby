@@ -38,6 +38,15 @@ class Detect(unittest.TestCase):
         self.assertIn("no syntax newer than python >=3.11", out)
         self.assertIn("src/pkg/utils.py", out)
 
+    def test_monorepo_lists_nested_projects(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = pathlib.Path(d)
+            for name in ("api", "worker"):
+                (root / "services" / name).mkdir(parents=True)
+                (root / "services" / name / "pyproject.toml").write_text(PYPROJECT)
+            out = detect(root)
+        self.assertIn("monorepo: 2 nested Python project(s): services/api, services/worker", out)
+
     def test_empty_repo_does_not_fail(self):
         with tempfile.TemporaryDirectory() as d:
             out = detect(d)
