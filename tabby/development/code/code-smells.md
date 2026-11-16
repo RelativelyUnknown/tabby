@@ -2,6 +2,8 @@
 
 A smell is a habit that looks fine and makes the next reader stop: the code runs, but it is wrong, noisy or misleading. Check each function before you finish it. Each line is the smell, then `→`, then the fix. Report or fix a smell only when you can name the input or situation where the code goes wrong; one outside your diff is out of scope. Library, testing, service and native smells have their own `smells.md` in their folder.
 
+**Asked to clean up, tidy or fix a file:** go through this page against that file and fix every smell you find in it, wrong results first, each with a test where behaviour changes. Leave what is fine: a suppression that states its reason (`# type: ignore[arg-type]  # stub types it as str`), a helper that earns its name, a narrow `except` that handles its error. End by listing what you changed and what you left on purpose.
+
 ## Wrong results and lost data
 
 - `except Exception: pass`, a default returned from `except`, `raise Exception(...)` → catch the named exception around the one line that can raise; re-raise with `raise ... from e`
@@ -13,6 +15,7 @@ A smell is a habit that looks fine and makes the next reader stop: the code runs
 - `zip(a, b)` over inputs that must match in length → `zip(..., strict=True)` (3.10+)
 - Removing from a list while looping over it → build a new list, or loop over a copy
 - `status is "ready"`, `n is 1000` → `==`; `is` for `None` only
+- `x == None`, `flag == True`, `len(rows) == 0` → `x is None`, `if flag`, `if not rows`
 - Mutating an argument the caller passed in → copy it, or return a new value
 - A default that is a `DEFAULT_*` constant, a stand-in `None` that secretly means 30, a call (`now=datetime.now()` runs once, at import), or `[]` / `{}` → a literal: `timeout: float = 30`; for a mutable, `None` and create it inside
 
@@ -55,7 +58,7 @@ A smell is a habit that looks fine and makes the next reader stop: the code runs
 ## Comments and docs
 
 - A comment explaining a compound condition → a named variable, or move the condition into a function whose name says it
-- Narrating comments (`# Step 1`), commented-out code, a leftover `print`, `TODO` litter → delete
+- Narrating comments (`# Step 1`), commented-out code, a leftover `print`, `TODO` litter, a module docstring that only restates the file name or its contents → delete
 - Conversation residue ("as discussed", "now uses", "previously"), inflated claims ("robust", "production-ready"), a docstring that restates the signature → say what is not obvious, or nothing
 
 Mechanical ones are cheapest in config: ruff `B`, `BLE`, `S`, `DTZ`, `A`, `FBT`, `ANN401`, `SIM115`, `PLW1514`, `RUF006`, `T20`, `TRY`.
