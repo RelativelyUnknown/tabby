@@ -1,11 +1,7 @@
 ---
-type: regex
-target:
-  source: file
-  path: "src/minilib/__init__.py"
-pattern: "__version__\\s*=\\s*[\"\\']\\d+\\.\\d+"
-match: not_contains
+type: llm
+focus: trace
 weight: 2
 ---
 
-No hardcoded `__version__` literal remains
+PASS if, after the change, the version number 0.4.0 is written as a literal in exactly one place and the other location is derived from it (for example hatch reads the version dynamically from `__version__`, or `__version__` comes from `importlib.metadata` with a safe fallback when the package is not installed). FAIL if both `pyproject.toml` and `src/minilib/__init__.py` hold a hardcoded "0.4.0".
