@@ -9,6 +9,7 @@ A smell is a habit that looks fine and makes the next reader stop: the code runs
 - `payload.get("name", "")` for required data, `x = x or 30` (replaces `0`) → fail where it is missing: `payload["name"]`; `if x is None`
 - `assert` as validation (`python -O` strips it) → `if ...: raise ValueError(...)`
 - `return`, `break` or `continue` in `finally` discards the exception in flight → keep only cleanup there
+- `max(...)`, `min(...)`, `items[0]`, `next(it)` or a mean/division over input that can be empty → decide what empty gives (`max(..., default=None)`, `next(it, None)`, a guard) and write the test for it
 - `zip(a, b)` over inputs that must match in length → `zip(..., strict=True)` (3.10+)
 - Removing from a list while looping over it → build a new list, or loop over a copy
 - `status is "ready"`, `n is 1000` → `==`; `is` for `None` only

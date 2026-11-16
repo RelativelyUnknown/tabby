@@ -81,6 +81,8 @@ for item in items:
 best = max(items, key=lambda item: item.score, default=None)
 ```
 
+The short forms of `max`, `min`, `next`, `[0]` and a mean raise on empty input, and the long loop did not. When you replace a loop with one, decide what an empty input gives (`default=None`, `next(..., None)`, a guard that returns early), and add a test with empty input.
+
 Also worth it: `"".join(...)` over `+=` in a loop, `dict(zip(keys, values))`, `sorted(..., key=...)` over a hand-written compare, `x if cond else y` for a plain choice between two values, a guard clause that replaces an `else` pyramid, `pathlib` (`path.read_text()`) over `open` + `read` + `close`, `dataclass` over a hand-written `__init__`/`__repr__`/`__eq__`.
 
 ## Too short: stop here
