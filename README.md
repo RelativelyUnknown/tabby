@@ -103,15 +103,14 @@ Tabby does the task first and never interviews you before it. Project memory liv
 
 ## Measured effect
 
-The same agent with and without Tabby on Claude Haiku 5.5 (`claude plugin eval`, regex and model-judged graders, 3 runs per case, 16 November 2026). Scores are means over the 98 cases that have valid runs in every arm; the five cases whose graders were repaired afterwards are left out of this table. Runs of 0.2.0 were scored with the same graders as the 0.1.0 runs (plugin-fired indicators excluded).
+The same agent with and without Tabby on Claude Haiku 5.5 (`claude plugin eval`, regex and model-judged graders, 3 runs per case, 16 November 2026). The final 0.2.0 run covers all 106 cases with the repaired graders; plugin-fired indicators are excluded from the scores.
 
-| Version | Without Tabby | With Tabby | Delta (95% interval) | Better / worse / same (changes of 0.10 or more) |
+| Run | Without Tabby | With Tabby | Delta | Better / worse / same |
 | --- | --- | --- | --- | --- |
-| 0.1.0 (`main`) | 0.793 | 0.834 | +0.041 (+0.001 to +0.083) | 25 / 15 / 58 |
-| 0.2.0 as first built | 0.782 | 0.771 | -0.010 | |
-| 0.2.0 now | 0.782 | 0.836 | +0.055 (+0.014 to +0.096) | 25 / 15 / 58 |
+| 0.2.0, final (106 cases) | 0.804 | 0.875 | +0.071 | 31 / 13 / 62 |
+| 0.1.0 (`main`), 98 common cases, older graders | 0.793 | 0.834 | +0.041 (+0.001 to +0.083) | 25 / 15 / 58 |
 
-On the cases where the agent without Tabby scores under 0.95, 0.2.0's mean gain is +0.100 and 0.1.0's is +0.076. The two versions are level: against 0.1.0 the difference is +0.003 (interval -0.027 to +0.032). 0.2.0 uses fewer turns (11.6 against 14.1 per run) and costs about 17% more per run (the core rules and the reviewer subagent). Differences under about 0.05 are noise at 3 runs per case.
+On the 65 cases where the agent without Tabby scores under 0.95, 0.2.0's mean gain is +0.135 (95% interval +0.066 to +0.204). On the 100 cases that `main` also ran, 0.2.0 with Tabby scores 0.870 against 0.831 for 0.1.0 with Tabby, but 0.1.0's runs were scored by the graders as they were then, and 0.2.0's by the repaired ones, so read that +0.039 as an upper bound. Turns rise 26% and cost 58% per run with Tabby (the core rules, the gate and the reviewer subagent). Thirteen cases are worse by 0.10 or more; the largest are `diagram-state-machine`, `animation-self-contained-html`, `numpydoc-docstrings` (no fixture) and `optional-parquet-dependency`. 32 of 700 graders never pass in any run, and 64% always pass, so they cannot separate the arms. Differences under about 0.05 are noise at 3 runs per case.
 
 What the first 0.2.0 build got wrong, found by reading traces:
 
