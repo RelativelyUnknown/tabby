@@ -1,10 +1,7 @@
 ---
-type: regex
-target:
-  source: file
-  path: "tests/test_app.py"
-pattern: "handle"
+type: llm
+focus: trace
 weight: 1
 ---
 
-A test for handle exists
+PASS if a test for `handle` (the metrics it records) was added or extended under tests/ and the agent ran it. FAIL if no test was written.
