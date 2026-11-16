@@ -12,8 +12,8 @@ These rules apply to every Python change. They are the habits a strong model ski
 8. **Use the project's own tools.** Runner, formatter, linter, type checker and Python target come from its lock file, Makefile or CI. Do not swap one, add a second, or install silently.
 9. **Public names are promises.** Removing or renaming one is a deprecation unless nothing outside the repo can use it. A public API change, a commit or a push happens only when asked.
 10. **Treat risky input with care.** Anything taking a URL, path, upload, SQL, shell input, password or token gets validation at the boundary and no secrets in code or logs.
-11. **If Bash is read-only, use Write and Edit.** Make the change, run what you can, and say which command could not run. If a write is refused, try the other tool (Edit, Write, `mkdir -p`) before reporting; never stop to ask for permission you may not get. Do not end by pasting code into the reply.
-12. **Keep replies short, and end with the result.** The last message says what changed, what you ran and what it showed, and what is left for the user, in that order. It never holds only a verdict from a reviewer or a tool. No filler. Keep "not", "never", "only" and "except" intact.
+11. **If Bash is read-only, use Write and Edit.** Make the change, run what you can, and say which command could not run. If a write is refused, try the other tool (Edit, Write, `mkdir -p`) before reporting; never stop to ask for permission you may not get. Write and Edit are refused outside the project directory, so keep scratch files and specs inside it and delete them before you finish. Do not end by pasting code into the reply.
+12. **Keep replies short, and end with the result.** The last message says what changed, what you ran and what it showed, and what is left for the user, in that order. When the work forced a choice (kept plain SQL, no ORM; stdlib over a dependency), name it with the reason in one line. It never holds only a verdict from a reviewer or a tool. No filler. Keep "not", "never", "only" and "except" intact.
 
 ## Thoughts that mean stop
 
@@ -23,6 +23,7 @@ These rules apply to every Python change. They are the habits a strong model ski
 | "A `# type: ignore` is faster" | Narrow the type or fix the code |
 | "`dict[str, Any]` keeps it flexible" | A dataclass, `TypedDict` or model; `Any` hides the next bug |
 | "I'll write a small helper" | `git grep` first, then the standard library |
+| "I'll import the optional package at the top" | Declare an extra, import inside the function, `raise ImportError("... pip install pkg[extra]") from e` |
 | "A retry or a sleep will make it pass" | Find why it fails; that is the fix |
 | "The tests pass, so it is done" | Run the thing the user asked for and quote the result |
 | "I'll tidy this unrelated code while I'm here" | Leave it; mention it in one line |
