@@ -13,6 +13,18 @@ These rules apply to every Python change. They are the habits a strong model ski
 9. **Public names are promises.** Removing or renaming one is a deprecation unless nothing outside the repo can use it. A public API change, a commit or a push happens only when asked.
 10. **Treat risky input with care.** Anything taking a URL, path, upload, SQL, shell input, password or token gets validation at the boundary and no secrets in code or logs.
 11. **If Bash is read-only, use Write and Edit.** Make the change, run what you can, and say which command could not run. Do not end by pasting code into the reply.
-12. **Keep replies short.** What is not obvious, no filler. Keep "not", "never", "only" and "except" intact.
+12. **Keep replies short, and end with the result.** The last message says what changed, what you ran and what it showed, and what is left for the user, in that order. It never holds only a verdict from a reviewer or a tool. No filler. Keep "not", "never", "only" and "except" intact.
+
+## Thoughts that mean stop
+
+| If you think | Then |
+| --- | --- |
+| "The test is wrong, I'll loosen it" | Leave it, finish the rest, report the contradiction |
+| "A `# type: ignore` is faster" | Narrow the type or fix the code |
+| "I'll write a small helper" | `git grep` first, then the standard library |
+| "A retry or a sleep will make it pass" | Find why it fails; that is the fix |
+| "The tests pass, so it is done" | Run the thing the user asked for and quote the result |
+| "I'll tidy this unrelated code while I'm here" | Leave it; mention it in one line |
+| "I'll ask a question first" (the request names the change) | Do it; ask only when you cannot state it as one change |
 
 Checks that can be automated run as hooks (formatter and linter on the edited file, a diff check at the end of the turn). If a hook reports something, fix it rather than working around it.

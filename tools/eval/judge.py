@@ -82,17 +82,25 @@ def task_of(case):
     return re.sub(r"\A---.*?---\s*", "", t, flags=re.S).strip()
 
 
-def ask(model, task, first, second):
+FAILURES = []
+
+
+def ask(model, task, first, second, tries=3):
+    """One judge call; retried when the reply has no parseable JSON (a usage limit, a timeout, prose). The last reason is kept in FAILURES."""
     body = f"{RUBRIC}\n\n# Task\n{task}\n\n# Candidate A (diff)\n{first}\n\n# Candidate B (diff)\n{second}\n"
-    with tempfile.TemporaryDirectory() as d:
-        rc, out = sh(["claude", "-p", body, "--model", model, "--max-turns", "1", "--output-format", "text"], cwd=d)
-    m = re.search(r"\{.*\}", out, re.S)
-    if not m:
-        return None
-    try:
-        return json.loads(m.group(0))
-    except ValueError:
-        return None
+    for _ in range(tries):
+        with tempfile.TemporaryDirectory() as d:
+            rc, out = sh(["claude", "-p", body, "--model", model, "--max-turns", "1", "--output-format", "text"], cwd=d)
+        m = re.search(r"\{.*\}", out, re.S)
+        if m:
+            try:
+                return json.loads(m.group(0))
+            except ValueError:
+                pass
+        FAILURES.append(f"rc={rc}: {out.strip()[:160]!r}")
+        if "limit" in out.lower():
+            break
+    return None
 
 
 def judge_pair(args):
@@ -153,6 +161,8 @@ def main():
             rows.append(dict(case=case, run=i, verdict=verdict, first=r1.get("reason"), second=r2.get("reason")))
     n = win + loss + tie + split
     print(f"\npairs judged: {n} (unparseable: {bad}); judge {a.judge_model}")
+    for f in dict.fromkeys(FAILURES[-5:]):
+        print("  unparseable reply:", f)
     print(f"with-skill wins {win}, loses {loss}, ties {tie}, orderings disagreed {split}")
     print("\ncriterion                              with   without")
     for c in CRITERIA:
