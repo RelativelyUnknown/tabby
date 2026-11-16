@@ -3,7 +3,7 @@ type: regex
 target:
   source: file
   path: "src/lib.rs"
-pattern: "pymodule_export\\]\\s*use super::checksum|wrap_pyfunction!\\(\\s*checksum|add_function"
+pattern: "pymodule_export\\]\\s*use super::(?:checksum|\\{[^}]*\\bchecksum\\b)|wrap_pyfunction!\\(\\s*checksum|add_function"
 flags: s
 weight: 3
 ---

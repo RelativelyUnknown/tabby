@@ -103,23 +103,24 @@ Tabby does the task first and never interviews you before it. Project memory liv
 
 ## Measured effect
 
-The same agent with and without Tabby on Claude Haiku 5.5 (`claude plugin eval`, regex and model-judged graders, 3 runs per case, 16 November 2026). Scores are means over the 98 cases that have valid runs in every arm; the five cases whose graders were repaired afterwards are left out of this table.
+The same agent with and without Tabby on Claude Haiku 5.5 (`claude plugin eval`, regex and model-judged graders, 3 runs per case, 16 November 2026). Scores are means over the 98 cases that have valid runs in every arm; the five cases whose graders were repaired afterwards are left out of this table. Runs of 0.2.0 were scored with the same graders as the 0.1.0 runs (plugin-fired indicators excluded).
 
-| Version | Without Tabby | With Tabby | Delta (95% interval) | Better / worse / same |
+| Version | Without Tabby | With Tabby | Delta (95% interval) | Better / worse / same (changes of 0.10 or more) |
 | --- | --- | --- | --- | --- |
-| 0.1.0 (`main`) | 0.793 | 0.834 | +0.041 (0.000 to +0.083) | 36 / 25 / 37 |
+| 0.1.0 (`main`) | 0.793 | 0.834 | +0.041 (+0.001 to +0.083) | 25 / 15 / 58 |
 | 0.2.0 as first built | 0.782 | 0.771 | -0.010 | |
-| 0.2.0 now | 0.782 | 0.823 | +0.042 (+0.002 to +0.084) | 43 / 40 / 15 |
+| 0.2.0 now | 0.782 | 0.836 | +0.055 (+0.014 to +0.096) | 25 / 15 / 58 |
 
-On the cases where the agent without Tabby scores under 0.95 (66 cases), 0.2.0's mean gain is +0.092 and 0.1.0's is +0.076. The two versions are level on score. 0.2.0 helps on more cases (43 against 36) and hurts on more (40 against 25), uses fewer turns (11.6 against 14.1 per run) and costs about 17% more per run (the core rules and the reviewer subagent). Differences under about 0.05 are noise at 3 runs per case.
+On the cases where the agent without Tabby scores under 0.95, 0.2.0's mean gain is +0.100 and 0.1.0's is +0.076. The two versions are level: against 0.1.0 the difference is +0.003 (interval -0.027 to +0.032). 0.2.0 uses fewer turns (11.6 against 14.1 per run) and costs about 17% more per run (the core rules and the reviewer subagent). Differences under about 0.05 are noise at 3 runs per case.
 
 What the first 0.2.0 build got wrong, found by reading traces:
 
 - **The skills stopped loading.** Calmer descriptions plus a core that said "read a skill page only when the task touches that area" cut skill loading from 185 of 252 runs to 13. Descriptions and core now say to load the skill at the start; it loads in 194 of 252 runs.
 - **The reviewer request swallowed the summary.** After the reviewer subagent replied, the final message held only its verdict, so graders that read the trace saw no summary of the change. The request and the core now ask for a full summary.
 - **Some graders never matched.** Graders that read files by glob path never found a file, so four cases scored low in every arm. They now read the trace. Run `summarise.py` and look at its grader-health line to find graders that never pass.
+- **Runs without the with/without ablation score every grader.** That includes the plugin-fired indicator and the "with-only" graders, which the paired runs leave out. Re-score such runs against the paired runs' graders before comparing (see TESTING.md).
 
-On the cases with hidden tests, runs with Tabby had fewer ruff errors (0.27 against 0.70 per run), smaller diffs (49 against 59 added lines) and no weakened tests. The score does not capture that. Cases where 0.2.0 still scores well below 0.1.0 include `join-existing-native-library`, `community-standard-over-handrolled` and `review-pyo3-diff`. One model, one suite, 3 runs.
+On the cases with hidden tests, runs with Tabby had fewer ruff errors (0.27 against 0.70 per run), smaller diffs (49 against 59 added lines) and no weakened tests. The score does not capture that. One model, one suite, 3 runs.
 
 ### Re-measuring
 

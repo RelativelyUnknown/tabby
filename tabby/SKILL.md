@@ -36,7 +36,8 @@ Open leaves with Read at the path given; do not search for them. A one-line fix,
 - a new function, class, option, constant or name: `code/minimalism-reuse-names.md`
 - a loop that builds, filters, counts or searches, or logic that feels long for what it does: `code/concise-code.md` (when a shorter form is plainer, and where to stop)
 - a hand-rolled utility, a new package, or a job a library may already do: `code/minimalism-reuse-names.md`, `stdlib-vs-community-libraries.md`, `dependencies/choosing-dependencies.md` (the runner is uv: `dependencies/uv-workflows-ci-docker.md`, which also covers CI and Docker)
-- raises, catches or retries an error: `code/errors-validation-logging.md` (also input validation); adds annotations: `code/type-annotations.md`
+- raises, catches or retries an error: `code/errors-validation-logging.md` (also input validation); retries, backoff (full jitter) or timeouts on a call: `application/shared/retries-timeouts-circuit-breakers.md`; adds annotations: `code/type-annotations.md`
+- an API, queue, cache, ORM or async change: `references/growth.md` first; the final message gives the options, the choice and what stays open
 - Rust, C, C++ or Zig behind a Python API, including moving a function into one: `library/native/native-overview.md`, then the language page it names (`native-rust.md`, `native-c.md`, `native-cpp.md`, `native-zig.md`), and `library/native/native-porting-a-function.md` to move a function
 - opens files, connections, locks, subprocesses or streams: `code/files-connections-locks.md`
 - writes or changes tests: `testing/testing-basics-and-fixtures.md`, `testing/test-smells.md`; with mocks `testing/test-mocking.md`, fixtures (in `testing/testing-basics-and-fixtures.md`), property-based or release-grade `testing/test-rigor-property-and-release.md`
@@ -67,7 +68,7 @@ If AGENTS.md has a `## Tabby` section, read it and follow `kind:`, `always:`, `a
 
 In a monorepo, the nearest AGENTS.md to the files you change wins over the root one, so a package's own `## Tabby` section overrides the root's for that package (`detect.py` lists the nested files). Do not copy the root's rules into a package; a package section holds only what differs (its own runner, its `kind:`, its `never:`).
 
-If there is no section, do the task; missing project memory is not a reason to interview. Infer the scope and stack from the request and the repo (`development/project-kind-detection.md`), say it in one line (`Treating this as: library/native; stack: poetry, black, pytest`), and label guesses `(assumed)`. After the first task in a session add one line, once: "To save purpose, growth and limits for later tasks, run the interview skill." (`/tabby:interview` in Claude Code, `/interview` in Copilot, `@interview` in OpenCode.) The interview itself is a separate skill and never a condition for the work.
+If there is no section, do the task; missing project memory is not a reason to interview. Infer the scope and stack from the request and the repo (`development/project-kind-detection.md`), say it in one line (`Treating this as: library/native; stack: poetry, black, pytest`), and label guesses `(assumed)`. After the first task in a session add one line, once, in the final message even after gate or reviewer rework: "To save purpose, growth and limits for later tasks, run the interview skill." (`/tabby:interview` in Claude Code, `/interview` in Copilot, `@interview` in OpenCode.) The interview itself is a separate skill and never a condition for the work.
 
 ## Never
 

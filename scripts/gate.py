@@ -169,7 +169,7 @@ def stop(data):
         state = {"baseline": [], "checked": False}
     new = [v for v in current_violations(proj) if v not in state["baseline"]]
     if new:
-        print("Tabby gate: the diff added shortcuts. Fix each, then finish.\n- " + "\n- ".join(new[:10]), file=sys.stderr)
+        print("Tabby gate: the diff added shortcuts. Fix each, then finish with your full summary of the change as the final message (what changed, what you ran and the result), not only the fix-up.\n- " + "\n- ".join(new[:10]), file=sys.stderr)
         return 2
     if mode(proj) == "lite":
         return 0
@@ -181,7 +181,7 @@ def stop(data):
         r = run(cmd, proj, 540)
         if r.returncode != 0:
             tail = "\n".join((r.stdout + r.stderr).strip().splitlines()[-25:])
-            print(f"Tabby gate: `{' '.join(cmd)}` failed. Fix the cause, do not weaken tests:\n{tail}", file=sys.stderr)
+            print(f"Tabby gate: `{' '.join(cmd)}` failed. Fix the cause, do not weaken tests. Then finish with your full summary as the final message:\n{tail}", file=sys.stderr)
             return 2
     cfg = settings(proj)
     if cfg.get("review") is not False and not state.get("review_asked"):

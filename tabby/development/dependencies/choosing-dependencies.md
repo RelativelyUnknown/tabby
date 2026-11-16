@@ -35,6 +35,8 @@ uv export --format requirements-txt --locked --no-emit-project -o /tmp/requireme
 uvx pip-audit -r /tmp/requirements-audit.txt --disable-pip   # hashes from the export make --disable-pip safe
 ```
 
+A heavy library one function needs goes in an optional extra (`[project.optional-dependencies]`), imported inside that function, with `raise ImportError("install pkg[extra]") from e`; never in base `dependencies` when the package does not depend on it.
+
 Audit what ships: dependencies plus extras. Audit dev groups separately; a finding there matters for CI and developer machines, not users.
 
 ## Triage each finding

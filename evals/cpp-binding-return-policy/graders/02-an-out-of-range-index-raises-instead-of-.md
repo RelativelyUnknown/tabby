@@ -3,7 +3,7 @@ type: regex
 target:
   source: file
   path: "src/grid.cpp"
-pattern: "out_of_range|index_error|IndexError"
+pattern: "out_of_range|index_error|IndexError|\\.at\\("
 weight: 3
 ---
 

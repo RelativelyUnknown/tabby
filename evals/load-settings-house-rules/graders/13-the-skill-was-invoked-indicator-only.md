@@ -1,7 +1,7 @@
 ---
 type: tool_used
 tool: Skill
-input_match: "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?tabby\""
+input_match: "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?tabby(?:-[a-z]+)?\""
 weight: 1
 ---
 

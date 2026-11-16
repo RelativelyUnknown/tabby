@@ -49,7 +49,7 @@ Shapes this finds in Python:
 
 ## Native code (Rust, C, C++, Zig behind Python)
 
-A panic or C++ exception crossing the boundary; `unwrap()` on caller data; integer overflow that wraps in release and panics in debug; `as` casts that truncate; touching a Python object without the GIL, or holding it through a long call; a missing or extra reference count; a buffer that outlives its owner. See [native-boundary.md](native-boundary.md).
+A panic or C++ exception crossing the boundary; `unwrap()` on caller data; integer overflow that wraps in release and panics in debug; `as` casts that truncate (a `len()` into `u32` is a finding even when inputs are unlikely: report it as minor, do not drop it); touching a Python object without the GIL, or holding it through a long call; a missing or extra reference count; a buffer that outlives its owner. See [native-boundary.md](native-boundary.md).
 
 ## Two places that must agree
 

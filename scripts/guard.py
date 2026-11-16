@@ -17,7 +17,7 @@ SUPPRESS = re.compile(r"#\s*(type:\s*ignore|noqa)\b(?!.*--\s*\S)")
 ANY = re.compile(r"\bAny\b")
 CAST = re.compile(r"\bcast\(")
 MARK = re.compile(r"pytest\.mark\.(skip|xfail|skipif)\b")
-BARE = re.compile(r"^\s*except\s*(\(?\s*(Base)?Exception\s*\)?\s*)?(\s+as\s+\w+)?\s*:\s*(pass\s*)?$")
+BARE = re.compile(r"^\s*except\s*(\(?\s*BaseException\s*\)?(\s+as\s+\w+)?)?\s*:\s*(pass\s*)?$|^\s*except\s*\(?\s*Exception\s*\)?(\s+as\s+\w+)?\s*:\s*pass\s*$")
 ASSERT = re.compile(r"^\s*(assert\b|self\.assert\w+\(|with\s+pytest\.raises\b)")
 TESTDEF = re.compile(r"^\s*(?:async\s+)?def\s+(test\w*)\(")
 

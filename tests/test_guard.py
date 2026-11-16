@@ -36,6 +36,12 @@ class Guard(unittest.TestCase):
         self.assertTrue(check_diff(diff("src/a.py", ["    except Exception:", "        pass"])))
         self.assertEqual(check_diff(diff("src/a.py", ["    except KeyError:", "        pass"])), [])
 
+    def test_except_exception_that_records_or_reraises_is_allowed(self):
+        self.assertEqual(check_diff(diff("src/a.py", ["    except Exception as error:", "        failures.append(error)"])), [])
+        self.assertEqual(check_diff(diff("src/a.py", ["    except Exception:", "        lock.release()", "        raise"])), [])
+        self.assertTrue(check_diff(diff("src/a.py", ["    except Exception as error:", "        pass"])))
+        self.assertTrue(check_diff(diff("src/a.py", ["    except BaseException as error:"])))
+
     def test_deleted_test_and_assertions(self):
         self.assertTrue(check_diff(diff("tests/test_a.py", [], ["def test_x():", "    assert f() == 1"])))
         self.assertTrue(check_diff(diff("tests/test_a.py", ["    assert f()"], ["    assert f() == 1", "    assert g() == 2"])))
