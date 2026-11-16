@@ -190,7 +190,7 @@ def stop(data):
             state["review_asked"] = True
             sf.write_text(json.dumps(state))
             print(f"Tabby gate: this is a large change ({lines} changed lines in {files} Python files). Run the `tabby-reviewer` subagent once, "
-                  "giving it the task in the user's words and the command `git diff HEAD`. Fix what it confirms, say what you declined and why, then finish. "
+                  "giving it the task in the user's words and the command `git diff HEAD`. Fix what it confirms, then finish with your full summary of the change as the final message (what you changed, what you ran and the result, what you declined and why), not only the reviewer's verdict. "
                   "Turn this off with {\"review\": false} in .claude/tabby.json.", file=sys.stderr)
             return 2
     return 0
