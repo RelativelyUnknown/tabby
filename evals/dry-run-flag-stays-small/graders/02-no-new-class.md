@@ -1,10 +1,7 @@
 ---
-type: regex
-target:
-  source: file
-  path: "src/cleaner/**/*.py"
-pattern: "^class |Strategy|Factory|Protocol"
-match: not_contains
+type: llm
+focus: trace
 weight: 2
 ---
 
+PASS if the dry-run option was added without a new class, strategy, factory or protocol (a parameter and an if are enough). FAIL if the change introduces any of them.

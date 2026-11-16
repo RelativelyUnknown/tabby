@@ -34,6 +34,7 @@ Open leaves with Read at the path given; do not search for them. A one-line fix,
 
 - changes more than a few lines: `code/code-smells.md`; `code/shortcut-examples.md` shows the common shortcuts (suppressions, weakened tests, swallowed errors, a second helper, over-building, `Any`, Pydantic v1 on v2) as before and after
 - a new function, class, option, constant or name: `code/minimalism-reuse-names.md`
+- a loop that builds, filters, counts or searches, or logic that feels long for what it does: `code/concise-code.md` (when a shorter form is plainer, and where to stop)
 - a hand-rolled utility, a new package, or a job a library may already do: `code/minimalism-reuse-names.md`, `stdlib-vs-community-libraries.md`, `dependencies/choosing-dependencies.md` (the runner is uv: `dependencies/uv-workflows-ci-docker.md`, which also covers CI and Docker)
 - raises, catches or retries an error: `code/errors-validation-logging.md` (also input validation); adds annotations: `code/type-annotations.md`
 - Rust, C, C++ or Zig behind a Python API, including moving a function into one: `library/native/native-overview.md`, then the language page it names (`native-rust.md`, `native-c.md`, `native-cpp.md`, `native-zig.md`), and `library/native/native-porting-a-function.md` to move a function

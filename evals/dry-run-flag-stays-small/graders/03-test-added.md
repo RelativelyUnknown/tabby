@@ -1,9 +1,7 @@
 ---
-type: regex
-target:
-  source: file
-  path: "tests/**/*.py"
-pattern: "dry.run"
+type: llm
+focus: trace
 weight: 1
 ---
 
+PASS if a test for the dry-run behaviour was added or extended under tests/. FAIL otherwise.
