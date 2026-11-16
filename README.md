@@ -103,15 +103,20 @@ Tabby does the task first and never interviews you before it. Project memory liv
 
 ## Measured effect
 
-The same agent with and without Tabby on Claude Haiku 5.5, 98 eval cases, 3 runs each (`claude plugin eval`, regex and model-judged graders), 13 November 2026.
+The same agent with and without Tabby on Claude Haiku 5.5 (`claude plugin eval`, regex and model-judged graders, 3 runs per case, 16 November 2026). Scores are means over the 97 cases that completed in every arm.
 
-| | Without Tabby | With Tabby |
-| --- | --- | --- |
-| Mean score | 0.775 | 0.832 |
-| Turns per run | 11.4 | 14.8 |
-| Cost per run | $0.0131 | $0.0152 |
+| Version | Without Tabby | With Tabby | Delta (95% interval) | Better / worse / same |
+| --- | --- | --- | --- | --- |
+| 0.1.0 (`main`) | 0.792 | 0.837 | +0.045 (+0.006 to +0.088) | 36 / 24 / 37 |
+| 0.2.0 as first built | 0.781 | 0.771 | -0.010 | |
+| 0.2.0 after two fixes | 0.781 | 0.802 | +0.021 (-0.019 to +0.066) | 43 / 38 / 16 |
 
-Tabby scored higher on 23 cases, lower on 11 and the same on 64. These numbers predate version 0.2.0 (always-on core, quality-gate hooks, calmer descriptions, new headroom cases); they have not been re-measured.
+What the first 0.2.0 build got wrong, found by reading traces:
+
+- **The skills stopped loading.** Calmer descriptions plus a core that said "read a skill page only when the task touches that area" cut skill loading from 185 of 252 runs to 13. Descriptions and core now say to load the skill at the start; it loads in 191 of 246 runs.
+- **The reviewer request swallowed the summary.** After the reviewer subagent replied, the final message held only its verdict, so graders that read the trace saw no summary of the change. The request now asks for a full summary.
+
+0.2.0 still scores below 0.1.0 and its gain over no Tabby is not distinguishable from zero on this suite. It does produce cleaner code on the cases with hidden tests (ruff errors per run 0.27 against 0.70 without Tabby, 49 against 59 added lines, no weakened tests), which the score does not capture. The `interview` cases score low because the skill is now user-invoked only (`disable-model-invocation`) and those cases ask the agent to start it. One model, one suite, 3 runs: treat differences under about 0.05 as noise.
 
 ### Re-measuring
 
