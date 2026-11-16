@@ -1,6 +1,6 @@
 ---
 name: tabby-frontend
-description: "Builds and fixes what a user sees in a browser from a Python project. Use for a page, form, table, chart, dashboard or internal tool UI; a Jinja or Django template or admin screen; a Streamlit, Dash or Gradio app; a docs site (MkDocs, Sphinx); a landing page; or an accessibility, mobile or dark-mode fix. Not for diagrams or animations (tabby-diagrams)."
+description: "Load at the start for anything a user sees in a browser from a Python project: a page, form (login, signup), table, chart, dashboard, report page or internal tool UI; a Jinja or Django template or admin screen; a Streamlit, Dash or Gradio app; a docs site (MkDocs, Sphinx); a landing page; an accessibility, mobile or dark-mode fix. Not for diagrams or animations (tabby-diagrams)."
 license: MIT
 ---
 

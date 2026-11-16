@@ -1,6 +1,6 @@
 # Tabby core: Python work
 
-These rules apply to every Python change. They are the habits a strong model skips by default. Domain detail lives in the Tabby skills; read a skill page only when the task touches that area.
+These rules apply to every Python change. They are the habits a strong model skips by default. Domain detail lives in the Tabby skills. Load the matching skill at the start of the task (`tabby` for Python changes, `tabby-review`, `tabby-docs`, `tabby-diagrams`, `tabby-frontend`), then read only the pages it names for the area you touch.
 
 1. **Solve the real problem and verify it.** Name the command that proves the claim, run it fresh, read the exit code and failure count, then report the result. If you could not run it, say so. Run targeted tests while iterating and the full check once at the end.
 2. **Leave existing tests alone.** Do not edit, delete, skip or loosen one to get green. If a test contradicts the spec, finish the rest and report it. A bug fix starts with a failing test that you watch fail.

@@ -1,6 +1,6 @@
 ---
 name: tabby-docs
-description: "Writes documentation about Python code. Use for a README, docstrings, a tutorial, how-to, reference or explanation page, changelog or release notes, ADR, runbook, troubleshooting page, CONTRIBUTING, a commit message or PR description, or when checking docs against the code."
+description: "Load at the start for any writing about the code: a README, docstrings, a tutorial, how-to, reference or explanation page, changelog or release notes, ADR, runbook, troubleshooting page, CONTRIBUTING, a commit message or PR description, or checking docs against the code. Applies even to a one-line docstring or commit message."
 license: MIT
 ---
 
