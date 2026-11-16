@@ -53,6 +53,30 @@ def boot_ci(deltas, n=2000, seed=1):
     return means[int(.025 * n)], means[int(.975 * n)]
 
 
+INDICATOR = ("skill-was-invoked", "indicator-only")
+
+
+def grader_health(cases):
+    """Graders that never discriminate: (dead, vacuous). Dead = failed in every run of every arm (a grader that cannot be
+    satisfied: a wrong path or pattern, or a behaviour no run reaches). Vacuous = passed in every run of every arm (it cannot tell the arms apart).
+    Plugin-fired indicators are skipped: they fail in the arm without the plugin by design. Each item is `case/grader`."""
+    dead, vacuous = [], []
+    for n, c in sorted(cases.items()):
+        seen = {}
+        for runs in c.get("arms", {}).values():
+            for r in runs:
+                for g in r.get("graders", []):
+                    if any(k in g["name"] for k in INDICATOR):
+                        continue
+                    seen.setdefault(g["name"], []).append(bool(g.get("passed")))
+        for name, res in sorted(seen.items()):
+            if not any(res):
+                dead.append(f"{n}/{name}")
+            elif all(res):
+                vacuous.append(f"{n}/{name}")
+    return dead, vacuous
+
+
 def main(argv):
     if not argv:
         print(__doc__); return 1
@@ -101,6 +125,10 @@ def main(argv):
             for n, c in sorted(cases.items()):
                 ww, oo = stats(arm(c, "with")), stats(arm(c, "without"))
                 w_.writerow([n, int(n in ok)] + [("%.3f" % x) if x is not None else "" for x in (ww["score"], oo["score"], ww["turns"], oo["turns"], ww["cost"], oo["cost"])])
+    dead, vacuous = grader_health(ok)
+    total = sum(len({g["name"] for runs in c.get("arms", {}).values() for r in runs for g in r.get("graders", []) if not any(k in g["name"] for k in INDICATOR)}) for c in ok.values())
+    print(f"grader health over {total} graders: {len(dead)} never pass in any run of any arm" + (" (a broken path or pattern, or a behaviour out of reach; read one run): " + ", ".join(dead[:15]) + (" ..." if len(dead) > 15 else "") if dead else "") +
+          f"; {len(vacuous)} always pass ({100 * len(vacuous) // max(total, 1)}%), so they cannot separate the arms")
     if bad:
         print("errored (re-run):", ", ".join(bad))
     return 0

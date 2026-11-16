@@ -21,6 +21,7 @@ These rules apply to every Python change. They are the habits a strong model ski
 | --- | --- |
 | "The test is wrong, I'll loosen it" | Leave it, finish the rest, report the contradiction |
 | "A `# type: ignore` is faster" | Narrow the type or fix the code |
+| "`dict[str, Any]` keeps it flexible" | A dataclass, `TypedDict` or model; `Any` hides the next bug |
 | "I'll write a small helper" | `git grep` first, then the standard library |
 | "A retry or a sleep will make it pass" | Find why it fails; that is the fix |
 | "The tests pass, so it is done" | Run the thing the user asked for and quote the result |
