@@ -158,5 +158,12 @@ Ideas only, restated in Tabby's words; nothing vendored and no text copied. Shal
 
 ## Fredoka (README title)
 
-The README banner's lettering is outlined from Fredoka (SIL Open Font License 1.1, copyright 2016 The Fredoka Project Authors, https://github.com/hafontia/Fredoka-One), turned into path data by `tools/outline_font.py` and stored in `assets/src/fredoka-bold.json` and `assets/src/fredoka-medium.json`. The licence text is `assets/src/fonts/OFL-Fredoka.txt`. The cat drawing is original; its pose (a solid curled shape with the ears, stripes and closed eyes cut out) was inspired by a reference image the project owner supplied.
+The README banner's lettering is set in Fredoka (SIL Open Font License 1.1, copyright 2016 The Fredoka Project Authors, https://github.com/hafontia/Fredoka-One). The font file is `assets/src/fonts/Fredoka-Variable.ttf` with its licence in `assets/src/fonts/OFL-Fredoka.txt`; it is used only to render the banner.
 
+## JetBrains Mono (README banner terminal)
+
+The terminal text in the README banner and logo is set in JetBrains Mono (SIL Open Font License 1.1, copyright 2020 The JetBrains Mono Project Authors, https://github.com/JetBrains/JetBrainsMono). The font file is `assets/src/fonts/JetBrainsMono-Variable.ttf` with its licence in `assets/src/fonts/OFL-JetBrainsMono.txt`; it is used only to render the banner. The ASCII cat is original.
+
+## lemomo-ai/lemo-opuscar (README banner, 17 November 2026)
+
+Read for ideas only; no text, code or images copied (its docs are CC BY-NC 4.0, its code MIT). Taken as practice for `tools/readme_film/`: each frame is a pure function of time recorded frame by frame, one timeline drives every move, moves get anticipation, action and follow-through, a hook early in the loop, and no default fades.

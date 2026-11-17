@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-hero-dark.svg">
-    <img src="assets/tabby-hero-light.svg" width="860" alt="Tabby: a cat walks in, lies down, and the name appears. Agent skills for careful Python: cause before fix, small diffs, tests stay green.">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-cat-dark.webp">
+    <img src="assets/tabby-cat-light.webp" width="880" alt="Tabby: agent skills for careful Python. In a terminal someone types cat, an ASCII cat prints, blinks, swishes its tail and says meow, then the screen clears.">
   </picture>
 </p>
 
@@ -9,11 +9,11 @@
 Finds the cause before the fix. Reuses before it writes. Keeps the diff small. Never edits a test to get green.</p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Claude%20Code-plugin-2a8f89?style=flat-square" alt="Claude Code plugin">
-  <img src="https://img.shields.io/badge/OpenCode-skills-2a8f89?style=flat-square" alt="OpenCode skills">
-  <img src="https://img.shields.io/badge/GitHub%20Copilot-skills-2a8f89?style=flat-square" alt="GitHub Copilot skills">
-  <img src="https://img.shields.io/badge/Python%20%2B%20Rust%2C%20C%2C%20C%2B%2B%2C%20Zig-2a8f89?style=flat-square" alt="Python, with Rust, C, C++ and Zig behind it">
-  <img src="https://img.shields.io/badge/license-MIT-2a8f89?style=flat-square" alt="MIT licence">
+  <img src="https://img.shields.io/badge/Claude%20Code-plugin-7c5cd6?style=flat-square" alt="Claude Code plugin">
+  <img src="https://img.shields.io/badge/OpenCode-skills-7c5cd6?style=flat-square" alt="OpenCode skills">
+  <img src="https://img.shields.io/badge/GitHub%20Copilot-skills-7c5cd6?style=flat-square" alt="GitHub Copilot skills">
+  <img src="https://img.shields.io/badge/Python%20%2B%20Rust%2C%20C%2C%20C%2B%2B%2C%20Zig-7c5cd6?style=flat-square" alt="Python, with Rust, C, C++ and Zig behind it">
+  <img src="https://img.shields.io/badge/license-MIT-7c5cd6?style=flat-square" alt="MIT licence">
 </p>
 
 <p align="center">
@@ -147,14 +147,23 @@ Same agent, with and without Tabby, on Claude Haiku 5.5 (`claude plugin eval`, 1
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-results-dark.svg">
-    <img src="assets/tabby-results-light.svg" width="760" alt="Mean score over 112 cases: 0.812 without Tabby, 0.902 with Tabby. 34 cases better, 72 about the same, 6 worse.">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-effect-dark.webp">
+    <img src="assets/tabby-effect-light.webp" width="760" alt="Mean score over 112 cases: 0.812 without Tabby, 0.902 with Tabby. 34 cases better, 72 about the same, 6 worse.">
   </picture>
 </p>
 
 34 cases improve by 0.10 or more, 6 get worse and 72 stay within 0.10. A run with Tabby takes about 25% more turns and costs about 59% more, because of the core rules, the end-of-turn checks and the reviewer subagent.
 
-On the cases with hidden tests, runs with Tabby had fewer ruff errors, smaller diffs and no weakened tests; the score does not capture that. This is one model, one suite and 3 runs per case, so differences under about 0.05 are noise.
+The score does not capture everything. What the code itself looked like, on 10 cases checked in detail:
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-quality-dark.webp">
+    <img src="assets/tabby-quality-light.webp" width="760" alt="Code quality on 10 cases, 30 runs each way. With Tabby against without: lines added per run 49 against 60; runs that weakened a test 0 against 3; runs that added a dependency 0 against 2; comment lines added per run 0.0 against 0.7. Cost per run $0.015 against $0.009, 10 against 7 turns.">
+  </picture>
+</p>
+
+This is one model, one suite and 3 runs per case, so differences under about 0.05 are noise.
 
 <details>
 <summary><strong>Re-run it yourself</strong></summary>

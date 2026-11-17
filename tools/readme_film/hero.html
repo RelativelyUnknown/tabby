@@ -1,0 +1,170 @@
+<!doctype html>
+<!--
+  The README hero: a seamless 6-second loop. In a terminal, someone types `cat`; an ASCII cat prints, swishes its tail,
+  blinks, says "meow", washes its face; then `clear` and back to an empty prompt. Every frame is a pure function of time:
+  window.render(t) draws the frame at t seconds; build.mjs steps t and records frames. ?theme=dark, ?logo=1 (a tile).
+-->
+<html><head><meta charset="utf-8">
+<style>
+  @font-face { font-family: "Fredoka"; src: url("../../assets/src/fonts/Fredoka-Variable.ttf"); font-weight: 300 700; }
+  @font-face { font-family: "JBMono"; src: url("../../assets/src/fonts/JetBrainsMono-Variable.ttf"); font-weight: 100 800; }
+  html, body { margin: 0; background: transparent; }
+  canvas { display: block; }
+</style></head>
+<body><canvas id="c"></canvas>
+<script>
+const Q = new URLSearchParams(location.search);
+const DARK = Q.get("theme") === "dark", LOGO = Q.get("logo") === "1";
+const SCALE = Number(Q.get("scale") || 1.5);
+const W = LOGO ? 360 : 1280, H = 360;
+const C = DARK
+  ? { panel: "#1a1524", line: "#241d31", ink: "#efe8fb", muted: "#a99fbd" }
+  : { panel: "#f4effb", line: "#e8def6", ink: "#1d1530", muted: "#6f6485" };
+const TERM = { bg: "#16121f", bar: "#221b2e", text: "#ece6f6", dim: "#8a80a0", cat: "#f7a8cb" };
+const TEAL = "#8b6cf0";   // the accent: violet (prompt, pills, sparkles)
+// The script below is timed in story seconds (0-6); SPEED stretches it, so the loop plays slower without re-timing every key.
+const SPEED = 0.6;
+window.DUR = 6 / SPEED;
+
+const cv = document.getElementById("c");
+cv.width = W * SCALE; cv.height = H * SCALE; cv.style.width = W + "px"; cv.style.height = H + "px";
+const ctx = cv.getContext("2d");
+
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const between = (t, a, b) => t >= a && t < b;
+
+// ---------- the script: what the terminal shows at time t ----------
+const CMD1 = "cat", CMD2 = "clear";
+const typed = (cmd, t, t0, step) => cmd.slice(0, clamp(Math.floor((t - t0) / step) + 1, 0, cmd.length) * (t >= t0 ? 1 : 0));
+const T_ENTER1 = 1.1, T_CLEAR0 = 4.95, T_ENTER2 = 5.5;
+
+// frame helpers: which frame of a flip-book plays at t (null before it starts or after it ends)
+const flip = (t, t0, step, frames) => { const k = Math.floor((t - t0) / step); return k >= 0 && k < frames.length ? frames[k] : null; };
+
+function eyesAt(t) {
+  // in-betweens: half-closed "=.=" between open and shut, a one-eye step into and out of the happy face
+  return flip(t, 2.10, .05, ["=.=", "-.-", "-.-", "=.="]) ||        // blink
+         flip(t, 2.38, .06, ["o.^"]) ||                             // into happy
+         (between(t, 2.44, 3.40) ? "^.^" : null) ||
+         flip(t, 3.40, .06, ["^.o", "o.o", "=.="]) ||                // out of happy, eyes settle shut to wash
+         (between(t, 3.58, 4.55) ? "-.-" : null) ||
+         flip(t, 4.55, .06, ["=.=", "o.o"]) ||
+         flip(t, 4.75, .05, ["=.=", "-.-", "=.="]) ||               // blink
+         "o.o";
+}
+// the wash, as a flip-book of paw positions: 0 rest, 1 paw rising, 2 lick, 3 cheek, 4 ear
+const PAW = [
+  (e) => ["   /\\_/\\", `  ( ${e} )`, "   > ^ <", "  /     \\"],
+  (e) => ["   /\\_/\\", `  ( ${e} )`, "   > ^ <", "  /    o|"],
+  (e) => ["   /\\_/\\", `  ( ${e} )`, "   > ^ <o", "  /     |"],
+  (e) => ["   /\\_/\\", `  ( ${e} )o`, "   > ^ </", "  /     |"],
+  (e) => ["   /\\_/\\o", `  ( ${e} )/`, "   > ^ <", "  /     |"],
+];
+const WASH = [1, 2, 2, 2, 2, 3, 4, 4, 3, 4, 4, 3, 2, 1];
+function catLines(t) {
+  const swishing = between(t, 1.6, 2.4) || between(t, 4.55, 4.95);
+  const tail = swishing ? ["~", "~'", "S", "~,"][Math.floor(t / .1) % 4] : "~";
+  const pose = flip(t, 3.52, .074, WASH) ?? 0;
+  return [...PAW[pose](eyesAt(t)), ` (| | | |)${tail}`];
+}
+// the speech bubble grows out of the cat's mouth and shrinks back: level 0 (none) to 3 (full)
+function bubbleAt(t) {
+  const k = flip(t, 2.36, .04, [1, 2]) ?? (between(t, 2.44, 3.38) ? 3 : null) ?? flip(t, 3.38, .04, [2, 1]) ?? 0;
+  if (!k) return null;
+  const dash = "-".repeat(k * 2);
+  return [` .${dash}${k === 3 ? "." : ""}`, "<  ", ` '${dash}${k === 3 ? "'" : ""}`, k === 3];
+}
+
+function screen(t) {
+  // Returns the rows: each row is a list of [text, colour, bold?]. The last row may end with the cursor.
+  const rows = [];
+  const prompt = (cmd) => [["$ ", TEAL, true], [cmd, TERM.text]];
+  if (t < T_ENTER1) { rows.push(prompt(typed(CMD1, t, .5, .17))); return { rows, cursorRow: 0, typing: t >= .5 }; }
+  if (t >= T_ENTER2) { rows.push(prompt("")); return { rows, cursorRow: 0, typing: false }; }
+  rows.push(prompt(CMD1));
+  const cat = catLines(t), shown = Math.floor((t - 1.2) / .1) + 1;
+  const bubble = bubbleAt(t), word = "meow".slice(0, clamp(Math.floor((t - 2.55) / .12) + 1, 0, 4));
+  // sparkles twinkle in and out one after another once it is clean
+  const twinkle = (t0) => flip(t, t0, .07, [".", "+", "*", "*", "+", "."]);
+  const spark = { 0: ["  ", twinkle(4.5)], 2: [" ", twinkle(4.6)], 4: ["   ", twinkle(4.7)] };
+  for (let i = 0; i < 5; i++) {
+    if (i >= shown) break;
+    const row = [[cat[i].padEnd(13), TERM.cat]];
+    if (bubble && i < 3) row.push([bubble[i], TERM.text]);
+    if (bubble && bubble[3] && i === 1) row.push([word.padEnd(4), TERM.text, true], [" |", TERM.text]);
+    if (spark[i] && spark[i][1]) row.push([spark[i][0] + spark[i][1], TEAL, true]);
+    rows.push(row);
+  }
+  const done = t >= 1.75;
+  if (done) rows.push(prompt(t >= T_CLEAR0 ? typed(CMD2, t, T_CLEAR0, .1) : ""));
+  return { rows, cursorRow: done ? rows.length - 1 : -1, typing: t >= T_CLEAR0 };
+}
+
+// ---------- drawing ----------
+function drawTerminal(g, t, x, y, w, h, size) {
+  g.save();
+  g.shadowColor = DARK ? "rgba(0,0,0,.45)" : "rgba(60,40,20,.22)"; g.shadowBlur = 24; g.shadowOffsetY = 8;
+  g.fillStyle = TERM.bg; g.beginPath(); g.roundRect(x, y, w, h, 16); g.fill();
+  g.restore();
+  g.save(); g.beginPath(); g.roundRect(x, y, w, h, 16); g.clip();
+  g.fillStyle = TERM.bar; g.fillRect(x, y, w, 38);
+  [["#ff5f57", 0], ["#febc2e", 1], ["#28c840", 2]].forEach(([c, i]) => { g.fillStyle = c; g.beginPath(); g.arc(x + 22 + i * 20, y + 19, 6.5, 0, Math.PI * 2); g.fill(); });
+  g.fillStyle = TERM.dim; g.font = `500 15px JBMono`; g.textAlign = "center"; g.fillText("~/tabby", x + w / 2, y + 24);
+  g.textAlign = "left";
+
+  const { rows, cursorRow, typing } = screen(t);
+  g.font = `500 ${size}px JBMono`;
+  const cw = g.measureText("M").width, lh = size * 1.3;
+  const bounce = -5 * Math.sin(Math.PI * seg(t, 2.42, 2.72));   // a smooth little hop as it starts to talk
+  rows.forEach((row, r) => {
+    let cx = x + 22;
+    const cy = y + 38 + 20 + size + r * lh + (r >= 1 && r <= 5 ? bounce : 0);
+    for (const [text, colour, bold] of row) {
+      g.font = `${bold ? 700 : 500} ${size}px JBMono`; g.fillStyle = colour;
+      g.fillText(text, cx, cy); cx += cw * text.length;
+    }
+    if (r === cursorRow) {
+      const on = typing || Math.floor(t * 2.5) % 2 === 0;
+      if (on) { g.fillStyle = TERM.text; g.fillRect(cx + 1, cy - size * .82, cw * .9, size * 1.02); }
+    }
+  });
+  g.restore();
+}
+
+function drawText(g) {
+  const x0 = 690;
+  g.fillStyle = C.ink; g.font = "700 124px Fredoka"; g.fillText("Tabby", x0, 168);   // the y descender clears the tagline
+  g.fillStyle = C.muted; g.font = "500 31px Fredoka"; g.fillText("Agent skills for careful Python.", x0 + 4, 240);
+  g.font = "500 21px Fredoka"; let px = x0 + 4;
+  for (const label of ["cause before fix", "small diffs", "tests stay green"]) {
+    const w = g.measureText(label).width + 34;
+    g.fillStyle = TEAL; g.beginPath(); g.roundRect(px, 266, w, 40, 20); g.fill();
+    g.fillStyle = "#fff"; g.fillText(label, px + 17, 293); px += w + 12;
+  }
+}
+
+function drawLogo(g) {
+  g.fillStyle = TERM.bg; g.beginPath(); g.roundRect(20, 20, 320, 320, 56); g.fill();
+  g.fillStyle = TEAL; g.font = "700 40px JBMono"; g.fillText("$", 60, 96);
+  g.fillStyle = TERM.cat; g.font = "600 46px JBMono";
+  const cw = g.measureText("M").width, face = ["/\\_/\\", "( ^.^ )", " > ^ <"];
+  face.forEach((s, i) => g.fillText(s, 180 - cw * 3.5 + (i === 0 ? cw : 0), 176 + i * 58));
+}
+
+window.render = (t) => {
+  t = (((t % DUR) + DUR) % DUR) * SPEED;
+  ctx.setTransform(SCALE, 0, 0, SCALE, 0, 0); ctx.clearRect(0, 0, W, H);
+  if (LOGO) { drawLogo(ctx); return; }
+  ctx.fillStyle = C.panel; ctx.beginPath(); ctx.roundRect(0, 0, W, H, 28); ctx.fill();
+  ctx.save(); ctx.beginPath(); ctx.roundRect(0, 0, W, H, 28); ctx.clip();
+  ctx.strokeStyle = C.line; ctx.lineWidth = 26;
+  for (let x = 700; x < 1560; x += 120) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x - 60, H); ctx.stroke(); }
+  ctx.restore();
+  drawTerminal(ctx, t, 40, 26, 600, 308, 24);
+  drawText(ctx);
+};
+Promise.all([document.fonts.load("700 40px Fredoka"), document.fonts.load("500 20px Fredoka"),
+             document.fonts.load("500 20px JBMono"), document.fonts.load("700 20px JBMono")])
+  .then(() => { window.render(0); window.READY = true; });
+</script></body></html>

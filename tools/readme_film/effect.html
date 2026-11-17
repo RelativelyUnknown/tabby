@@ -1,0 +1,91 @@
+<!doctype html>
+<!--
+  The README's "Measured effect" card, animated once: the two score bars grow while their numbers count up, the two gains
+  pop in, then the per-case bar fills (better, about the same, worse). It plays once and holds the last frame.
+  Every frame is a pure function of time: window.render(t). The numbers are in RESULTS below: update them after a full run.
+-->
+<html><head><meta charset="utf-8">
+<style>
+  @font-face { font-family: "Fredoka"; src: url("../../assets/src/fonts/Fredoka-Variable.ttf"); font-weight: 300 700; }
+  html, body { margin: 0; background: transparent; }
+  canvas { display: block; }
+</style></head>
+<body><canvas id="c"></canvas>
+<script>
+// Results of the last full paired run (see TESTING.md).
+const RESULTS = { without: 0.812, with: 0.902, gainHeadroom: 0.141, headroomCases: 74, better: 34, same: 72, worse: 6, cases: 112 };
+
+const Q = new URLSearchParams(location.search);
+const DARK = Q.get("theme") === "dark";
+const SCALE = Number(Q.get("scale") || 1.5);
+const W = 760, H = 384;
+const C = DARK
+  ? { panel: "#1a1524", line: "#2e2640", ink: "#efe8fb", muted: "#a99fbd", track: "#2b2339", off: "#5e5378" }
+  : { panel: "#f4effb", line: "#e3d9f3", ink: "#1d1530", muted: "#6f6485", track: "#e6ddf4", off: "#bfb3d6" };
+const VIOLET = "#7c5cd6", PINK = DARK ? "#f0a3c6" : "#e07fab", PINK_INK = DARK ? "#f0a3c6" : "#b9497e", RED = "#d6564a";
+window.DUR = 3.4;
+
+const cv = document.getElementById("c");
+cv.width = W * SCALE; cv.height = H * SCALE; cv.style.width = W + "px"; cv.style.height = H + "px";
+const g = cv.getContext("2d");
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const out = (x) => 1 - Math.pow(1 - x, 3);
+const back = (x, s = 1.6) => { x = clamp(x) - 1; return 1 + x * x * ((s + 1) * x + s); };
+const F = (w, s) => `${w} ${s}px Fredoka`;
+
+function bar(y, label, value, colour, t0, t) {
+  const x = 150, full = 470, p = out(seg(t, t0, t0 + .9));
+  g.fillStyle = C.muted; g.font = F(500, 18); g.fillText(label, 36, y + 19);
+  g.fillStyle = C.track; g.beginPath(); g.roundRect(x, y, full, 26, 13); g.fill();
+  if (p > 0) { g.fillStyle = colour; g.beginPath(); g.roundRect(x, y, Math.max(26, full * value * p), 26, 13); g.fill(); }
+  g.fillStyle = C.ink; g.font = F(700, 20); g.fillText((value * p).toFixed(3), x + full + 16, y + 20);
+}
+
+function pop(x, y, text, caption, colour, t0, t) {
+  const p = seg(t, t0, t0 + .45);
+  if (p <= 0) return;
+  g.save(); g.globalAlpha = clamp(p * 3); g.translate(x, y); const s = .6 + .4 * back(p); g.scale(s, s);
+  g.fillStyle = colour; g.font = F(700, 48); g.fillText(text, 0, 0); g.restore();
+  g.save(); g.globalAlpha = clamp((t - t0 - .2) * 3); g.fillStyle = C.muted; g.font = F(500, 15); g.fillText(caption, x, y + 26); g.restore();
+}
+
+window.render = (t) => {
+  t = clamp(t, 0, window.DUR);
+  const r = RESULTS;
+  g.setTransform(SCALE, 0, 0, SCALE, 0, 0); g.clearRect(0, 0, W, H);
+  g.fillStyle = C.panel; g.strokeStyle = C.line; g.lineWidth = 2;
+  g.beginPath(); g.roundRect(1, 1, W - 2, H - 2, 22); g.fill(); g.stroke();
+
+  g.fillStyle = C.ink; g.font = F(700, 28); g.fillText("Measured effect", 36, 54);
+  g.fillStyle = C.muted; g.font = F(500, 16);
+  g.fillText(`${r.cases} cases, 3 runs each, Claude Haiku 5.5, the same agent with and without Tabby`, 36, 80);
+
+  bar(104, "Without", r.without, C.off, .15, t);
+  bar(146, "With Tabby", r.with, PINK, .45, t);
+
+  const gain = r.with - r.without;
+  pop(36, 232, "+" + (gain * out(seg(t, 1.35, 1.9))).toFixed(3), "mean score, all cases", VIOLET, 1.3, t);
+  pop(262, 232, "+" + (r.gainHeadroom * out(seg(t, 1.6, 2.15))).toFixed(3), `on the ${r.headroomCases} cases that score under 0.95 without`, PINK_INK, 1.55, t);
+
+  // per-case change: better grows from the left, worse from the right, about the same fills between
+  const x = 36, y = 318, full = 688, tot = r.better + r.same + r.worse;
+  const p = out(seg(t, 2.05, 2.75)), wb = full * r.better / tot, ww = Math.max(16, full * r.worse / tot);
+  g.fillStyle = C.muted; g.font = F(500, 15); g.globalAlpha = clamp((t - 1.95) * 4);
+  g.fillText("Change per case of 0.10 or more", x, y - 10); g.globalAlpha = 1;
+  g.fillStyle = C.track; g.beginPath(); g.roundRect(x, y, full, 16, 8); g.fill();
+  if (p > 0) {
+    g.fillStyle = VIOLET; g.beginPath(); g.roundRect(x, y, Math.max(16, wb * p), 16, 8); g.fill();
+    g.fillStyle = RED; g.beginPath(); g.roundRect(x + full - ww * p, y, Math.max(8, ww * p), 16, 8); g.fill();
+  }
+  const lp = clamp((t - 2.6) * 4);
+  if (lp > 0) {
+    g.globalAlpha = lp; let lx = x; g.font = F(700, 15);
+    for (const [text, colour, bold] of [[`${r.better} better`, VIOLET, 1], ["  ·  ", C.muted], [`${r.same} about the same`, C.muted], ["  ·  ", C.muted], [`${r.worse} worse`, RED, 1]]) {
+      g.font = F(bold ? 700 : 500, 15); g.fillStyle = colour; g.fillText(text, lx, y + 40); lx += g.measureText(text).width;
+    }
+    g.globalAlpha = 1;
+  }
+};
+Promise.all([document.fonts.load("700 20px Fredoka"), document.fonts.load("500 20px Fredoka")]).then(() => { window.render(0); window.READY = true; });
+</script></body></html>
