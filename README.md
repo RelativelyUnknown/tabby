@@ -104,16 +104,17 @@ Tabby does the task first and never interviews you before it. Project memory liv
 
 ## Measured effect
 
-The same agent with and without Tabby on Claude Haiku 5.5 (`claude plugin eval`, regex and model-judged graders, 3 runs per case, 16 November 2026). The final 0.2.0 run covers all 106 cases with the repaired graders; plugin-fired indicators are excluded from the scores.
+The same agent with and without Tabby on Claude Haiku 5.5 (`claude plugin eval`, regex and model-judged graders, 3 runs per case, 17 November 2026). The final 0.2.0 run covers all 112 cases; plugin-fired indicators are excluded from the scores.
 
-| Run | Without Tabby | With Tabby | Delta | Better / worse / same |
+| Run | Without Tabby | With Tabby | Delta | Better / worse / same (changes of 0.10 or more) |
 | --- | --- | --- | --- | --- |
-| 0.2.0, final (106 cases) | 0.804 | 0.875 | +0.071 | 31 / 13 / 62 |
+| 0.2.0, final (112 cases) | 0.812 | 0.902 | +0.090 | 34 / 6 / 72 |
+| 0.2.0, first full run (106 cases) | 0.804 | 0.875 | +0.071 | 31 / 13 / 62 |
 | 0.1.0 (`main`), 98 common cases, older graders | 0.793 | 0.834 | +0.041 (+0.001 to +0.083) | 25 / 15 / 58 |
 
-On the 65 cases where the agent without Tabby scores under 0.95, 0.2.0's mean gain is +0.135 (95% interval +0.066 to +0.204). On the 100 cases that `main` also ran, 0.2.0 with Tabby scores 0.870 against 0.831 for 0.1.0 with Tabby, but 0.1.0's runs were scored by the graders as they were then, and 0.2.0's by the repaired ones, so read that +0.039 as an upper bound. Turns rise 26% and cost 58% per run with Tabby (the core rules, the gate and the reviewer subagent). Thirteen cases are worse by 0.10 or more; the largest are `diagram-state-machine`, `animation-self-contained-html`, `numpydoc-docstrings` (no fixture) and `optional-parquet-dependency`. 32 of 700 graders never pass in any run, and 64% always pass, so they cannot separate the arms. Differences under about 0.05 are noise at 3 runs per case.
+On the 74 cases where the agent without Tabby scores under 0.95, 0.2.0's mean gain is +0.141 (95% interval +0.093 to +0.194). With Tabby a run takes 25% more turns and costs 59% more (the core rules, the gate, the reviewer subagent and the larger context). The row for 0.1.0 was scored by the graders as they were then, and 0.2.0's by the repaired ones, so the gap between those rows is an upper bound. Between the two 0.2.0 runs, the plugin changed to fix what the worst cases showed (a read-only-sandbox flow that sent diagram specs outside the project, a missing fixture, a brittle grader, and a few core rules), and six cases were added; the cases were chosen after seeing the first run, so part of the gain is regression to the mean.
 
-After that run I read the traces of the seven worst cases, fixed what they showed (a read-only-sandbox flow that sent diagram specs outside the project, a missing fixture, one brittle grader, and three core rules) and re-ran only those seven. With Tabby they went from 0.00-0.85 to 0.50-1.00 and are now at or above the without-Tabby arm in each (for example `diagram-state-machine` 0.00 to 1.00, `optional-parquet-dependency` 0.58 to 1.00, `numpydoc-docstrings` 0.22 to 0.78). The without-Tabby arm stayed within 0.1 on five of the seven (`numpydoc-docstrings` has a new fixture, and `optional-parquet-dependency` fell 0.88 to 0.64). The cases were picked because they scored worst, so part of the gain is regression to the mean; the suite-wide numbers above are not re-run.
+Six cases are worse by 0.10 or more with Tabby: `animation-self-contained-html` (-0.52; in a read-only sandbox the builder prints a 22 KB page that the model must copy by hand, and some runs give up), `pick-a-set-representation`, `fake-needs-contract-test`, `port-hot-path-to-rust`, `add-owned-resource-endpoint` and `reuse-existing-slugify` (each -0.11 to -0.19, not yet read). 32 of 724 graders never pass in any run, and 68% always pass, so they cannot separate the arms. Differences under about 0.05 are noise at 3 runs per case.
 
 What the first 0.2.0 build got wrong, found by reading traces:
 
