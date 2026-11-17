@@ -23,6 +23,7 @@ These rules apply to every Python change. They are the habits a strong model ski
 | "A `# type: ignore` is faster" | Narrow the type or fix the code |
 | "`dict[str, Any]` keeps it flexible" | A dataclass, `TypedDict` or model; `Any` hides the next bug |
 | "I'll write a small helper" | `git grep` first, then the standard library |
+| "The sample rows are fine, so it works" (data from a file, API or user) | Ask what a real one does on a bad day: encoding, locale numbers, empty input, near-miss matches. Guard the likely ones, test one, name the rest |
 | "I'll import the optional package at the top" | Declare an extra, import inside the function, `raise ImportError("... pip install pkg[extra]") from e` |
 | "A retry or a sleep will make it pass" | Find why it fails; that is the fix |
 | "The tests pass, so it is done" | Run the thing the user asked for and quote the result |

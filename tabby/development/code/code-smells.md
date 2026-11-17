@@ -13,7 +13,7 @@ A smell is a habit that looks fine and makes the next reader stop: the code runs
 - `return`, `break` or `continue` in `finally` discards the exception in flight → keep only cleanup there
 - `max(...)`, `min(...)`, `items[0]`, `next(it)` or a mean/division over input that can be empty → decide what empty gives (`max(..., default=None)`, `next(it, None)`, a guard) and write the test for it
 - A keyword or substring test on free text (`"rent" in description`) → it also matches "cu**rrent**" and "App**rent**ice"; match whole words (`re.search(r"\bword\b", text)`) or say the limit in the rules file, and test one near-miss
-- Reading a file you did not write (a bank or vendor export) as UTF-8 only → `encoding="utf-8-sig"` for a BOM, and on `UnicodeDecodeError` print one line naming the file and the encoding to try (`--encoding`), not a traceback
+- Reading a file you did not write (a bank or vendor export) as UTF-8 only → guard it now; see [foreseeable-failures.md](foreseeable-failures.md)
 - `zip(a, b)` over inputs that must match in length → `zip(..., strict=True)` (3.10+)
 - Removing from a list while looping over it → build a new list, or loop over a copy
 - `status is "ready"`, `n is 1000` → `==`; `is` for `None` only

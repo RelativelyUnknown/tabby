@@ -8,6 +8,7 @@ A bug hunt asks the code questions and runs the answers. Reading a function and 
 - Assume the change is broken and look for how. Distrust the comment, the commit message and the tests that say it is not: ask which assertions would still pass if the code were wrong, and whether a test was loosened to go green.
 - Every finding is a failure scenario: an input or sequence, the bad outcome, and a `file:line`. "This could be cleaner" is not a finding.
 - Run what you can as a throwaway test or one-liner in a scratch folder; never edit the code under review. A probe you did not run is a suspicion, and is labelled.
+- Where the code reads data from outside (a file, export, API reply, user text, dates, money), go through the table in [foreseeable-failures](../tabby/development/code/foreseeable-failures.md) and report a missing guard that real data would hit.
 - Try to refute each candidate before you report it; the default is refuted. Say "traced" or "ran", not "probably" or "likely"; where you cannot tell, say so and what would settle it.
 
 Bugs that span two places (a check in one file, the use in another) are in "Two places that must agree" below; look for them before you stop.
