@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- READMEs for `interview`, `hooks` and `tabby`, written from real runs (a read-only interview round on a two-file project, the Stop hook against a loosened test, `detect.py` output). The root README now has a short "How it works", says what to do after installing, lists the proof-based rule, and fixes two errors: the hooks row said `/tabby:hooks off|lite|full` (the skill takes `on` and `off`; `lite` is set in `.claude/tabby.json` or `TABBY_MODE`), and the case count was 112 against 114.
+- `plugin.json` and `marketplace.json` descriptions now list all nine skills (they said six and omitted `tabby-debt`, `voice` and `hooks`).
 - `tabby-debt/README.md` explains what the ledger is for, shows real output and the CI flags, and states what the script does not check (the flag is about shape, a git repository shows tracked files only). The README row says what the command lists and flags, and `SKILL.md` carries the two limits for the agent.
 - Proof-based testing for pure logic (`tabby/development/testing/proof-based-testing.md`): laws written as if-and-only-if before the code, a pure core split from I/O, independent oracles, a CrossHair search through Hypothesis's `crosshair` backend, a mutmut audit of the core, and report labels that say "searched" instead of "proved". The commands and numbers were run (a planted rare-branch bug that plain Hypothesis found in 8 of 15 runs; 4 of 8 mutants surviving a one-example test, 0 surviving an if-and-only-if property).
 - `tabby-review/proof-checks.md`: reviews a diff for weakened or vacuous laws (stub the function with `return False` and `return True`; hand-made mutants in a scratch copy, never `mutmut` in the repository under review).
