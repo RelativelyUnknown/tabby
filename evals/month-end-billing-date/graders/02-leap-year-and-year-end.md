@@ -4,4 +4,4 @@ focus: trace
 weight: 2
 ---
 
-PASS if tests or runs cover a leap-year February (for example 2028-01-31 gives 2028-02-29) and a December-to-January wrap, and multiple months (`months=12` or more) are handled. FAIL if any of these is missing from what was tested.
+PASS if the tests the model wrote include a leap-year February (for example 2028-01-31 gives 2028-02-29), a rollover into the next year, and a `months` value above 12 or a multi-month step, and the suite passed. FAIL if any of these three is missing from the tests.
