@@ -147,8 +147,8 @@ Same agent, with and without Tabby, on Claude Haiku 5.5 (`claude plugin eval`, 1
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-results-dark.svg">
-    <img src="assets/tabby-results-light.svg" width="760" alt="Mean score over 112 cases: 0.812 without Tabby, 0.902 with Tabby. 34 cases better, 72 about the same, 6 worse.">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-effect-dark.webp">
+    <img src="assets/tabby-effect-light.webp" width="760" alt="Mean score over 112 cases: 0.812 without Tabby, 0.902 with Tabby. 34 cases better, 72 about the same, 6 worse.">
   </picture>
 </p>
 
