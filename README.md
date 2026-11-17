@@ -1,11 +1,9 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/cat-head-dark.png">
-    <img src="assets/cat-head-light.png" width="140" alt="The Tabby logo: a painted tabby cat's head, orange in light mode and grey in dark mode.">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-hero-dark.svg">
+    <img src="assets/tabby-hero-light.svg" width="860" alt="Tabby: agent skills for careful Python. Cause before fix, small diffs, tests stay green.">
   </picture>
 </p>
-
-<h1 align="center">Tabby</h1>
 
 <p align="center"><strong>Agent skills that make your coding agent write Python like a careful senior engineer.</strong><br>
 Finds the cause before the fix. Reuses before it writes. Keeps the diff small. Never edits a test to get green.</p>
@@ -25,13 +23,6 @@ Finds the cause before the fix. Reuses before it writes. Keeps the diff small. N
   <a href="#the-rules-it-holds">The rules</a> ·
   <a href="#measured-effect">Measured effect</a> ·
   <a href="TESTING.md">Testing</a>
-</p>
-
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/cat-sleeping-dark.png">
-    <img src="assets/cat-sleeping-light.png" width="520" alt="A tabby cat asleep in a curl, painted in brushstrokes: orange in light mode and grey in dark mode.">
-  </picture>
 </p>
 
 ## Why Tabby
@@ -154,14 +145,12 @@ Tabby does the task first and never interviews you before it. Project memory liv
 
 Same agent, with and without Tabby, on Claude Haiku 5.5 (`claude plugin eval`, 112 cases, regex and model-judged graders, 3 runs per case, November 2026).
 
-```
-Mean score over all cases
-  without Tabby  ████████████████████████████████░░░░░░░░  0.812
-  with Tabby     ████████████████████████████████████░░░░  0.902   +0.090
-
-Cases where the agent scores under 0.95 without Tabby (74)
-  gain           +0.141   (95% interval +0.093 to +0.194)
-```
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-results-dark.svg">
+    <img src="assets/tabby-results-light.svg" width="760" alt="Mean score over 112 cases: 0.812 without Tabby, 0.902 with Tabby. 34 cases better, 72 about the same, 6 worse.">
+  </picture>
+</p>
 
 34 cases improve by 0.10 or more, 6 get worse and 72 stay within 0.10. A run with Tabby takes about 25% more turns and costs about 59% more, because of the core rules, the end-of-turn checks and the reviewer subagent.
 

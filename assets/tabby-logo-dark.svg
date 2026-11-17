@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 560" width="560" height="560" role="img" aria-labelledby="t d">
+<title id="t">Tabby</title><desc id="d">A tabby cat's head with a teal collar and a code-bracket tag.</desc>
+<style>
+  .blink { transform-box: fill-box; transform-origin: center; animation: blink 5.5s infinite; }
+  .ear { transform-box: fill-box; transform-origin: 50% 100%; animation: flick 9s infinite; }
+  @keyframes blink { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.08); } }
+  @keyframes flick { 0%, 90%, 100% { transform: rotate(0); } 93% { transform: rotate(-7deg); } 96% { transform: rotate(2deg); } }
+  @media (prefers-reduced-motion: reduce) { .blink, .ear { animation: none; } }
+</style>
+<rect width="560" height="560" rx="96" fill="#17120d" opacity="0"/>
+<g transform="translate(24 10) scale(1.0)">
+  <g class="ear"><path d="M104 132 L112 92 Q116 84 124 90 L196 168 Z" fill="#e8903a"/><path d="M128 120 L124 112 L172 164 L146 160 Z" fill="#f2a6a0"/></g>
+  <g class="ear" style="animation-delay:1.3s"><path d="M408 132 L400 92 Q396 84 388 90 L316 168 Z" fill="#e8903a"/><path d="M384 120 L388 112 L340 164 L366 160 Z" fill="#f2a6a0"/></g>
+  <path d="M112 118 L196 168 Q256 150 316 168 L400 118 Q442 250 420 330 Q392 438 256 442 Q120 438 92 330 Q70 250 112 118 Z" fill="#e8903a"/>
+  <g stroke="#b3541a" stroke-width="15" stroke-linecap="round" fill="none">
+    <path d="M256 176 L256 236"/><path d="M222 182 Q214 214 220 236"/><path d="M290 182 Q298 214 292 236"/>
+    <path d="M96 296 L146 304"/><path d="M92 336 L142 336"/><path d="M416 296 L366 304"/><path d="M420 336 L370 336"/>
+  </g>
+  <ellipse cx="256" cy="372" rx="84" ry="62" fill="#f7cf9a"/>
+  <g class="blink"><ellipse cx="186" cy="290" rx="30" ry="34" fill="#7fc96b"/><ellipse cx="186" cy="290" rx="7" ry="26" fill="#1a130c"/><circle cx="196" cy="276" r="7" fill="#fff"/></g>
+  <g class="blink"><ellipse cx="326" cy="290" rx="30" ry="34" fill="#7fc96b"/><ellipse cx="326" cy="290" rx="7" ry="26" fill="#1a130c"/><circle cx="336" cy="276" r="7" fill="#fff"/></g>
+  <path d="M238 340 Q256 332 274 340 Q268 360 256 364 Q244 360 238 340 Z" fill="#f2a6a0" stroke="#c9736c" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M256 364 L256 378 M256 378 Q244 396 226 390 M256 378 Q268 396 286 390" fill="none" stroke="#5a3a28" stroke-width="5" stroke-linecap="round"/>
+  <g stroke="#e9dccb" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.9">
+    <path d="M176 366 L70 346"/><path d="M176 378 L66 384"/><path d="M180 390 L80 420"/>
+    <path d="M336 366 L442 346"/><path d="M336 378 L446 384"/><path d="M332 390 L432 420"/>
+  </g>
+  <path d="M170 430 Q256 460 342 430 L338 454 Q256 484 174 454 Z" fill="#2a8f89"/>
+  <circle cx="256" cy="488" r="24" fill="#2a8f89" stroke="#17120d" stroke-width="4"/>
+  <g stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M247 480 L239 488 L247 496"/><path d="M265 480 L273 488 L265 496"/><path d="M260 478 L252 498"/>
+  </g>
+</g>
+</svg>
