@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: quote-rules-from-docs
+expected_outcome: |
+  Reads docs/pricing.md, adds a pure quote_cents(...) that follows it, and writes tests that pin the edges the document implies (tier boundaries, the cap and its lift, the free-shipping thresholds for members and non-members, the started-500 g weight steps, the express surcharge rounded up and charged on free shipping, the validation) with expected values from the document. The existing test is left alone, the agent breaks the function on purpose to see a test fail, and the final message says what the tests cover without calling a sampled run a proof.
+context:
+  scaffold_script: fixture.sh
