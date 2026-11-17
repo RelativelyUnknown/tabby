@@ -155,3 +155,8 @@ Ideas only, restated in Tabby's words; nothing vendored and no text copied. Shal
 - `adamentwistle/fable-skills`, skill `edge-case-sweep` (MIT, copyright 2026 Adam Entwistle). Adapted into `tabby/development/code/foreseeable-failures.md`: the three outcomes for each failure (handle, reject loudly, note), the rule that "handled" needs an observed run, the rule not to guard inputs the code cannot receive, and the checklist families (absent against empty, boundaries, duplicates, called twice or concurrently, stale state, time, a dependency failing). Rewritten in Tabby's words and joined to Python-specific guards and packages.
 - `getsentry/warden`, `code-review/references/python.md` (Functional Source License): read for ideas only, no text copied. It confirmed the patterns "falsey fallback", "used-up iterator" and "mutable default" as high-signal.
 - Read, nothing taken: `olshansk/agent-skills` `cmd-pr-edgecase` (a PR review procedure, not a guard list), `wshobson` `python-anti-patterns` (already covered by `code-smells.md`).
+
+## Fredoka (README title)
+
+The README banner's lettering is outlined from Fredoka (SIL Open Font License 1.1, copyright 2016 The Fredoka Project Authors, https://github.com/hafontia/Fredoka-One), turned into path data by `tools/outline_font.py` and stored in `assets/src/fredoka-bold.json` and `assets/src/fredoka-medium.json`. The licence text is `assets/src/fonts/OFL-Fredoka.txt`. The cat drawing is original; its pose (a solid curled shape with the ears, stripes and closed eyes cut out) was inspired by a reference image the project owner supplied.
+

@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-hero-dark.svg">
-    <img src="assets/tabby-hero-light.svg" width="860" alt="Tabby: agent skills for careful Python. Cause before fix, small diffs, tests stay green.">
+    <img src="assets/tabby-hero-light.svg" width="860" alt="Tabby: a cat walks in, lies down, and the name appears. Agent skills for careful Python: cause before fix, small diffs, tests stay green.">
   </picture>
 </p>
 
