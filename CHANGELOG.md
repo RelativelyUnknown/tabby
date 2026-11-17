@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Proof-based testing for pure logic (`tabby/development/testing/proof-based-testing.md`): laws written as if-and-only-if before the code, a pure core split from I/O, independent oracles, a CrossHair search through Hypothesis's `crosshair` backend, a mutmut audit of the core, and report labels that say "searched" instead of "proved". The commands and numbers were run (a planted rare-branch bug that plain Hypothesis found in 8 of 15 runs; 4 of 8 mutants surviving a one-example test, 0 surviving an if-and-only-if property).
+- `tabby-review/proof-checks.md`: reviews a diff for weakened or vacuous laws (stub the function with `return False` and `return True`; hand-made mutants in a scratch copy, never `mutmut` in the repository under review).
+- Checked mutmut 3.8.1 option names: `source_paths` (`paths_to_mutate` is deprecated), and `only_mutate` needs globs ending in `*` or `.py`.
+
 ## 0.3.0
 
 - The interview's answers steer the coding agent (new core rule 12): it names the `## Tabby` lines that shape a task, builds the seam the next `growth:` item needs and rejects choices one would have to undo, checks its work against `goals:`, and does not re-ask what `decided:`, the code or the git history records. "Keep replies short" is now rule 13.

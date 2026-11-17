@@ -26,6 +26,8 @@ def test_sorting_keeps_length_and_is_ordered(xs):
 
 ## Mutation testing
 
+Config keys, the pragmas and a worked example are in [proof-based-testing.md](proof-based-testing.md).
+
 Coverage shows which lines ran; mutation testing shows which behaviour the tests would notice. Run it before a release or weekly, not on every commit: `uv add --dev mutmut`, `[tool.mutmut]` with `source_paths = ["src/"]`, `uv run mutmut run`, `uv run mutmut browse`. `mutants/` in `.gitignore`; mutmut needs `fork` (WSL on Windows).
 
 - A surviving mutant means a missing or weak test: strengthen the test. Never change the code to kill a mutant. It is not by itself a bug in the code; it is a pointer to where nothing checks, so read that code and reproduce a failure before calling anything a bug.

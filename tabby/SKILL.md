@@ -42,7 +42,7 @@ Open leaves with Read at the path given; do not search for them. A one-line fix,
 - an API, queue, cache, ORM or async change: `references/growth.md` first; the final message gives the options, the choice and what stays open
 - Rust, C, C++ or Zig behind a Python API, including moving a function into one: `library/native/native-overview.md`, then the language page it names (`native-rust.md`, `native-c.md`, `native-cpp.md`, `native-zig.md`), and `library/native/native-porting-a-function.md` to move a function
 - opens files, connections, locks, subprocesses or streams: `code/files-connections-locks.md`
-- writes or changes tests: `testing/testing-basics-and-fixtures.md`, `testing/test-smells.md`; with mocks `testing/test-mocking.md`, fixtures (in `testing/testing-basics-and-fixtures.md`), property-based or release-grade `testing/test-rigor-property-and-release.md`
+- writes or changes tests: `testing/testing-basics-and-fixtures.md`, `testing/test-smells.md`; with mocks `testing/test-mocking.md`, fixtures (in `testing/testing-basics-and-fixtures.md`), property-based or release-grade `testing/test-rigor-property-and-release.md`; laws for pure decision, money or parsing logic, a solver search or a mutation audit `testing/proof-based-testing.md`
 - three or more outcomes, or "all"/"every": `workflow/multi-outcome-gates.md` (a short list, then start); several readings: `workflow/specs-and-slices.md`
 - removes or replaces something: `workflow/deprecation-and-migration.md`
 

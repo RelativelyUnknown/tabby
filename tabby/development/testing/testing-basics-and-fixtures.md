@@ -30,7 +30,7 @@ A test is evidence about behaviour. Ask of any test: if the behaviour broke, wou
 
 - `lite`: The rules above. Nothing else is required.
 - `full`: Everything in "Full" below, and read [test-mocking.md](test-mocking.md).
-- `ultra`: `full`, plus read [test-rigor-property-and-release.md](test-rigor-property-and-release.md) (property-based tests, mutation testing, release gates) and apply it. Their examples use `uv`; with another runner, use its equivalents.
+- `ultra`: `full`, plus read [test-rigor-property-and-release.md](test-rigor-property-and-release.md) (property-based tests, mutation testing, release gates) and apply it; for pure decision, money or parsing logic also [proof-based-testing.md](proof-based-testing.md) (laws as if-and-only-if, solver search, mutation audit). Their examples use `uv`; with another runner, use its equivalents.
 
 ## Full
 
