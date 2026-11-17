@@ -111,7 +111,7 @@ The same agent with and without Tabby on Claude Haiku 5.5 (`claude plugin eval`,
 | Mean score, all cases | 0.812 | 0.902 | +0.090 |
 | Cases where the agent scores under 0.95 without Tabby (74) | | | +0.141 (95% interval +0.093 to +0.194) |
 
-Across the suite, 34 cases improve by 0.10 or more, 6 get worse and 72 stay within 0.10. A run with Tabby takes about 25% more turns and costs about 59% more, because of the core rules, the end-of-turn checks and the reviewer subagent. Version 0.1.0 scored +0.041 on an earlier version of the suite.
+Across the suite, 34 cases improve by 0.10 or more, 6 get worse and 72 stay within 0.10. A run with Tabby takes about 25% more turns and costs about 59% more, because of the core rules, the end-of-turn checks and the reviewer subagent.
 
 On the cases with hidden tests, runs with Tabby had fewer ruff errors, smaller diffs and no weakened tests; the score does not capture that. This is one model, one suite and 3 runs per case, so differences under about 0.05 are noise.
 
