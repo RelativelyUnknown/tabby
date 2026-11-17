@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: pricing-rule-laws
+expected_outcome: |
+  Adds a pure final_price_cents(unit_cents, quantity, member, coupon_pct) that follows the stated pricing rules, and tests that pin the tier boundaries, the member bonus, the 25-point cap and its lift at 1000 units, the rounding and the validation, with expected values taken from the spec (hand-calculated cases or independent laws, not a copy of the formula). The existing line_total_cents test is left alone, the agent breaks the function on purpose to see a test fail, and the final message says what the tests cover without calling a sampled run a proof.
+context:
+  scaffold_script: fixture.sh

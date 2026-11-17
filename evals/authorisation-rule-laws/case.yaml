@@ -1,6 +1,0 @@
-schema_version: "1.1"
-name: authorisation-rule-laws
-expected_outcome: |
-  Adds a pure can_delete(role, is_owner, locked) that follows the stated rules, and tests that cover the whole role, owner and locked matrix with both allowed and refused outcomes (an exhaustive table or an if-and-only-if property), with expected values taken from the spec. The existing can_edit test is left alone, the agent breaks the function on purpose to see a test fail, and the final message says how the rule was checked without calling a sampled run a proof.
-context:
-  scaffold_script: fixture.sh
