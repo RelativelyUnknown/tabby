@@ -1,5 +1,5 @@
 // build.mjs: record the README hero loop to animated WebP, and the logo to PNG.
-//   node tools/readme_film/build.mjs                 both themes -> assets/tabby-hero-{light,dark}.webp, assets/tabby-logo-{light,dark}.png
+//   node tools/readme_film/build.mjs                 both themes -> assets/tabby-terminal-{light,dark}.webp, assets/tabby-logo-{light,dark}.png
 //   node tools/readme_film/build.mjs --stills 0,2.5  contact frames only, into $OUT (default ./film-stills)
 // Needs Playwright with Chromium, and ffmpeg built with libwebp.
 import { execFileSync } from "node:child_process";
@@ -41,7 +41,7 @@ for (const theme of ["light", "dark"]) {
     await p.evaluate((t) => window.render(t), i / FPS);
     await canvas.screenshot({ path: path.join(dir, `f${String(i).padStart(4, "0")}.png`), omitBackground: true });
   }
-  const out = path.join(root, `assets/tabby-hero-${theme}.webp`);
+  const out = path.join(root, `assets/tabby-terminal-${theme}.webp`);
   execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(FPS), "-i", path.join(dir, "f%04d.png"),
     "-c:v", "libwebp_anim", "-lossless", "0", "-q:v", "82", "-compression_level", "6", "-loop", "0", "-pix_fmt", "yuva420p", out]);
   rmSync(dir, { recursive: true });
