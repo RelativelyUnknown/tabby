@@ -2,7 +2,7 @@
 
 Run this only when the user asks for it (the interview skill, `/tabby:interview` in Claude Code, "run the Tabby interview", "set up Tabby") or accepts the one-line offer after a task. It is never a condition for doing a task.
 
-Goal: a short `## Tabby` section in AGENTS.md that every later task reads in a few hundred tokens. The interview adapts to the project's state and is grounded in its code: research first, then rounds of questions that cite what the code showed.
+Goal: a short `## Tabby` section in AGENTS.md that every later task reads in a few hundred tokens and decides from. The coding agent builds the seam each `growth:` item needs, rejects choices a line rules out, and checks its work against `goals:` (core rule 12), so write each line as something it can act on: "Apple Music replaces Spotify from June 2026", not "more sources later". The interview adapts to the project's state and is grounded in its code: research first, then rounds of questions that cite what the code showed.
 
 ## Rules
 
@@ -20,7 +20,7 @@ Ask round one now and stop: the user asked for the interview, so the interview i
 
 | State | Signals | Rounds |
 | --- | --- | --- |
-| New | no code, or a stub | 3: purpose, users, success; the shape (kind, growth and workload, constraints, and the tool stack: offer two or three stacks with trade-offs, such as uv with ruff and pytest, or poetry with black and unittest, and recommend the one the user's team already knows); boundaries |
+| New | no code, or a stub | 3: purpose and the project's name, users, success; the shape (kind, growth and workload, constraints, and the tool stack: offer two or three stacks with trade-offs, such as uv with ruff and pytest, or poetry with black and unittest, and recommend the one the user's team already knows); boundaries |
 | Young | under about 30 commits or 6 months, few tests, no CI | 2: confirm the table plus purpose and users; growth and boundaries |
 | Established | many commits, CI, tests, docs | 2: corrections to the table only; then growth, out of scope, boundaries. A third round only for a conflict the research found: docs against code, two build systems, a TODO that contradicts the README |
 | Has a section | `## Tabby` exists | no rounds unless the drift check (section 6) finds a change |
@@ -33,22 +33,23 @@ Stop when you could predict the user's next three answers, after four rounds, or
 
 ## 3. Restate, get a yes, save
 
-Write the section's lines back in the user's words, with the open questions. "Sounds good" or "whatever you think" is not a yes: ask what to refine. On a clear yes, write the section and stop; start no work in the same turn. If the user tells you to save before you restated, print the full section in your reply as you save it and list every `(assumed)` line, so nothing lands in AGENTS.md unseen.
+Write the section's lines back in the user's words, with the open questions. Before restating, check the lines against each other: an item is in `growth:` (coming, maybe later) or `out-of-scope:` (never), not both; a `goals:` line that a `growth:` item changes (a source that replaces another) says so; `name:` is the name the user gave. "Sounds good" or "whatever you think" is not a yes: ask what to refine. On a clear yes, write the section and stop; start no work in the same turn. For Claude Code without the plugin's hooks, also suggest a `CLAUDE.md` with one line, `@AGENTS.md`, so later sessions load it. If the user tells you to save before you restated, print the full section in your reply as you save it and list every `(assumed)` line, so nothing lands in AGENTS.md unseen.
 
 ## 4. The section
 
 ```markdown
 ## Tabby
 reviewed: 2026-11-09 @ a1b2c3d
+name: the project's name as the user says it; the package, command and README use it
 purpose: one line
 users: who, in what situation
 goals: up to three, measurable where possible
-growth: ordered list; the first item is likeliest
+growth: ordered list, in the user's order; the first item comes next. "Not now" goes here, never in out-of-scope
 workload: read or write heavy, rough request rates, concurrency, data size
 map: five lines: entry points, layers, how data is reached, where the closest example of each kind of change lives
 conventions: the patterns this code follows that a newcomer would miss
 gotchas: things that surprised the team
-out-of-scope: list
+out-of-scope: what the project will never do (not "later": that is growth)
 constraints: python 3.12+; no new runtime dependencies
 always: run `make check` before reporting done
 ask-first: new dependency, public API change, schema change
@@ -58,6 +59,7 @@ modules: development, review, documentation
 docs: README, reference, ADR
 commands: one canonical check command, plus the targeted form (one test or file) when the suite is slow
 open: release process
+decided: (filled by later tasks) 2026-11-12 song matching in Rust, approved in chat
 ```
 
 - `kind:` is one of these paths under `../tabby/development/` (more in `../tabby/development/project-kind-detection.md`):
@@ -67,6 +69,8 @@ open: release process
   - queue worker or scheduler: `application/workers`
   - anything else: `code`
 - `reviewed:` carries the short commit hash the facts were checked at; the drift check starts from it.
+- `name:` is asked if the user has not given one; a project without a name gets named after the plugin by mistake. Suggest names from the user's own words (what it does, their group's slang), never from Tabby's name or the tool's.
+- `decided:` starts empty. Later tasks append decisions the user makes in conversation (an approval, a changed requirement, a rejected option), dated, so no later session asks again.
 - `docs:` lists the page types to keep current (`documentation/pages.md`): a library usually gets README, reference, how-to, changelog; a service gets README, runbook, ADR.
 - Add `design` to `modules:` only when the user wants diagrams or explainers.
 - `## Python defaults` holds the tools: `runner`, `build`, `test`, `lint`, `types`, `ci`, `python`. Fill it from the stack detected in `../tabby/development/project-kind-detection.md`; never from Tabby's own defaults for a project that already has tools.

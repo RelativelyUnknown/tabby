@@ -1,6 +1,6 @@
 ---
 name: tabby-debt
-description: "Use only when the user asks for it: /tabby:debt, 'list our shortcuts', 'show the technical debt ledger'. Lists the deliberate `# shortcut:` comments in a repository with their limits and triggers, and flags the ones that name no trigger. Never run it on your own."
+description: "Use only when the user asks for it: /tabby:tabby-debt (Claude Code), /tabby-debt elsewhere, 'list our shortcuts', 'show the technical debt ledger'. Lists the deliberate `# shortcut:` comments in a repository with their limits and triggers, and flags the ones that name no trigger. Never run it on your own."
 disable-model-invocation: true
 license: MIT
 ---
@@ -13,3 +13,4 @@ A shortcut is a deliberate simplification with a known limit, written as `# shor
 2. Show the table. For each flagged row (no trigger, or no limit), propose a one-line rewrite that names both; apply it only if the user agrees.
 3. For rows whose trigger may already have fired, check the current number against it (row count, request rate, supported Python version) and say which have. Do not fix them unasked.
 4. `--check` makes the script exit 1 when anything is flagged, for use in CI; `--json` prints the rows as JSON.
+5. If the ledger is empty or thin, look for deliberate limits that were never marked: size caps (`MAX_` constants, hard-coded limits in validation), slow fallbacks, skipped cases named in the README or AGENTS.md. List each with the line and a proposed `# shortcut:` comment; add them only if the user agrees.

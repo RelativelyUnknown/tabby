@@ -119,12 +119,12 @@ Five skills load on their own when the request matches, and four commands you ru
 | [`tabby-docs`](tabby-docs/) | write a README, docstrings, a tutorial, a changelog, an ADR or a runbook | One page type per reader need, and a check of the docs against the code |
 | [`tabby-diagrams`](tabby-diagrams/) | ask for a diagram, an architecture picture or an animation | A builder that turns a small spec into an SVG or an HTML animation, and checkers for crowded labels, contrast and loop jumps |
 | [`tabby-frontend`](tabby-frontend/) | build a page, dashboard, data app or docs site | A method, design tokens, a list of things it refuses to ship, and `ui-check` for contrast, focus, motion and layout |
-| [`tabby-debt`](tabby-debt/) | `/tabby:debt` | A ledger of the `# shortcut: <limit>, <trigger>` comments in the repository, with the ones that name no trigger flagged |
+| [`tabby-debt`](tabby-debt/) | `/tabby:tabby-debt` | A ledger of the `# shortcut: <limit>, <trigger>` comments in the repository, with the ones that name no trigger flagged |
 | [`interview`](interview/) | run `/tabby:interview` | Researches the repository read-only, asks at most three questions a round, and saves a `## Tabby` section to `AGENTS.md` |
 | [`voice`](voice/) | run `/tabby:voice terse\|explain\|auto` | Sets whether replies are terse and technical, or explain how the change works in plain words; the default picks from what you say |
 | [`hooks`](hooks/) | run `/tabby:hooks off\|lite\|full` | Turns the quality-gate hooks (Claude Code) off, on or to the light mode |
 
-The core rules in [`core/TABBY-CORE.md`](core/TABBY-CORE.md) are always on. In Claude Code, hooks in [`hooks/`](hooks/) inject them at session start, run the project's ruff on edited files, and at the end of a turn check the diff for shortcuts (added suppressions, skipped or weakened tests, bare `except`) and run the project's check command once. Modes: `full`, `lite` (core rules and the diff check only) and `off`, set with `TABBY_MODE` or `{"mode": "lite"}` in `.claude/tabby.json`. Large changes also get one request for the read-only `tabby-reviewer` subagent. In the other tools the core lives in the instructions file (see the table above).
+The core rules in [`core/TABBY-CORE.md`](core/TABBY-CORE.md) are always on. In Claude Code, hooks in [`hooks/`](hooks/) inject them and the `## Tabby` project memory at session start, run the project's ruff on edited files, and at the end of a turn check the diff for shortcuts (added suppressions, skipped or weakened tests, bare `except`) and run the project's check command once. Modes: `full`, `lite` (core rules, project memory, the diff check and the memory update request) and `off`, set with `TABBY_MODE` or `{"mode": "lite"}` in `.claude/tabby.json`. Large changes made in the session also get one request for the read-only `tabby-reviewer` subagent, and a change to the project's shape that leaves `AGENTS.md` untouched gets one request to update it. In the other tools the core lives in the instructions file (see the table above).
 
 ## The rules it holds
 
@@ -139,7 +139,7 @@ The core rules in [`core/TABBY-CORE.md`](core/TABBY-CORE.md) are always on. In C
 
 ## Project memory
 
-Tabby does the task first and never interviews you before it. Project memory lives in `AGENTS.md` for every tool. It infers the project from the repository and your request, and marks guesses `(assumed)`. `/tabby:interview` saves what the project is for and where it is going to a `## Tabby` section in `AGENTS.md`; later tasks read that section and ask before contradicting it. Tool and style defaults live in a `## Python defaults` section. Both are plain text you can edit.
+Tabby does the task first and never interviews you before it. Project memory lives in `AGENTS.md` for every tool. It infers the project from the repository and your request, and marks guesses `(assumed)`. `/tabby:interview` saves the project's name, what it is for and where it is going to a `## Tabby` section in `AGENTS.md`. That section steers every later task: the agent names the lines that shape its design, builds the seam the next `growth:` item needs instead of a choice it would have to undo, checks its work against `goals:`, asks before contradicting a line, and does not re-ask what `decided:` or the code already records. When the work changes a fact (a growth item gets built, a module appears, you approve something in chat), the agent updates those lines in the same task, so the next session starts from the truth. Tool and style defaults live in a `## Python defaults` section. Both are plain text you can edit.
 
 ## Measured effect
 

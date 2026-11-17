@@ -14,7 +14,7 @@ Name them, the criterion that decides, and what this project's evidence says. Ca
 
 | Growth item | Build now | Leave unbuilt |
 | --- | --- | --- |
-| A hot path may move to Rust or C | The function behind one module with a fully typed signature and a pure-Python implementation; one import site; a test that runs the reference on real inputs; a recorded benchmark | Cargo workspace, maturin, wheels, C sources |
+| A hot path may move to Rust or C | The function behind one module with a fully typed signature that takes a batch (a list, not one item, so a native version crosses the boundary once) and a pure-Python implementation that stays in the package as the fallback; one import site; a test that runs the reference on real inputs; a recorded benchmark | Cargo workspace, maturin, wheels, C sources |
 | A public API others will depend on | `__all__`, flat imports, `py.typed`, one root exception, the version in one place, keyword-only options ([public-api-design.md](../development/library/shared/public-api-design.md)) | A plugin system, registries, deprecation machinery |
 | It may become a service | Core logic as functions that take values (including time and config); a thin outer layer that reads the clock, environment and network | A web framework, auth, a database layer |
 | An ORM later | Data access in functions that take a connection and return typed rows; no SQL in handlers or views; one place builds connections | An ORM, a model layer, a migration tool |
@@ -23,7 +23,7 @@ Name them, the criterion that decides, and what this project's evidence says. Ca
 | Auth later | One dependency or middleware slot every route passes through; the user id passed explicitly to data access | An auth system |
 | Several tenants later | A tenant id in every data-access signature | Tenant routing, row-level security |
 | More clients later | Response models separate from storage rows; a versioned path prefix | A versioning scheme beyond that |
-| More integrations or data sources | One `Protocol` at the single seam where sources differ; one settings object | An adapter per imagined source: write the second when it exists |
+| More integrations or data sources | One `Protocol` at the single seam where sources differ; one settings object; keys and fields every source can supply (a title and artist, not one service's id) | An adapter per imagined source: write the second when it exists |
 | More users or scale | Idempotent handlers, timeouts, bounded queues and batches; a profile before any speed-up | Caching, sharding, async everywhere |
 | A second platform or Python version | The target in the CI matrix; platform checks in one module | Platform branches across the code |
 | Others will contribute | The canonical check command in `commands:`; CONTRIBUTING with that command | Governance documents beyond that |
@@ -36,11 +36,13 @@ In the reply: what you found, the options and why you chose this one, what you k
 
 ## When an item becomes real
 
+Do these in the same task that builds the item; the next session decides from the section, so a step left for later is a wrong fact.
+
 1. Re-read `out-of-scope:` and `constraints:`. Ask if the task conflicts.
 2. Read the leaf for that kind of work: `development/library/native/native-overview.md` for a first Rust, C or C++ module (`native-porting-a-function.md` to move an existing function), `development/application/apis/http/http-service-design.md` for a first endpoint, `development/library/shared/public-api-design.md` for a first public release.
 3. For a first data structure, representation or algorithm choice, read `development/architecture/data-structure-and-algorithm-fit.md`.
 4. Write one ADR (`project-docs.md` in the `tabby-docs` skill): the decision, the alternatives, what would change it.
-5. Move the item from `growth:` to `goals:` or delete it. Update `reviewed:`.
+5. Move the item from `growth:` to `goals:` or delete it. Update `map:`, `commands:` and `open:` where the build changed them, add the user's approval to `decided:` with the date, and update `reviewed:`. Say in the final message which lines changed.
 
 ## Smells
 
@@ -48,3 +50,4 @@ In the reply: what you found, the options and why you chose this one, what you k
 - More than three seams for one item: the item is too vague; ask what the first concrete step is.
 - A `growth:` item older than a year with no movement: ask whether it is still true.
 - A choice presented as the only option: name the one you rejected and why.
+- A key, data shape or layout that a `growth:` item would have to undo (records keyed by one service's id while a second service is in `growth:`): change it now, while it is cheap.

@@ -16,7 +16,8 @@ Rules (FAIL unless marked WARN):
   node-overlap      two node boxes overlap
   edge-through-node a line crosses a node box that is not one of its two ends
   pill-clearance    a label overlaps a node, or sits closer than 16 px to its arrowhead
-  tiny-text         text below 10 px
+  tiny-text         text below 10 px as shown in a README or docs column (at most 1040 px wide): a wider viewBox
+                    shrinks every label, so a 10.5 px label in a 1220-wide picture shows at 9 px
   budget            more than 9 nodes, 12 connections or 2 focal nodes
   contrast          a token pair below its minimum, in light or in dark
   grid (WARN)       a node box that is off the 4 px grid
@@ -31,6 +32,7 @@ ARROW = 12          # arrowhead length used by make.mjs
 CLEAR = ARROW + 4   # a label keeps this far from the arrowhead
 MAX_NODES, MAX_EDGES, MAX_FOCAL = 9, 12, 2
 MIN_TEXT = 10
+SHOWN_WIDTH = 1040  # the widest common README or docs column (GitHub's is about 1000 px); wider pictures shrink to it
 
 
 def tag(el):
@@ -230,12 +232,14 @@ def check(path):
             if dist_point_rect(ex, ey, r) < CLEAR:
                 add("FAIL", "pill-clearance", f"label {key} is within {CLEAR} px of its arrowhead; widen the gap or shorten the label")
 
-    # text
+    # text, at the size it is shown
+    scale = min(1.0, SHOWN_WIDTH / vbox[2]) if vbox[2] > 0 else 1.0
     for el in root.iter():
         if tag(el) == "text":
             fs = num(el.get("font-size"), 99)
-            if fs < MIN_TEXT:
-                add("FAIL", "tiny-text", f"text \"{''.join(el.itertext())[:20]}\" is {fs:g} px")
+            if fs * scale < MIN_TEXT:
+                shown = f" ({fs * scale:.1f} px when the {vbox[2]:g}-wide picture is shown {SHOWN_WIDTH} px wide; stack it or split it)" if scale < 1 else ""
+                add("FAIL", "tiny-text", f"text \"{''.join(el.itertext())[:20]}\" is {fs:g} px{shown}")
 
     # budget
     if len(nodes) > MAX_NODES:

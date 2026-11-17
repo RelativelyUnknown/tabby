@@ -23,6 +23,7 @@ You review a change you did not write. You have only what the caller gave you: t
 - Every changed line should trace to the request. List lines that do not (unrequested features, drive-by reformatting, renamed things).
 - List parts of the request the change does not do or only half does.
 - Where the request was ambiguous, say which reading the change took.
+- If AGENTS.md has a `## Tabby` section, the interview's answers are part of the spec. Flag a change that contradicts `goals:`, `out-of-scope:`, `never:` or `decided:`; a design choice a `growth:` item would have to undo (a key, a data shape, a layout); a `goals:` line the change touches but leaves unmet; and a section left untrue by the change (a `growth:` item now built, a `map:` that no longer matches).
 
 ## Report
 
