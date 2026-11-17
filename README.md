@@ -48,14 +48,14 @@ Tabby is plain `SKILL.md` folders in the open [Agent Skills](https://agentskills
 Run these as two separate prompts:
 
 ```
-/plugin marketplace add RelativelyUnknown/my-skills
+/plugin marketplace add RelativelyUnknown/tabby
 ```
 
 ```
 /plugin install tabby@tabby
 ```
 
-On Claude Code 2.1.275 or later, one command does both: `/plugin install tabby --marketplace RelativelyUnknown/my-skills`.
+On Claude Code 2.1.275 or later, one command does both: `/plugin install tabby --marketplace RelativelyUnknown/tabby`.
 
 </details>
 
@@ -65,14 +65,14 @@ On Claude Code 2.1.275 or later, one command does both: `/plugin install tabby -
 Clone the repository and copy the skills into your project:
 
 ```
-git clone https://github.com/RelativelyUnknown/my-skills
+git clone https://github.com/RelativelyUnknown/tabby
 cd your-project
-python3 ../my-skills/tools/install.py agents
+python3 ../tabby/tools/install.py agents
 ```
 
 `agents` installs to `.agents/skills/`, which both tools read. Add `--user` to install for every project (`~/.agents/skills/`). Other targets: `github` (`.github/skills/`, Copilot), `opencode` (`.opencode/skills/`), `claude` (`.claude/skills/`, read by all three). The installer never deletes anything and skips folders that already exist unless you pass `--force`.
 
-Install Tabby only from `RelativelyUnknown/my-skills` on GitHub.
+Install Tabby only from `RelativelyUnknown/tabby` on GitHub.
 
 </details>
 
@@ -86,12 +86,10 @@ Install Tabby only from `RelativelyUnknown/my-skills` on GitHub.
 | Set the reply voice | `/tabby:voice terse\|explain\|auto` | | |
 | Project memory file | `CLAUDE.md` containing `@AGENTS.md` | `AGENTS.md` | `AGENTS.md` or `.github/copilot-instructions.md` |
 | Core rules and quality gate | plugin hooks, on by default (`hooks/`) | paste [`core/TABBY-CORE.md`](core/TABBY-CORE.md) into `AGENTS.md` | paste [`core/TABBY-CORE.md`](core/TABBY-CORE.md) into `.github/copilot-instructions.md` |
-| Read-only reviewer subagent | `agents/tabby-reviewer.md`, asked for after a large change | `install.py opencode` writes `.opencode/agents/` (not run here) | `install.py github` writes `.github/agents/*.agent.md` (not run here) |
+| Read-only reviewer subagent | `agents/tabby-reviewer.md`, asked for after a large change | `install.py opencode` writes `.opencode/agents/`; file format follows OpenCode's docs, not tested in OpenCode | `install.py github` writes `.github/agents/*.agent.md`; file format follows Copilot's docs, not tested in Copilot |
 | Paste the core rules for you | n/a | `install.py opencode --core AGENTS.md` | `install.py github --core .github/copilot-instructions.md` |
 
 </details>
-
-Install Tabby only from `RelativelyUnknown/my-skills` on GitHub.
 
 ## See it work
 
@@ -108,9 +106,18 @@ python3 tools/eval/run.py --out results --cases bug-fix-starts-red --plugin . --
 python3 tools/eval/summarise.py results
 ```
 
+## How it works
+
+- **Core rules are always on.** In Claude Code a hook injects [`core/TABBY-CORE.md`](core/TABBY-CORE.md) at session start; elsewhere you paste it into `AGENTS.md`.
+- **Skills load when the request matches** and read only the reference pages for the area the task touches, so a task reads a few hundred lines, not the whole library.
+- **Hooks check afterwards** (Claude Code): ruff on edited files, a diff check for loosened tests and silenced checkers, the project's check command once. See [`hooks/`](hooks/).
+- **Project memory is optional.** `/tabby:interview` saves what the code cannot say (users, growth, limits) to `AGENTS.md`, and later tasks decide from it. See [`interview/`](interview/).
+
+After you install, nothing needs setting up: ask for a Python change. Run `/tabby:interview` once if you want the agent to know where the project is going, and `/tabby:tabby-debt` whenever you want the list of shortcuts it left on purpose.
+
 ## What's inside
 
-Five skills load on their own when the request matches, and four commands you run yourself.
+Five skills load on their own when the request matches, and four commands you run yourself. Each folder has its own README with the details.
 
 | Skill | The agent loads it when you | What it adds |
 | --- | --- | --- |
@@ -119,10 +126,10 @@ Five skills load on their own when the request matches, and four commands you ru
 | [`tabby-docs`](tabby-docs/) | write a README, docstrings, a tutorial, a changelog, an ADR or a runbook | One page type per reader need, and a check of the docs against the code |
 | [`tabby-diagrams`](tabby-diagrams/) | ask for a diagram, an architecture picture or an animation | A builder that turns a small spec into an SVG or an HTML animation, and checkers for crowded labels, contrast and loop jumps |
 | [`tabby-frontend`](tabby-frontend/) | build a page, dashboard, data app or docs site | A method, design tokens, a list of things it refuses to ship, and `ui-check` for contrast, focus, motion and layout |
-| [`tabby-debt`](tabby-debt/) | `/tabby:tabby-debt` | A ledger of the `# shortcut: <limit>, <trigger>` comments in the repository, with the ones that name no trigger flagged |
+| [`tabby-debt`](tabby-debt/) | run `/tabby:tabby-debt` | Lists every `# shortcut: <limit>, <when to upgrade>` comment (the simplifications the agent left on purpose) as one table, flags the ones that name no trigger to revisit, and exits 1 in CI with `--check` |
 | [`interview`](interview/) | run `/tabby:interview` | Researches the repository read-only, asks at most three questions a round, and saves a `## Tabby` section to `AGENTS.md` |
 | [`voice`](voice/) | run `/tabby:voice terse\|explain\|auto` | Sets whether replies are terse and technical, or explain how the change works in plain words; the default picks from what you say |
-| [`hooks`](hooks/) | run `/tabby:hooks off\|lite\|full` | Turns the quality-gate hooks (Claude Code) off, on or to the light mode |
+| [`hooks`](hooks/) | run `/tabby:hooks on\|off` | Shows, turns on or turns off the quality-gate hooks (Claude Code); the light `lite` mode is set in `.claude/tabby.json` or with `TABBY_MODE` |
 
 The core rules in [`core/TABBY-CORE.md`](core/TABBY-CORE.md) are always on. In Claude Code, hooks in [`hooks/`](hooks/) inject them and the `## Tabby` project memory at session start, run the project's ruff on edited files, and at the end of a turn check the diff for shortcuts (added suppressions, skipped or weakened tests, bare `except`) and run the project's check command once. Modes: `full`, `lite` (core rules, project memory, the diff check and the memory update request) and `off`, set with `TABBY_MODE` or `{"mode": "lite"}` in `.claude/tabby.json`. Large changes made in the session also get one request for the read-only `tabby-reviewer` subagent, and a change to the project's shape that leaves `AGENTS.md` untouched gets one request to update it. In the other tools the core lives in the instructions file (see the table above).
 
@@ -134,6 +141,7 @@ The core rules in [`core/TABBY-CORE.md`](core/TABBY-CORE.md) are always on. In C
 - **No silencing.** No `# type: ignore`, `# noqa`, `Any` or looser config to make a tool quiet.
 - **Small diff.** No new dependency, public API change, commit or push unless you ask.
 - **Your tools first.** It uses your project's runner, formatter and checker, and reuses in this order: your project, the standard library, the community's standard library, then code you write.
+- **Rules that decide get laws.** Code that decides something (a permission, a price, a parser, a state transition) gets tests that say what must be allowed and what must be refused, pin both sides of every boundary and break the function once on purpose to see a test fail; the agent reads [`proof-based-testing.md`](tabby/development/testing/proof-based-testing.md) first.
 - **Real data fails.** Code that reads files, exports, API replies, dates or money guards the known failures (encodings, locale numbers, empty input, near-miss matches) and recommends a package when a guard would grow into a feature.
 - **Replies match the reader.** Result first; a short how-it-works if you say you are learning; no lessons if you are not (`/tabby:voice`).
 
@@ -168,7 +176,7 @@ This is one model, one suite and 3 runs per case, so differences under about 0.0
 <details>
 <summary><strong>Re-run it yourself</strong></summary>
 
-How to re-run the evals, read the summary and run the ablation arms is in [TESTING.md](TESTING.md). Check the eval environment first: the sandbox needs pytest and the fixtures' packages installed, or every score measures that handicap. All 112 cases, grouped by what they check, are in the [case catalogue](TESTING.md#case-catalogue).
+How to re-run the evals, read the summary and run the ablation arms is in [TESTING.md](TESTING.md). Check the eval environment first: the sandbox needs pytest and the fixtures' packages installed, or every score measures that handicap. All 114 cases (the measurement above used the first 112), grouped by what they check, are in the [case catalogue](TESTING.md#case-catalogue).
 
 </details>
 
@@ -177,7 +185,7 @@ How to re-run the evals, read the summary and run the ablation arms is in [TESTI
 - [`evals/`](evals/): the eval cases, trigger sets and seeded-audit fixtures
 - [`tools/eval/`](tools/eval/): the runner, summaries, trace reader, quality, smell and judge tools
 - [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md): ideas adapted from other projects, with sources and licences
-- [Issues](https://github.com/RelativelyUnknown/my-skills/issues)
+- [Issues](https://github.com/RelativelyUnknown/tabby/issues)
 
 ## License
 

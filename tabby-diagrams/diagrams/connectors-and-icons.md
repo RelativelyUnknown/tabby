@@ -51,7 +51,7 @@ A node's icon says what kind of thing it is at a glance, so the reader finds the
 - Search by word: `node assets/diagram/make.mjs --icons <word>` lists names containing it (`--icons cloud`). A name that does not exist stops the build and prints the nearest five.
 - Reuse one icon for one kind across a whole set of pictures. Two kinds never share an icon in the same picture.
 - Abstract nodes (a cron job, a cache, a webhook) get a pictogram too (`clock`, `bolt`, `webhook`), never text in the tile and never an emoji.
-- The tile is part of the node style: ordinary nodes get a `tile`, the focal node an `accent` tile with the icon in `on-accent`. Do not recolour an icon, add a second one, or scale it off 24 px × 0.667.
+- The tile is part of the node style: ordinary nodes get a `tile`, the focal node an `accent` tile with the icon in `on-accent`. Do not recolour an icon, add a second one, or scale it off 30 px (24 px × 1.25, stroke 1.5), centred in the 40 px tile, so the glyph fills about 56% of it.
 
 ### Refreshing the set
 
