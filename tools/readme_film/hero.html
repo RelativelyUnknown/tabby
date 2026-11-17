@@ -1,12 +1,13 @@
 <!doctype html>
 <!--
-  The README hero: a seamless 6-second loop. The curled cat dozes, a bug buzzes past the title, the cat wakes, tracks it,
-  catches it with one paw (a teal check: bug fixed) and dozes off again. Every frame is a pure function of time:
-  window.render(t) draws the frame at t seconds; build.mjs steps t and records frames. ?theme=dark, ?logo=1 (cat only, no panel).
+  The README hero: a seamless 6-second loop. In a terminal, someone types `cat`; an ASCII cat prints, swishes its tail,
+  blinks and says "meow"; then `clear` and back to an empty prompt. Every frame is a pure function of time:
+  window.render(t) draws the frame at t seconds; build.mjs steps t and records frames. ?theme=dark, ?logo=1 (a tile).
 -->
 <html><head><meta charset="utf-8">
 <style>
   @font-face { font-family: "Fredoka"; src: url("../../assets/src/fonts/Fredoka-Variable.ttf"); font-weight: 300 700; }
+  @font-face { font-family: "JBMono"; src: url("../../assets/src/fonts/JetBrainsMono-Variable.ttf"); font-weight: 100 800; }
   html, body { margin: 0; background: transparent; }
   canvas { display: block; }
 </style></head>
@@ -15,242 +16,101 @@
 const Q = new URLSearchParams(location.search);
 const DARK = Q.get("theme") === "dark", LOGO = Q.get("logo") === "1";
 const SCALE = Number(Q.get("scale") || 1.5);
-const W = LOGO ? 460 : 1280, H = LOGO ? 360 : 360;
+const W = LOGO ? 360 : 1280, H = 360;
 const C = DARK
   ? { panel: "#1f1812", line: "#2c2219", ink: "#f2e7d8", muted: "#ab9a8b" }
   : { panel: "#f7ecdd", line: "#ecdcc6", ink: "#17120e", muted: "#7a6a5a" };
-const TEAL = "#2a8f89", BUG = "#d6564a";
+const TERM = { bg: "#15110d", bar: "#221b14", text: "#efe4d4", dim: "#8c7d6e", cat: "#f0973f" };
+const TEAL = "#2fa59e";
 window.DUR = 6;
 
 const cv = document.getElementById("c");
 cv.width = W * SCALE; cv.height = H * SCALE; cv.style.width = W + "px"; cv.style.height = H + "px";
 const ctx = cv.getContext("2d");
-const layer = document.createElement("canvas"); layer.width = cv.width; layer.height = cv.height;
-const L = layer.getContext("2d");
 
-// ---------- small maths ----------
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
-const lerp = (a, b, t) => a + (b - a) * t;
 const seg = (t, a, b) => clamp((t - a) / (b - a));
-const sm = (x) => x * x * (3 - 2 * x);                      // smoothstep
-const io = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
-const out = (x) => 1 - Math.pow(1 - x, 3);
-const back = (x, s = 1.7) => { x = clamp(x) - 1; return 1 + x * x * ((s + 1) * x + s); };
-const env = (t, a, b, fi, fo) => Math.min(sm(seg(t, a, a + fi)), 1 - sm(seg(t, b - fo, b)));
-const TAU = Math.PI * 2;
-// A track through keys [[t, value], ...] with smooth (Hermite, flat-tangent) easing between keys.
-const track = (keys, t) => {
-  if (t <= keys[0][0]) return keys[0][1];
-  for (let i = 0; i < keys.length - 1; i++) {
-    const [t0, v0] = keys[i], [t1, v1] = keys[i + 1];
-    if (t <= t1) return lerp(v0, v1, sm((t - t0) / (t1 - t0)));
+const between = (t, a, b) => t >= a && t < b;
+
+// ---------- the script: what the terminal shows at time t ----------
+const CMD1 = "cat", CMD2 = "clear";
+const typed = (cmd, t, t0, step) => cmd.slice(0, clamp(Math.floor((t - t0) / step) + 1, 0, cmd.length) * (t >= t0 ? 1 : 0));
+const T_ENTER1 = 1.1, T_CLEAR0 = 4.75, T_ENTER2 = 5.35;
+
+function catLines(t) {
+  // the ASCII cat, with its frame variants
+  const blink = between(t, 2.1, 2.22) || between(t, 4.3, 4.42);
+  const happy = between(t, 2.45, 3.75);
+  const eyes = blink ? "-.-" : happy ? "^.^" : "o.o";
+  const ears = between(t, 3.95, 4.1) || between(t, 4.16, 4.24) ? "/\\_/|" : "/\\_/\\";
+  const swish = Math.floor(t * 4) % 2;
+  const tail = between(t, 1.6, 2.45) || between(t, 3.75, 4.75) ? (swish ? "~" : "S") : "~";
+  return [`   ${ears}`, `  ( ${eyes} )`, `   > ^ <`, `  /     \\`, ` (| | | |)${tail}`];
+}
+const BUBBLE = [" .------.", "<  ", " '------'"];
+
+function screen(t) {
+  // Returns the rows: each row is a list of [text, colour, bold?]. The last row may end with the cursor.
+  const rows = [];
+  const prompt = (cmd) => [["$ ", TEAL, true], [cmd, TERM.text]];
+  if (t < T_ENTER1) { rows.push(prompt(typed(CMD1, t, .5, .17))); return { rows, cursorRow: 0, typing: t >= .5 }; }
+  if (t >= T_ENTER2) { rows.push(prompt("")); return { rows, cursorRow: 0, typing: false }; }
+  rows.push(prompt(CMD1));
+  const cat = catLines(t), shown = Math.floor((t - 1.2) / .1) + 1;
+  const talk = between(t, 2.45, 4.5), word = "meow".slice(0, clamp(Math.floor((t - 2.6) / .12) + 1, 0, 4));
+  for (let i = 0; i < 5; i++) {
+    if (i >= shown) break;
+    const row = [[cat[i].padEnd(13), TERM.cat]];
+    if (talk && i < 3) row.push(i === 1 ? [BUBBLE[1], TERM.text] : [BUBBLE[i], TERM.text]);
+    if (talk && i === 1) row.push([word.padEnd(4), TERM.text, true], [" |", TERM.text]);
+    rows.push(row);
   }
-  return keys[keys.length - 1][1];
-};
-
-// ---------- the performance: one timeline ----------
-// awake: 0 asleep, 1 alert. paw: 0 tucked, 1 out. Everything returns to its t = 0 value by t = DUR.
-const AWAKE = [[0, 0], [1.75, 0], [2.0, .45], [2.35, .45], [2.55, 1], [4.35, 1], [4.95, 0], [6, 0]];
-const LIFT = [[0, 0], [2.4, 0], [2.75, 1], [3.05, .55], [3.25, 1.15], [3.75, 1], [4.4, 1], [5.0, 0], [6, 0]];
-const PAW = [[0, 0], [3.08, 0], [3.16, -.12], [3.32, 1], [3.62, 1], [3.95, 0], [6, 0]];
-const BUGP = [ // bug path (x, y) keys; it enters right, loops over the title, dives to the cat and is caught at 3.32
-  [1.05, 1340, 110], [1.6, 1060, 70], [2.05, 860, 140], [2.45, 700, 60], [2.8, 560, 120], [3.1, 470, 96], [3.32, 452, 118]];
-function bugAt(t) {
-  if (t < BUGP[0][0]) return null;
-  if (t > 3.32) return { x: BUGP.at(-1)[1], y: BUGP.at(-1)[2], caught: true };
-  for (let i = 0; i < BUGP.length - 1; i++) {
-    const [t0, x0, y0] = BUGP[i], [t1, x1, y1] = BUGP[i + 1];
-    if (t <= t1) { const u = (t - t0) / (t1 - t0), e = sm(u); return { x: lerp(x0, x1, e) + 6 * Math.sin(t * 23), y: lerp(y0, y1, e) + 9 * Math.sin(t * 11 + 1), caught: false }; }
-  }
+  const done = t >= 1.75;
+  if (done) rows.push(prompt(t >= T_CLEAR0 ? typed(CMD2, t, T_CLEAR0, .1) : ""));
+  return { rows, cursorRow: done ? rows.length - 1 : -1, typing: t >= T_CLEAR0 };
 }
 
-// ---------- the cat ----------
-const CAT = LOGO ? { x: 196, y: 196, s: .9 } : { x: 250, y: 196, s: 0.86 };
-
-function headPath(g, r, earL) {
-  // A front-facing head: two ears and a round chin. earL rotates the left ear tip (a flick).
-  const lt = [-r * .8 + earL * r * .25, -r * 1.36 + Math.abs(earL) * r * .1];
-  g.beginPath();
-  g.moveTo(-r * .96, -r * .12);
-  g.lineTo(lt[0], lt[1]);
-  g.lineTo(-r * .26, -r * .72);
-  g.quadraticCurveTo(0, -r * .84, r * .26, -r * .72);
-  g.lineTo(r * .8, -r * 1.36);
-  g.lineTo(r * .96, -r * .12);
-  g.quadraticCurveTo(r * 1.02, r * .96, 0, r * .96);
-  g.quadraticCurveTo(-r * 1.02, r * .96, -r * .96, -r * .12);
-  g.closePath();
-}
-function headLine(g, r, earL) { // the cut line over the ears and down the right cheek, as in the logo
-  const lt = [-r * .8 + earL * r * .25, -r * 1.36 + Math.abs(earL) * r * .1];
-  g.beginPath();
-  g.moveTo(-r * .96, -r * .05);
-  g.lineTo(lt[0], lt[1]);
-  g.lineTo(-r * .26, -r * .72);
-  g.quadraticCurveTo(0, -r * .84, r * .26, -r * .72);
-  g.lineTo(r * .8, -r * 1.36);
-  g.lineTo(r * .96, -r * .12);
-  g.quadraticCurveTo(r * 1.04, r * .7, r * .55, r * 1.05);
-  g.stroke();
-}
-
-function drawCat(g, t) {
-  const b = bugAt(t);
-  const breath = Math.sin(TAU * t / 3);                 // two breaths per loop
-  const awake = track(AWAKE, t), lift = track(LIFT, t), paw = track(PAW, t);
-  const crouch = env(t, 2.75, 3.2, .12, .18);           // anticipation before the strike
+// ---------- drawing ----------
+function drawTerminal(g, t, x, y, w, h, size) {
   g.save();
-  g.translate(CAT.x, CAT.y); g.scale(CAT.s, CAT.s);
-  // body: a loaf that breathes, squashes in the crouch and stretches on the strike
-  const sx = 1 + .012 * breath * (1 - awake * .5) + .05 * crouch - .02 * Math.max(0, paw);
-  const sy = 1 + .028 * breath * (1 - awake * .5) - .07 * crouch + .03 * Math.max(0, paw);
-  g.fillStyle = C.ink; g.strokeStyle = C.ink;
-
-  // tail (behind the body): runs along the ground and its tip curls out at the front right
-  const wag = env(t, 2.1, 4.6, .3, .5) * Math.sin(TAU * t * 2.2) + env(t, 3.3, 3.9, .05, .3) * .8 * Math.sin(TAU * t * 5);
-  // it comes out from under the body at the front right and lies on the ground; the tip hooks up and wags
-  g.lineCap = "round"; g.lineJoin = "round";
-  const pts = [];
-  const P0 = [70, 104], P1 = [170, 128], P2 = [214, 104 - 20 * wag], P3 = [222 + 8 * wag, 70 - 6 * Math.abs(wag)];
-  for (let i = 0; i <= 24; i++) {
-    const u = i / 24, v = 1 - u;
-    pts.push([v * v * v * P0[0] + 3 * v * v * u * P1[0] + 3 * v * u * u * P2[0] + u * u * u * P3[0],
-              v * v * v * P0[1] + 3 * v * v * u * P1[1] + 3 * v * u * u * P2[1] + u * u * u * P3[1]]);
-  }
-  g.lineWidth = 28; g.beginPath(); pts.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.stroke();
-  g.strokeStyle = TEAL; g.beginPath(); pts.slice(-6).forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.stroke();
-  g.strokeStyle = C.ink;
-
-  // paw: shoots from the front of the body toward the bug, with toe beans cut in
-  let pawTip = null;
-  if (paw > 0.01 || paw < -0.01) {
-    const shoulder = [90, -10];
-    const target = b ? [(b.x - CAT.x) / CAT.s, (b.y - CAT.y) / CAT.s] : [210, -60];
-    const reach = clamp(paw, -.2, 1);
-    pawTip = [lerp(shoulder[0] + 10, target[0], reach), lerp(shoulder[1] + 20, target[1] + 6, reach)];
-    g.lineWidth = 34; g.beginPath(); g.moveTo(shoulder[0], shoulder[1]); g.lineTo(pawTip[0], pawTip[1]); g.stroke();
-    g.beginPath(); g.arc(pawTip[0], pawTip[1], 23, 0, TAU); g.fill();
-  }
-
-  g.save(); g.scale(sx, sy);
-  g.beginPath(); g.ellipse(0, 0, 168, 120, -.06, 0, TAU); g.fill();
+  g.shadowColor = DARK ? "rgba(0,0,0,.45)" : "rgba(60,40,20,.22)"; g.shadowBlur = 24; g.shadowOffsetY = 8;
+  g.fillStyle = TERM.bg; g.beginPath(); g.roundRect(x, y, w, h, 16); g.fill();
   g.restore();
+  g.save(); g.beginPath(); g.roundRect(x, y, w, h, 16); g.clip();
+  g.fillStyle = TERM.bar; g.fillRect(x, y, w, 38);
+  [["#ff5f57", 0], ["#febc2e", 1], ["#28c840", 2]].forEach(([c, i]) => { g.fillStyle = c; g.beginPath(); g.arc(x + 22 + i * 20, y + 19, 6.5, 0, Math.PI * 2); g.fill(); });
+  g.fillStyle = TERM.dim; g.font = `500 15px JBMono`; g.textAlign = "center"; g.fillText("~/tabby", x + w / 2, y + 24);
+  // a Tamagotchi mood meter: the third heart fills when the cat says meow, and empties again with clear
+  const full = t >= 3.0 && t < T_ENTER2 ? 3 : 2;
+  g.textAlign = "right"; g.font = `700 17px JBMono`;
+  g.fillStyle = TERM.dim; g.fillText("mood", x + w - 84, y + 25);
+  for (let i = 0; i < 3; i++) { g.fillStyle = i < full ? "#e5534b" : "#4a3d31"; g.fillText("\u2665", x + w - 62 + i * 20, y + 25); }
+  g.textAlign = "left";
 
-  // head: rests inside the body, lifts when alert, tracks the bug
-  const look = b && awake > .3 ? clamp((b.x - CAT.x - 90) / 600, -.3, 1) : 0;
-  const hx = 62 + lift * 14 + look * 10, hy = 18 - lift * 30 + 4 * breath * (1 - awake) + crouch * 12;
-  const tilt = -.06 + lift * .1 - crouch * .08 + look * .06;
-  const flick = env(t, 1.45, 1.75, .06, .12) * Math.sin(TAU * (t - 1.45) * 6) * .9 + env(t, 3.3, 3.55, .04, .1) * .6;
-  g.save(); g.translate(hx, hy); g.rotate(tilt);
-  headPath(g, 62, flick); g.fill();
-  g.restore();
-
-  // ---- cut-outs: lines, stripes and eyes are holes, so the panel shows through ----
-  g.globalCompositeOperation = "destination-out";
-  g.lineCap = "round"; g.lineJoin = "round";
-  g.save(); g.translate(hx, hy); g.rotate(tilt);
-  g.lineWidth = 10; headLine(g, 62, flick);
-  // eyes: closed arcs when asleep; open almonds with pupils that follow the bug when awake
-  const eyeOpen = (side) => clamp(side < 0 ? awake * 1.6 : (awake - .45) * 1.9);   // the left eye peeks first
-  for (const side of [-1, 1]) {
-    const ex = side * 23, ey = 12, o = eyeOpen(side);
-    if (o < .15) {
-      g.lineWidth = 7; g.beginPath(); g.moveTo(ex - 12, ey); g.quadraticCurveTo(ex, ey + 10, ex + 12, ey); g.stroke();
-    } else {
-      g.beginPath(); g.ellipse(ex, ey, 12, 12 * o, 0, 0, TAU); g.fill();
+  const { rows, cursorRow, typing } = screen(t);
+  g.font = `500 ${size}px JBMono`;
+  const cw = g.measureText("M").width, lh = size * 1.3;
+  const bounce = between(t, 2.45, 2.62) ? -3 : 0;
+  rows.forEach((row, r) => {
+    let cx = x + 22;
+    const cy = y + 38 + 20 + size + r * lh + (r >= 1 && r <= 5 ? bounce : 0);
+    for (const [text, colour, bold] of row) {
+      g.font = `${bold ? 700 : 500} ${size}px JBMono`; g.fillStyle = colour;
+      g.fillText(text, cx, cy); cx += cw * text.length;
     }
-  }
-  g.restore();
-  // stripes on the back
-  g.save(); g.scale(sx, sy);
-  g.lineWidth = 11;
-  for (const [x0, y0, x1, y1, x2, y2] of [[-120, -82, -92, -62, -100, -30], [-78, -110, -52, -86, -58, -52], [-158, -10, -124, -2, -120, 22]]) {
-    g.beginPath(); g.moveTo(x0, y0); g.quadraticCurveTo(x1, y1, x2, y2); g.stroke();
-  }
-  g.restore();
-  // toe beans on the paw, and a ring on the tail
-  if (pawTip && paw > .3) {
-    g.fillStyle = "#000";
-    for (const [dx, dy, r] of [[-8, -6, 4.5], [0, -10, 4.5], [8, -6, 4.5], [0, 3, 7]]) { g.beginPath(); g.arc(pawTip[0] + dx, pawTip[1] + dy, r, 0, TAU); g.fill(); }
-  }
-  g.globalCompositeOperation = "source-over";
-  // pupils (ink again, inside the open eyes)
-  g.save(); g.translate(hx, hy); g.rotate(tilt);
-  for (const side of [-1, 1]) {
-    const o = eyeOpen(side);
-    if (o >= .15) {
-      const px2 = side * 23 + look * 5, py2 = 12 - (b && !b.caught ? 3 : 0);
-      g.fillStyle = C.ink; g.beginPath(); g.ellipse(px2, py2, 4.5, 9 * o, 0, 0, TAU); g.fill();
+    if (r === cursorRow) {
+      const on = typing || Math.floor(t * 2.5) % 2 === 0;
+      if (on) { g.fillStyle = TERM.text; g.fillRect(cx + 1, cy - size * .82, cw * .9, size * 1.02); }
     }
-  }
-  g.restore();
-  g.restore();
-  return { hx, hy };
-}
-
-function drawBug(g, t) {
-  const b = bugAt(t);
-  if (!b || b.caught) return;
-  g.save(); g.translate(b.x, b.y);
-  const d = Math.atan2(Math.cos(t * 11 + 1) * 99, -1);
-  g.rotate(Math.sin(t * 9) * .3);
-  const flap = .55 + .45 * Math.abs(Math.sin(t * 60));
-  g.fillStyle = DARK ? "rgba(255,255,255,.55)" : "rgba(255,255,255,.85)";
-  g.strokeStyle = C.ink; g.lineWidth = 1.5;
-  for (const s of [-1, 1]) { g.beginPath(); g.ellipse(s * 7, -9, 8, 11 * flap, s * .5, 0, TAU); g.fill(); g.stroke(); }
-  g.fillStyle = BUG; g.beginPath(); g.ellipse(0, 0, 9, 11, 0, 0, TAU); g.fill();
-  g.strokeStyle = C.ink; g.lineWidth = 2; g.beginPath(); g.moveTo(0, -10); g.lineTo(0, 10); g.stroke();
-  g.fillStyle = C.ink; g.beginPath(); g.arc(0, -12, 5, 0, TAU); g.fill();
-  g.lineWidth = 1.8;
-  for (const s of [-1, 1]) for (const k of [-4, 1, 6]) { g.beginPath(); g.moveTo(s * 8, k); g.lineTo(s * 13, k + 3); g.stroke(); }
+  });
   g.restore();
 }
 
-function drawCatch(g, t) {
-  const b = BUGP.at(-1), x = b[1], y = b[2];
-  const p = seg(t, 3.32, 3.72);
-  if (p > 0 && p < 1) { // burst
-    g.save(); g.translate(x, y); g.strokeStyle = TEAL; g.lineCap = "round"; g.lineWidth = 5 * (1 - p);
-    for (let i = 0; i < 7; i++) { const a = i / 7 * TAU + .3, r0 = 26 + 30 * out(p), r1 = r0 + 16 * (1 - p); g.beginPath(); g.moveTo(Math.cos(a) * r0, Math.sin(a) * r0); g.lineTo(Math.cos(a) * r1, Math.sin(a) * r1); g.stroke(); }
-    g.restore();
-  }
-  const draw = seg(t, 3.6, 3.95), fade = seg(t, 4.55, 4.95);
-  if (draw > 0 && fade < 1) { // the check: bug fixed
-    g.save(); g.translate(x + 18, y - 34 - 10 * out(fade)); g.globalAlpha = 1 - fade;
-    const s = back(seg(t, 3.6, 3.85)) * .9 + .1; g.scale(s, s);
-    g.strokeStyle = TEAL; g.lineWidth = 9; g.lineCap = "round"; g.lineJoin = "round";
-    const P = [[-16, 0], [-4, 12], [20, -14]], len1 = Math.hypot(12, 12), len2 = Math.hypot(24, 26), tot = len1 + len2, d = out(draw) * tot;
-    g.beginPath(); g.moveTo(...P[0]);
-    if (d <= len1) g.lineTo(P[0][0] + 12 * d / len1, P[0][1] + 12 * d / len1);
-    else { g.lineTo(...P[1]); const u = (d - len1) / len2; g.lineTo(P[1][0] + 24 * u, P[1][1] - 26 * u); }
-    g.stroke(); g.restore();
-  }
-}
-
-function drawZ(g, t, head) {
-  for (const off of [0, 1.1]) {
-    const p = (((t - 4.95 - off) % 6) + 6) % 6 / 2.4;
-    if (p <= 0 || p >= 1) continue;
-    const a = Math.min(sm(seg(p, 0, .2)), 1 - sm(seg(p, .6, 1)));
-    g.save(); g.globalAlpha = a * .8;
-    g.translate(CAT.x + 105 + 40 * p + 8 * Math.sin(p * 7), CAT.y - 70 - 80 * p);
-    g.rotate(-.15); g.fillStyle = C.muted; g.font = `600 ${22 + 14 * p}px Fredoka`; g.fillText("z", 0, 0); g.restore();
-  }
-}
-
-function drawText(g, t) {
-  const b = bugAt(t);
-  g.fillStyle = C.ink; g.font = "700 132px Fredoka";
-  let x = 520;
-  for (const ch of "Tabby") {
-    const w = g.measureText(ch).width, cx = x + w / 2;
-    let hop = 0;
-    if (b && !b.caught) hop = 9 * Math.max(0, 1 - Math.abs(b.x - cx) / 60) * (b.y < 150 ? 1 : 0);
-    g.save(); g.translate(cx, 200 - hop); g.scale(1 - hop * .006, 1 + hop * .012); g.fillText(ch, -w / 2, 0); g.restore();
-    x += w;
-  }
-  g.fillStyle = C.muted; g.font = "500 31px Fredoka"; g.fillText("Agent skills for careful Python.", 524, 250);
-  g.font = "500 21px Fredoka"; let px = 524;
+function drawText(g) {
+  const x0 = 690;
+  g.fillStyle = C.ink; g.font = "700 132px Fredoka"; g.fillText("Tabby", x0, 200);
+  g.fillStyle = C.muted; g.font = "500 31px Fredoka"; g.fillText("Agent skills for careful Python.", x0 + 4, 250);
+  g.font = "500 21px Fredoka"; let px = x0 + 4;
   for (const label of ["cause before fix", "small diffs", "tests stay green"]) {
     const w = g.measureText(label).width + 34;
     g.fillStyle = TEAL; g.beginPath(); g.roundRect(px, 276, w, 40, 20); g.fill();
@@ -258,25 +118,27 @@ function drawText(g, t) {
   }
 }
 
+function drawLogo(g) {
+  g.fillStyle = TERM.bg; g.beginPath(); g.roundRect(20, 20, 320, 320, 56); g.fill();
+  g.fillStyle = TEAL; g.font = "700 40px JBMono"; g.fillText("$", 60, 96);
+  g.fillStyle = TERM.cat; g.font = "600 46px JBMono";
+  const cw = g.measureText("M").width, face = ["/\\_/\\", "( ^.^ )", " > ^ <"];
+  face.forEach((s, i) => g.fillText(s, 180 - cw * 3.5 + (i === 0 ? cw : 0), 176 + i * 58));
+}
+
 window.render = (t) => {
   t = ((t % DUR) + DUR) % DUR;
   ctx.setTransform(SCALE, 0, 0, SCALE, 0, 0); ctx.clearRect(0, 0, W, H);
-  L.setTransform(SCALE, 0, 0, SCALE, 0, 0); L.clearRect(0, 0, W, H);
-  if (!LOGO) {
-    ctx.fillStyle = C.panel; ctx.beginPath(); ctx.roundRect(0, 0, W, H, 28); ctx.fill();
-    ctx.save(); ctx.beginPath(); ctx.roundRect(0, 0, W, H, 28); ctx.clip();
-    const shift = 0; ctx.strokeStyle = C.line; ctx.lineWidth = 26;   // static: only the cat and the bug change, so frames compress
-    for (let x = 640 - 120 + shift; x < 1560; x += 120) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x - 60, H); ctx.stroke(); }
-    // soft shadow under the cat
-    ctx.fillStyle = DARK ? "rgba(0,0,0,.28)" : "rgba(60,40,20,.10)";
-    ctx.beginPath(); ctx.ellipse(CAT.x + 10, CAT.y + 104 * CAT.s + 4, 170 * CAT.s, 16, 0, 0, TAU); ctx.fill();
-    ctx.restore();
-    drawText(ctx, t);
-  }
-  const head = drawCat(L, t);
-  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(layer, 0, 0);
-  ctx.setTransform(SCALE, 0, 0, SCALE, 0, 0);
-  if (!LOGO) { drawZ(ctx, t, head); drawCatch(ctx, t); drawBug(ctx, t); }
+  if (LOGO) { drawLogo(ctx); return; }
+  ctx.fillStyle = C.panel; ctx.beginPath(); ctx.roundRect(0, 0, W, H, 28); ctx.fill();
+  ctx.save(); ctx.beginPath(); ctx.roundRect(0, 0, W, H, 28); ctx.clip();
+  ctx.strokeStyle = C.line; ctx.lineWidth = 26;
+  for (let x = 700; x < 1560; x += 120) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x - 60, H); ctx.stroke(); }
+  ctx.restore();
+  drawTerminal(ctx, t, 40, 26, 600, 308, 24);
+  drawText(ctx);
 };
-document.fonts.load("700 40px Fredoka").then(() => document.fonts.load("500 20px Fredoka")).then(() => { window.render(0); window.READY = true; });
+Promise.all([document.fonts.load("700 40px Fredoka"), document.fonts.load("500 20px Fredoka"),
+             document.fonts.load("500 20px JBMono"), document.fonts.load("700 20px JBMono")])
+  .then(() => { window.render(0); window.READY = true; });
 </script></body></html>

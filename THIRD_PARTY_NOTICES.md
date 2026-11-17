@@ -158,7 +158,11 @@ Ideas only, restated in Tabby's words; nothing vendored and no text copied. Shal
 
 ## Fredoka (README title)
 
-The README banner's lettering is set in Fredoka (SIL Open Font License 1.1, copyright 2016 The Fredoka Project Authors, https://github.com/hafontia/Fredoka-One). The font file is `assets/src/fonts/Fredoka-Variable.ttf` with its licence in `assets/src/fonts/OFL-Fredoka.txt`; it is used only to render the banner. The cat is original; its curled pose (a solid shape with the ears, stripes and closed eyes cut out) was inspired by a reference image the project owner supplied.
+The README banner's lettering is set in Fredoka (SIL Open Font License 1.1, copyright 2016 The Fredoka Project Authors, https://github.com/hafontia/Fredoka-One). The font file is `assets/src/fonts/Fredoka-Variable.ttf` with its licence in `assets/src/fonts/OFL-Fredoka.txt`; it is used only to render the banner.
+
+## JetBrains Mono (README banner terminal)
+
+The terminal text in the README banner and logo is set in JetBrains Mono (SIL Open Font License 1.1, copyright 2020 The JetBrains Mono Project Authors, https://github.com/JetBrains/JetBrainsMono). The font file is `assets/src/fonts/JetBrainsMono-Variable.ttf` with its licence in `assets/src/fonts/OFL-JetBrainsMono.txt`; it is used only to render the banner. The ASCII cat is original.
 
 ## lemomo-ai/lemo-opuscar (README banner, 17 November 2026)
 

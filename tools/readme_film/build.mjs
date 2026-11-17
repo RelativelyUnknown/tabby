@@ -45,7 +45,7 @@ for (const theme of ["light", "dark"]) {
   execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(FPS), "-i", path.join(dir, "f%04d.png"),
     "-c:v", "libwebp_anim", "-lossless", "0", "-q:v", "82", "-compression_level", "6", "-loop", "0", "-pix_fmt", "yuva420p", out]);
   rmSync(dir, { recursive: true });
-  const l = await open(`theme=${theme}&logo=1&scale=2`, 460, 360, 2);
+  const l = await open(`theme=${theme}&logo=1&scale=2`, 360, 360, 2);
   await l.evaluate(() => window.render(0));
   await (await l.$("canvas")).screenshot({ path: path.join(root, `assets/tabby-logo-${theme}.png`), omitBackground: true });
   console.log("wrote", out);

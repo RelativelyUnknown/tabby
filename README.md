@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-hero-dark.webp">
-    <img src="assets/tabby-hero-light.webp" width="880" alt="Tabby: agent skills for careful Python. A curled cat dozes beside the name; a bug buzzes past, the cat wakes, catches it with one paw, a teal check appears, and it dozes off again.">
+    <img src="assets/tabby-hero-light.webp" width="880" alt="Tabby: agent skills for careful Python. In a terminal someone types cat, an ASCII cat prints, blinks, swishes its tail and says meow, then the screen clears.">
   </picture>
 </p>
 
