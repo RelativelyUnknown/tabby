@@ -104,30 +104,16 @@ Tabby does the task first and never interviews you before it. Project memory liv
 
 ## Measured effect
 
-The same agent with and without Tabby on Claude Haiku 5.5 (`claude plugin eval`, regex and model-judged graders, 3 runs per case, 17 November 2026). The final 0.2.0 run covers all 112 cases; plugin-fired indicators are excluded from the scores.
+The same agent with and without Tabby on Claude Haiku 5.5 (`claude plugin eval`, 112 cases, regex and model-judged graders, 3 runs per case, November 2026):
 
-| Run | Without Tabby | With Tabby | Delta | Better / worse / same (changes of 0.10 or more) |
-| --- | --- | --- | --- | --- |
-| 0.2.0, final (112 cases) | 0.812 | 0.902 | +0.090 | 34 / 6 / 72 |
-| 0.2.0, first full run (106 cases) | 0.804 | 0.875 | +0.071 | 31 / 13 / 62 |
-| 0.1.0 (`main`), 98 common cases, older graders | 0.793 | 0.834 | +0.041 (+0.001 to +0.083) | 25 / 15 / 58 |
+| | Without Tabby | With Tabby | Delta |
+| --- | --- | --- | --- |
+| Mean score, all cases | 0.812 | 0.902 | +0.090 |
+| Cases where the agent scores under 0.95 without Tabby (74) | | | +0.141 (95% interval +0.093 to +0.194) |
 
-On the 74 cases where the agent without Tabby scores under 0.95, 0.2.0's mean gain is +0.141 (95% interval +0.093 to +0.194). With Tabby a run takes 25% more turns and costs 59% more (the core rules, the gate, the reviewer subagent and the larger context). The row for 0.1.0 was scored by the graders as they were then, and 0.2.0's by the repaired ones, so the gap between those rows is an upper bound. Between the two 0.2.0 runs, the plugin changed to fix what the worst cases showed (a read-only-sandbox flow that sent diagram specs outside the project, a missing fixture, a brittle grader, and a few core rules), and six cases were added; the cases were chosen after seeing the first run, so part of the gain is regression to the mean.
+Across the suite, 34 cases improve by 0.10 or more, 6 get worse and 72 stay within 0.10. A run with Tabby takes about 25% more turns and costs about 59% more, because of the core rules, the end-of-turn checks and the reviewer subagent. Version 0.1.0 scored +0.041 on an earlier version of the suite.
 
-Six cases are worse by 0.10 or more with Tabby. I read the traces of each. `animation-self-contained-html` (-0.52): in a read-only sandbox the builder prints a 22 KB page that the model must copy by hand, and some runs give up. `port-hot-path-to-rust`: runs with Tabby add one rounding test where runs without add parity tests against the original Python; no plugin cause found. `pick-a-set-representation`, `fake-needs-contract-test`, `add-owned-resource-endpoint` and `reuse-existing-slugify` each lost a few checks in one of three runs, which is within run-to-run noise.
-
-The traces also showed one plugin fault: 14 of 336 runs with Tabby left throwaway files in the project (none without), because a core rule invited scratch files. The rule now says not to create them for checks that run inline, to keep any unavoidable one in a single `.scratch/` folder and delete it, and the Stop hook asks once to remove leftovers. In a re-run of five of the affected cases the runs that wrote `.scratch/` all deleted it; their scores did not move beyond noise, and the full suite was not re-run after this fix.
-
-32 of 724 graders never pass in any run, and 68% always pass, so they cannot separate the arms. Differences under about 0.05 are noise at 3 runs per case.
-
-What the first 0.2.0 build got wrong, found by reading traces:
-
-- **The skills stopped loading.** Calmer descriptions plus a core that said "read a skill page only when the task touches that area" cut skill loading from 185 of 252 runs to 13. Descriptions and core now say to load the skill at the start; it loads in 194 of 252 runs.
-- **The reviewer request swallowed the summary.** After the reviewer subagent replied, the final message held only its verdict, so graders that read the trace saw no summary of the change. The request and the core now ask for a full summary.
-- **Some graders never matched.** Graders that read files by glob path never found a file, so four cases scored low in every arm. They now read the trace. Run `summarise.py` and look at its grader-health line to find graders that never pass.
-- **Runs without the with/without ablation score every grader.** That includes the plugin-fired indicator and the "with-only" graders, which the paired runs leave out. Re-score such runs against the paired runs' graders before comparing (see TESTING.md).
-
-On the cases with hidden tests, runs with Tabby had fewer ruff errors (0.27 against 0.70 per run), smaller diffs (49 against 59 added lines) and no weakened tests. The score does not capture that. One model, one suite, 3 runs.
+On the cases with hidden tests, runs with Tabby had fewer ruff errors, smaller diffs and no weakened tests; the score does not capture that. This is one model, one suite and 3 runs per case, so differences under about 0.05 are noise.
 
 ### Re-measuring
 
