@@ -88,7 +88,7 @@ function themeCss(theme) {
 export function build(spec) {
   const id = spec.id || 'dg';
   const R = 12; // elbow radius
-  const NH = 72, TILE = 40;
+  const NH = 72, TILE = 40, ICON = 30;  // the icon's 24 px box scaled to 30 px, centred in the tile: the glyph (about 18 of 24 units) fills about 56% of the tile
   const out = [];
   const add = s => out.push(s);
 
@@ -216,7 +216,7 @@ export function build(spec) {
     } else {
       const ty = n.y + (n.h - TILE) / 2;
       add(`<rect x="${n.x + 12}" y="${ty}" width="${TILE}" height="${TILE}" rx="10" fill="${f ? 'var(--accent)' : 'var(--tile)'}"/>`);
-      if (n.icon) add(`<g transform="translate(${n.x + 20},${ty + 8}) scale(0.6667)" fill="none" stroke="${f ? 'var(--on-accent)' : 'var(--tile-ink)'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon(n.icon)}</g>`);
+      if (n.icon) add(`<g transform="translate(${n.x + 12 + (TILE - ICON) / 2},${ty + (TILE - ICON) / 2}) scale(${ICON / 24})" fill="none" stroke="${f ? 'var(--on-accent)' : 'var(--tile-ink)'}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${icon(n.icon)}</g>`);
       if (n.role) {
         add(`<text x="${n.x + 64}" y="${n.cy - 4}" font-size="15" font-weight="650">${esc(n.name)}</text>`);
         add(`<text class="l${n.mono ? ' m' : ''}" x="${n.x + 64}" y="${n.cy + 15}" font-size="${n.mono ? 11 : 11.5}">${esc(n.role)}</text>`);

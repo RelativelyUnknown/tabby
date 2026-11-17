@@ -48,14 +48,14 @@ Tabby is plain `SKILL.md` folders in the open [Agent Skills](https://agentskills
 Run these as two separate prompts:
 
 ```
-/plugin marketplace add RelativelyUnknown/my-skills
+/plugin marketplace add RelativelyUnknown/tabby
 ```
 
 ```
 /plugin install tabby@tabby
 ```
 
-On Claude Code 2.1.275 or later, one command does both: `/plugin install tabby --marketplace RelativelyUnknown/my-skills`.
+On Claude Code 2.1.275 or later, one command does both: `/plugin install tabby --marketplace RelativelyUnknown/tabby`.
 
 </details>
 
@@ -65,14 +65,14 @@ On Claude Code 2.1.275 or later, one command does both: `/plugin install tabby -
 Clone the repository and copy the skills into your project:
 
 ```
-git clone https://github.com/RelativelyUnknown/my-skills
+git clone https://github.com/RelativelyUnknown/tabby
 cd your-project
-python3 ../my-skills/tools/install.py agents
+python3 ../tabby/tools/install.py agents
 ```
 
 `agents` installs to `.agents/skills/`, which both tools read. Add `--user` to install for every project (`~/.agents/skills/`). Other targets: `github` (`.github/skills/`, Copilot), `opencode` (`.opencode/skills/`), `claude` (`.claude/skills/`, read by all three). The installer never deletes anything and skips folders that already exist unless you pass `--force`.
 
-Install Tabby only from `RelativelyUnknown/my-skills` on GitHub.
+Install Tabby only from `RelativelyUnknown/tabby` on GitHub.
 
 </details>
 
@@ -90,8 +90,6 @@ Install Tabby only from `RelativelyUnknown/my-skills` on GitHub.
 | Paste the core rules for you | n/a | `install.py opencode --core AGENTS.md` | `install.py github --core .github/copilot-instructions.md` |
 
 </details>
-
-Install Tabby only from `RelativelyUnknown/my-skills` on GitHub.
 
 ## See it work
 
@@ -187,7 +185,7 @@ How to re-run the evals, read the summary and run the ablation arms is in [TESTI
 - [`evals/`](evals/): the eval cases, trigger sets and seeded-audit fixtures
 - [`tools/eval/`](tools/eval/): the runner, summaries, trace reader, quality, smell and judge tools
 - [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md): ideas adapted from other projects, with sources and licences
-- [Issues](https://github.com/RelativelyUnknown/my-skills/issues)
+- [Issues](https://github.com/RelativelyUnknown/tabby/issues)
 
 ## License
 
