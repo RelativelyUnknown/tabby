@@ -159,7 +159,7 @@ The score does not capture everything. On the cases scored with hidden tests the
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-quality-dark.webp">
-    <img src="assets/tabby-quality-light.webp" width="760" alt="Code quality on 10 cases with hidden tests, 30 runs each way. With Tabby against without: hidden tests passed 99.2% against 97.3%; lines added per run 49 against 60; runs that weakened a test 0 against 3; runs that added a dependency 0 against 2; comment lines added per run 0.0 against 0.7; ruff findings per run 0.93 against 0.67 (worse with Tabby). Cost per run $0.015 against $0.009, 10 against 7 turns.">
+    <img src="assets/tabby-quality-light.webp" width="760" alt="Code quality on 10 cases with hidden tests, 30 runs each way. With Tabby against without: hidden tests passed 99.2% against 97.3%; lines added per run 49 against 60; runs that weakened a test 0 against 3; runs that added a dependency 0 against 2; comment lines added per run 0.0 against 0.7. Cost per run $0.015 against $0.009, 10 against 7 turns.">
   </picture>
 </p>
 

@@ -20,7 +20,6 @@ const QUALITY = {
     ["Runs that weakened a test", 0, 3, (v) => v.toFixed(0), false],
     ["Runs that added a dependency", 0, 2, (v) => v.toFixed(0), false],
     ["Comment lines added per run", 0, 0.7, (v) => v.toFixed(1), false],
-    ["Ruff findings per run", 0.93, 0.67, (v) => v.toFixed(2), false],
   ],
   cost: ["$0.015", "$0.009"], turns: ["10", "7"],
 };
@@ -28,7 +27,7 @@ const QUALITY = {
 const Q = new URLSearchParams(location.search);
 const DARK = Q.get("theme") === "dark";
 const SCALE = Number(Q.get("scale") || 1.5);
-const W = 760, H = 448;
+const W = 760, H = 402;
 const C = DARK
   ? { panel: "#1a1524", line: "#2e2640", ink: "#efe8fb", muted: "#a99fbd", track: "#2b2339", off: "#5e5378" }
   : { panel: "#f4effb", line: "#e3d9f3", ink: "#1d1530", muted: "#6f6485", track: "#e6ddf4", off: "#bfb3d6" };

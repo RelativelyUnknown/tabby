@@ -13,11 +13,12 @@ import { fileURLToPath } from "node:url";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "../..");
 const FPS = 30;
+// lossless: flat cards, where lossy compression speckles the empty bars.
 // loop: true repeats forever (frames 0 .. DUR, end excluded, so the seam is clean); false plays once and holds the last frame.
 const FILMS = {
   hero: { page: "hero.html", out: "tabby-meow", w: 1280, h: 360, loop: true, logo: true },
-  effect: { page: "effect.html", out: "tabby-effect", w: 760, h: 384, loop: false },
-  quality: { page: "quality.html", out: "tabby-quality", w: 760, h: 448, loop: false },
+  effect: { page: "effect.html", out: "tabby-effect", w: 760, h: 384, loop: false, lossless: true },
+  quality: { page: "quality.html", out: "tabby-quality", w: 760, h: 402, loop: false, lossless: true },
 };
 const require = createRequire(import.meta.url);
 let pw;   // a local install first, then a global one
@@ -52,7 +53,7 @@ for (const [name, film] of Object.entries(FILMS)) {
     }
     const out = path.join(root, `assets/${film.out}-${theme}.webp`);
     execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(FPS), "-i", path.join(dir, "f%04d.png"),
-      "-c:v", "libwebp_anim", "-lossless", "0", "-q:v", "82", "-compression_level", "6", "-loop", film.loop ? "0" : "1", "-pix_fmt", "yuva420p", out]);
+      "-c:v", "libwebp_anim", "-lossless", film.lossless ? "1" : "0", "-q:v", film.lossless ? "75" : "82", "-compression_level", "6", "-loop", film.loop ? "0" : "1", "-pix_fmt", "yuva420p", out]);
     rmSync(dir, { recursive: true });
     if (film.logo) {
       const l = await open(film.page, `theme=${theme}&logo=1&scale=2`, 360, 360, 2);
