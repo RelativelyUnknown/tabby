@@ -95,6 +95,11 @@ class Gate(unittest.TestCase):
         self.assertIn("Reply voice: explanatory", self.start(d))
         self.assertIn("Reply voice: terse", self.start(d, voice="terse"))
 
+    def test_voice_line_from_agents_md(self):
+        d = self.repo()
+        (d / "AGENTS.md").write_text("## Tabby\npurpose: x\nvoice: explain\n")
+        self.assertIn("Reply voice: explanatory", self.start(d))
+
     def test_reviewer_request_names_new_files_and_forbids_staging(self):
         d = self.repo()
         for i in range(5):

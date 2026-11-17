@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: keyword-categoriser-near-miss
+expected_outcome: |
+  Categorises bank rows by keyword without the substring trap ("rent" matching "Current account fee"), reads the export without a traceback on a non-UTF-8 byte, and says what it did about both.
+context:
+  scaffold_script: fixture.sh

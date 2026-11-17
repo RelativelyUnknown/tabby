@@ -33,7 +33,7 @@ Stop when you could predict the user's next three answers, after four rounds, or
 
 ## 3. Restate, get a yes, save
 
-Write the section's lines back in the user's words, with the open questions. "Sounds good" or "whatever you think" is not a yes: ask what to refine. On a clear yes, write the section and stop; start no work in the same turn.
+Write the section's lines back in the user's words, with the open questions. "Sounds good" or "whatever you think" is not a yes: ask what to refine. On a clear yes, write the section and stop; start no work in the same turn. If the user tells you to save before you restated, print the full section in your reply as you save it and list every `(assumed)` line, so nothing lands in AGENTS.md unseen.
 
 ## 4. The section
 

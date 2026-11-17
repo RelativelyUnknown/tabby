@@ -123,8 +123,17 @@ VOICES = {
 
 def voice_line(proj):
     """The reply-voice line for session start: TABBY_VOICE or {"voice": ...} in .claude/tabby.json; auto (the default) adds nothing."""
-    v = os.environ.get("TABBY_VOICE", "").lower() or str(settings(proj).get("voice", "auto")).lower()
+    v = os.environ.get("TABBY_VOICE", "").lower() or str(settings(proj).get("voice", "")).lower() or agents_voice(proj)
     return VOICES.get(v, "")
+
+
+def agents_voice(proj):
+    """A `voice: terse|explain` line in AGENTS.md (the `## Tabby` section); Claude Code protects .claude/, so the skill writes it here."""
+    try:
+        m = re.search(r"^voice:\s*(\w+)", (pathlib.Path(proj) / "AGENTS.md").read_text(), re.M)
+    except OSError:
+        return ""
+    return m.group(1).lower() if m else ""
 
 
 def session_start(data):

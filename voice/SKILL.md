@@ -22,4 +22,4 @@ Example, same change in each voice:
 
 ## `/tabby:voice terse|explain|auto`
 
-Write `{"voice": "<choice>"}` into `.claude/tabby.json` (merge with what is there; `auto` removes the key). Say it applies from the next session, and that `TABBY_VOICE` in the environment overrides it. For the current session, follow the choice from your next reply on. With no argument, report the current voice.
+Save the choice as a `voice: <choice>` line in AGENTS.md: inside the `## Tabby` section if there is one, otherwise create a `## Tabby` section holding only that line. `auto` removes the line. Claude Code refuses writes to `.claude/`, so do not use `.claude/tabby.json` (it still works if the user has made it by hand, and `TABBY_VOICE` in the environment overrides both). Say it applies from the next session, and follow the choice from your next reply on. With no argument, report the current voice.
