@@ -154,7 +154,16 @@ Same agent, with and without Tabby, on Claude Haiku 5.5 (`claude plugin eval`, 1
 
 34 cases improve by 0.10 or more, 6 get worse and 72 stay within 0.10. A run with Tabby takes about 25% more turns and costs about 59% more, because of the core rules, the end-of-turn checks and the reviewer subagent.
 
-On the cases with hidden tests, runs with Tabby had fewer ruff errors, smaller diffs and no weakened tests; the score does not capture that. This is one model, one suite and 3 runs per case, so differences under about 0.05 are noise.
+The score does not capture everything. On the cases scored with hidden tests the agent never saw, the code itself:
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-quality-dark.webp">
+    <img src="assets/tabby-quality-light.webp" width="760" alt="Code quality on 10 cases with hidden tests, 30 runs each way. With Tabby against without: hidden tests passed 99.2% against 97.3%; lines added per run 49 against 60; runs that weakened a test 0 against 3; runs that added a dependency 0 against 2; comment lines added per run 0.0 against 0.7; ruff findings per run 0.93 against 0.67 (worse with Tabby). Cost per run $0.015 against $0.009, 10 against 7 turns.">
+  </picture>
+</p>
+
+This is one model, one suite and 3 runs per case, so differences under about 0.05 are noise.
 
 <details>
 <summary><strong>Re-run it yourself</strong></summary>

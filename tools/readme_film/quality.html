@@ -1,0 +1,87 @@
+<!doctype html>
+<!--
+  The README's code-quality card, animated once: each row's two bars (with and without Tabby) grow while the numbers count
+  up, one row after another. The numbers come from tools/eval/quality.py on the last full run; update QUALITY below.
+-->
+<html><head><meta charset="utf-8">
+<style>
+  @font-face { font-family: "Fredoka"; src: url("../../assets/src/fonts/Fredoka-Variable.ttf"); font-weight: 300 700; }
+  html, body { margin: 0; background: transparent; }
+  canvas { display: block; }
+</style></head>
+<body><canvas id="c"></canvas>
+<script>
+// quality.py over the cases with hidden tests (the agent never sees those tests), last full run.
+const QUALITY = {
+  cases: 10, runs: 30,
+  rows: [ // label, with, without, format, higher is better
+    ["Hidden tests passed", 99.2, 97.3, (v) => v.toFixed(1) + "%", true],
+    ["Lines added per run", 49.0, 59.9, (v) => v.toFixed(0), false],
+    ["Runs that weakened a test", 0, 3, (v) => v.toFixed(0), false],
+    ["Runs that added a dependency", 0, 2, (v) => v.toFixed(0), false],
+    ["Comment lines added per run", 0, 0.7, (v) => v.toFixed(1), false],
+    ["Ruff findings per run", 0.93, 0.67, (v) => v.toFixed(2), false],
+  ],
+  cost: ["$0.015", "$0.009"], turns: ["10", "7"],
+};
+
+const Q = new URLSearchParams(location.search);
+const DARK = Q.get("theme") === "dark";
+const SCALE = Number(Q.get("scale") || 1.5);
+const W = 760, H = 448;
+const C = DARK
+  ? { panel: "#1a1524", line: "#2e2640", ink: "#efe8fb", muted: "#a99fbd", track: "#2b2339", off: "#5e5378" }
+  : { panel: "#f4effb", line: "#e3d9f3", ink: "#1d1530", muted: "#6f6485", track: "#e6ddf4", off: "#bfb3d6" };
+const VIOLET = "#7c5cd6", PINK = DARK ? "#f0a3c6" : "#e07fab", RED = "#d6564a";
+window.DUR = 3.6;
+
+const cv = document.getElementById("c");
+cv.width = W * SCALE; cv.height = H * SCALE; cv.style.width = W + "px"; cv.style.height = H + "px";
+const g = cv.getContext("2d");
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const out = (x) => 1 - Math.pow(1 - x, 3);
+const F = (w, s) => `${w} ${s}px Fredoka`;
+
+window.render = (t) => {
+  t = clamp(t, 0, window.DUR);
+  const q = QUALITY;
+  g.setTransform(SCALE, 0, 0, SCALE, 0, 0); g.clearRect(0, 0, W, H);
+  g.fillStyle = C.panel; g.strokeStyle = C.line; g.lineWidth = 2;
+  g.beginPath(); g.roundRect(1, 1, W - 2, H - 2, 22); g.fill(); g.stroke();
+  g.fillStyle = C.ink; g.font = F(700, 28); g.fillText("Code quality", 36, 54);
+  g.fillStyle = C.muted; g.font = F(500, 16);
+  g.fillText(`${q.cases} cases scored with hidden tests the agent never saw, ${q.runs} runs each way`, 36, 80);
+  // legend
+  g.fillStyle = PINK; g.beginPath(); g.roundRect(36, 98, 22, 10, 5); g.fill();
+  g.fillStyle = C.muted; g.font = F(500, 14); g.fillText("with Tabby", 64, 108);
+  g.fillStyle = C.off; g.beginPath(); g.roundRect(160, 98, 22, 10, 5); g.fill();
+  g.fillStyle = C.muted; g.fillText("without", 188, 108);
+
+  const bx = 300, full = 310;
+  q.rows.forEach(([label, wi, wo, fmt, higher], i) => {
+    const y = 132 + i * 46, t0 = .2 + i * .28, p = out(seg(t, t0, t0 + .8)), a = clamp((t - t0) * 4);
+    if (a <= 0) return;
+    g.globalAlpha = a;
+    g.fillStyle = C.ink; g.font = F(500, 17); g.fillText(label, 36, y + 20);
+    const max = Math.max(wi, wo) || 1;
+    for (const [v, col, dy] of [[wi, PINK, 4], [wo, C.off, 20]]) {
+      g.fillStyle = C.track; g.beginPath(); g.roundRect(bx, y + dy, full, 10, 5); g.fill();
+      if (v > 0) { g.fillStyle = col; g.beginPath(); g.roundRect(bx, y + dy, Math.max(10, full * (v / max) * p), 10, 5); g.fill(); }
+    }
+    const better = higher ? wi > wo : wi < wo, same = wi === wo;
+    g.font = F(700, 17); g.fillStyle = same ? C.muted : better ? VIOLET : RED;
+    g.fillText(fmt(wi * p), bx + full + 18, y + 15);
+    g.font = F(500, 14); g.fillStyle = C.muted; g.fillText(fmt(wo * p), bx + full + 18, y + 32);
+    if (p >= 1) { g.font = F(700, 16); g.fillStyle = same ? C.muted : better ? VIOLET : RED; g.fillText(same ? "=" : better ? "better" : "worse", bx + full + 82, y + 22); }
+    g.globalAlpha = 1;
+  });
+  const fa = clamp((t - 2.6) * 3);
+  if (fa > 0) {
+    g.globalAlpha = fa; g.fillStyle = C.muted; g.font = F(500, 15);
+    g.fillText(`The price: ${q.cost[0]} against ${q.cost[1]} per run, ${q.turns[0]} against ${q.turns[1]} turns.`, 36, H - 26);
+    g.globalAlpha = 1;
+  }
+};
+Promise.all([document.fonts.load("700 20px Fredoka"), document.fonts.load("500 20px Fredoka")]).then(() => { window.render(0); window.READY = true; });
+</script></body></html>

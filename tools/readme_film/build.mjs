@@ -1,6 +1,6 @@
 // build.mjs: record the README films to animated WebP, and the logo to PNG.
 //   node tools/readme_film/build.mjs                    every film, both themes, plus the logo
-//   node tools/readme_film/build.mjs hero               one film (hero or effect)
+//   node tools/readme_film/build.mjs hero               one film (hero, effect or quality)
 //   node tools/readme_film/build.mjs effect --stills 0,1.2   contact frames only, into $OUT (default ./film-stills)
 // Each page exposes window.DUR, window.render(t) and window.READY. Needs Playwright with Chromium, and ffmpeg with libwebp.
 import { execFileSync } from "node:child_process";
@@ -17,6 +17,7 @@ const FPS = 30;
 const FILMS = {
   hero: { page: "hero.html", out: "tabby-meow", w: 1280, h: 360, loop: true, logo: true },
   effect: { page: "effect.html", out: "tabby-effect", w: 760, h: 384, loop: false },
+  quality: { page: "quality.html", out: "tabby-quality", w: 760, h: 448, loop: false },
 };
 const require = createRequire(import.meta.url);
 let pw;   // a local install first, then a global one
