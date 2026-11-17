@@ -1,10 +1,7 @@
 ---
-type: regex
-target:
-  source: file
-  path: "tests/test_app.py"
-pattern: "handle"
+type: llm
+focus: trace
 weight: 1
 ---
 
-A test for handle exists
+PASS if a test for the metrics `handle` records was written under tests/. Running it is not required: the sandbox may not have the package. FAIL if no test was written.

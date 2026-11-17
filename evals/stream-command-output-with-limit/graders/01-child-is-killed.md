@@ -3,7 +3,7 @@ type: regex
 target:
   source: file
   path: "src/runner/stream.py"
-pattern: "\\.(kill|terminate)\\(\\)"
+pattern: "\\.(kill|terminate)\\(\\)|killpg\\(|os\\.kill\\("
 weight: 3
 ---
 

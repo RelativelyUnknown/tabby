@@ -6,19 +6,18 @@ Paths below are under `development/`.
 
 | Leaf | Upstream skill (under `plugins/python-development/skills/`) |
 | --- | --- |
-| `code/errors.md`, `validation.md` | `python-error-handling`, `python-code-style` |
-| `code/typing.md` | `python-type-safety` |
-| `code/resources.md` | `python-resource-management` |
-| `testing/mocking.md` (retries section) | `python-testing-patterns` |
-| `performance/index.md` | `python-performance-optimization` |
-| `dependencies/uv.md`, `uv-ci.md`, `uv-docker.md` | `uv-package-manager` |
-| `library/shared/versioning.md`, `entry-points.md`, `tooling.md` (build backends) | `python-packaging`, `python-project-structure` |
-| `architecture/design-patterns.md` (three principles) | `python-design-patterns` |
-| `application/shared/observability.md` | `python-observability` |
-| `application/shared/configuration.md` | `python-configuration` |
-| `application/shared/resilience.md` | `python-resilience` |
-| `application/shared/async.md`, `async-patterns.md` | `async-python-patterns` |
-| `application/workers/background-jobs.md`, `background-jobs-patterns.md` | `python-background-jobs` |
+| `code/errors-validation-logging.md` | `python-error-handling`, `python-code-style` |
+| `code/type-annotations.md` | `python-type-safety` |
+| `code/files-connections-locks.md` | `python-resource-management` |
+| `testing/test-mocking.md` (retries section) | `python-testing-patterns` |
+| `performance/performance-profiling.md` | `python-performance-optimization` |
+| `dependencies/uv-workflows-ci-docker.md` | `uv-package-manager` |
+| `library/shared/package-layout-and-versioning.md`, `build-and-lint-tooling.md` (build backends) | `python-packaging`, `python-project-structure` |
+| `architecture/design-patterns-and-layers.md` (three principles) | `python-design-patterns` |
+| `application/shared/logging-metrics-tracing.md` | `python-observability` |
+| `application/shared/settings-and-secrets.md` | `python-configuration` |
+| `application/shared/retries-timeouts-circuit-breakers.md` | `python-resilience` |
+| `application/shared/async-io-and-patterns.md` | `async-python-patterns` |
 
 ## What changed
 
@@ -26,7 +25,7 @@ Paths below are under `development/`.
 - Typing: `python-type-safety` (200 + 237 lines) is condensed to about 20 rules. Dropped as conflicting with the no-abstraction-for-one-use and no-`Any` rules: the generic `Result` class and the generic repository; dropped as language-doc restatement: the primer on annotations and unions. Run with `mypy --strict` 2.4.1 on Python 3.13: list invariance and `Sequence`; `TypeIs` requires a subtype of the parameter type; `assert_never` fails on a new enum member; `@override` fails on a typo and `explicit-override` makes it mandatory; `ParamSpec` keeps a keyword-only signature. The `from __future__ import annotations` note and the 3.14 lazy-annotation default (PEP 649, 749) and the pyright strict-mode variant come from documentation and were not run here.
 - Resources: upstream body (243 lines) and details (183 lines) are condensed to short rules; dropped the protocol-method primer and the logging-based timing block. Run on Python 3.13: `@contextmanager` needs `try`/`finally`; `ExitStack.pop_all`; generators that hold a resource and `contextlib.closing`; `subprocess.run` against `Popen.communicate` timeouts; `ResourceWarning` is silent unless enabled; cancellation runs async cleanup. Examples use stand-in resources so each block runs as written.
 - Testing: one section ("Retries and failure sequences") is adapted: a scripted `side_effect` list with three outcomes, rewritten with an injected sleep so the test is instant; the three tests pass under pytest. The rest of `python-testing-patterns` (278 + 761 lines) was already covered in stricter form; the upstream uses freezegun where this repository uses `time-machine`.
-- Performance: `python-performance-optimization` (100 + 759 lines) is a profiler tutorial plus an optimization catalogue. `performance/index.md` keeps the measure-first rules and the fix order (data structure, doing less work, memory, strings, concurrency), with ratios measured on one machine (Python 3.13, `timeit` and `tracemalloc`).
+- Performance: `python-performance-optimization` (100 + 759 lines) is a profiler tutorial plus an optimization catalogue. `performance/performance-profiling.md` keeps the measure-first rules and the fix order (data structure, doing less work, memory, strings, concurrency), with ratios measured on one machine (Python 3.13, `timeit` and `tracemalloc`).
 - uv: the upstream body (345 lines) and advanced reference (473 lines) are an installation and command tutorial; replaced by decision rules. Run with uv 0.11.32 on Python 3.12/3.13: `uv init --lib` (uv_build backend), `uv add --dev` writes `[dependency-groups]`, `uv sync --locked` fails on a stale lock while `--frozen` installs from it, `uv lock --check`, the `VIRTUAL_ENV` warning, `uv python pin`, `uv export`, `uv tree --outdated`, `uv add --script`, `uv run --with`, `uvx`, workspace members, `--package`, `--no-install-project`. Not run, taken from the uv documentation (`docs/guides/integration/github.md` and `docker.md`, read 7 November 2026): the private-index setting and the CI and Docker examples, including pinned action SHAs and `--no-install-workspace` / `--no-install-package`.
 - Packaging: dynamic versioning and console-script entry points are rewritten and rebuilt with uv 0.11.32: hatchling reading `__version__` from a file (0.4.0), hatch-vcs from a tag (1.2.3, then `1.2.4.dev1+g<sha>` one commit later, a local version PyPI rejects), a static `uv_build` version (2.0.0), `[project.scripts]` appearing in `entry_points.txt` and running with `uv run`, and installed metadata staying at the old version until reinstall. `python-project-structure` (252 lines): one concept per file, `__all__`, flat hierarchies and mirrored tests are rules here already; its layered and domain-driven structures are not folded in. Corrected while verifying: with uv 0.11.32 `uv init --package` and `--lib` already write `uv_build`; plain `uv init` writes an application with no build system.
 - Design patterns: four short sections: the rule of three, composition over inheritance, passing collaborators in, size by responsibility. Not folded in: KISS and single responsibility as slogans, separation-of-concerns layering, repository and service examples. New, run on Python 3.13: an inheritance example in which overriding `add()` silently changes the parent's `add_all()`, its composition rewrite, and an injected clock.
@@ -35,4 +34,4 @@ Paths below are under `development/`.
 - Resilience: upstream body (195 lines) and details (186 lines) are condensed to about 12 rules with runnable standard-library retry, breaker and bulkhead using injected time and randomness. Run: retry (Retry-After first, then full jitter, bounded), breaker (closed, open, probe, reset), semaphore bulkhead (peak concurrency 2). With tenacity 9.2.1, httpx 0.28.1, requests 2.34.2: default raises `RetryError`, `reraise=True` raises the original error, `wait_exponential_jitter(initial=...)` emits a DeprecationWarning, httpx default timeout is 5 seconds, `requests` has none. Not run: the status-code list, retry budgets, `Retry-After` date parsing.
 - Async: upstream body (295 lines) and details (440 lines) are condensed to about 12 rules; the event-loop primer and the scraping, database and WebSocket examples are dropped. Run on Python 3.13: `TaskGroup` failure cancels siblings and raises an `ExceptionGroup`; plain `gather()` leaves the others running; `asyncio.timeout` cancels the body; `Semaphore` caps the peak; `Queue.join` with workers; `to_thread` copies `contextvars`; `aclosing` runs an async generator's `finally`; `asyncio.run` inside a running loop raises `RuntimeError`. Not run: the weak-reference warning for tasks, thread-safety of `Lock`/`Queue`/`Event`, `run_coroutine_threadsafe`.
 - Background jobs: upstream body (241 lines) and details (128 lines) are condensed to about 10 rules, a decision section and one runnable standard-library job table (SQLite): atomic claim with `UPDATE ... RETURNING`, idempotency key, expiring leases, retry with backoff and jitter, dead state; run with four worker threads. Celery behaviour (acknowledge before running, `acks_late`, `reject_on_worker_lost`, `retry_backoff`, `retry_jitter`, `autoretry_for`, `max_retries`, `worker_prefetch_multiplier`, one-hour Redis visibility timeout) comes from the Celery documentation (read 7 November 2026) and was not run. The Django `transaction.on_commit` note was not run.
-- HTTP services (`apis/http/services.md`, `fastapi.md`, `django.md`, `shared/persistence.md`, `shared/deployment.md`, `apis/shared/security.md`) are original to this repository.
+- HTTP services (`apis/http/http-service-design.md`, `fastapi-services.md`, `django-services.md`, `shared/database-and-migrations.md`, `shared/deployment-and-containers.md`, `apis/shared/api-security-owasp.md`) are original to this repository.

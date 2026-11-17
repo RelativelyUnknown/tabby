@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: recommend-detector-do-not-install
+expected_outcome: |
+  Handles the likely encodings with a guard, tests one, and recommends an encoding-detection package in the final message without installing it, because the project asks first.
+context:
+  scaffold_script: fixture.sh

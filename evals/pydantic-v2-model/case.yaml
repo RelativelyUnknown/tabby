@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: pydantic-v2-model
+expected_outcome: |
+  Writes a Pydantic v2 model (ConfigDict, field_validator, model_dump) because the project pins pydantic 2.
+context:
+  scaffold_script: fixture.sh

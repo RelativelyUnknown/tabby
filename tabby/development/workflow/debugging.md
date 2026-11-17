@@ -4,7 +4,7 @@ Debugging is testing a hypothesis about a cause, not trying changes until the sy
 
 ## 1. Reproduce
 
-- A failing test, or the smallest failing input, before any edit. A fix starts red ([testing.md](../testing/testing.md)). Cannot reproduce: say so and ask for the input or log; do not fix what you cannot see fail.
+- A failing test, or the smallest failing input, before any edit. A fix starts red ([testing-basics-and-fixtures.md](../testing/testing-basics-and-fixtures.md)). Cannot reproduce: say so and ask for the input or log; do not fix what you cannot see fail.
 - Read the whole traceback, bottom frame first, and the `__cause__` or `__context__` chain above it. The decisive line is usually the last frame in the project's own code, not the library's.
 - Flaky: run it in a loop (`for i in $(seq 30); do pytest path::test -x -q || break; done`) to get a failure rate, then look for what differs between runs: order (`-p no:randomly`, run the test alone), time, shared state, network, a seed, a leftover file.
 - Make the loop one command: a script or a single `pytest` line that reproduces the failure and prints pass or fail, with setup and the run together (`rm -r data && ./launch.sh`) and variables set inline (`FLAG=on python x.py`, not an earlier `export`), so a stale step cannot make a hypothesis look tested. Change one thing between runs. Make it fast (a tiny input, one process, no network): a 2-second loop gets run hundreds of times and a 10-minute one gets abandoned. In a notebook or REPL, rerun from a clean start before believing a result.
@@ -21,11 +21,11 @@ Debugging is testing a hypothesis about a cause, not trying changes until the sy
 | Wrong value somewhere in the middle | `breakpoint()` or `pytest --pdb -x` where good data turns bad; look at the real value rather than reasoning about what it should be |
 | Hangs, never finishes | `py-spy dump --pid`, `python -X faulthandler`, `faulthandler.dump_traceback_later(30)` |
 | Regression, last good commit known | `git bisect run <command>` |
-| Slow | a sampling profiler (`py-spy record`), then [performance](../performance/index.md); judge a change with one measuring method used the same way, because `cProfile`, `line_profiler` and `timeit` disagree on absolute numbers |
+| Slow | a sampling profiler (`py-spy record`), then [performance](../performance/performance-profiling.md); judge a change with one measuring method used the same way, because `cProfile`, `line_profiler` and `timeit` disagree on absolute numbers |
 | Memory grows | `tracemalloc` snapshots before and after, `memray` |
 | Only fails in CI, or "works on my machine" | the same Python, locked dependencies and environment as CI; compare `pip freeze`; check which interpreter and package actually loaded (`python -c "import x; print(x.__file__, x.__version__)"`), a stale install or `.pyc` |
 | Slow imports, hidden warnings | `python -X importtime`; `python -X dev -W error` |
-| Native crash or segfault | `python -X faulthandler`, a debug build, the sanitizer jobs in [ci-wheels.md](../library/native/ci-wheels.md) |
+| Native crash or segfault | `python -X faulthandler`, a debug build, the sanitizer jobs in [native-ci-wheels.md](../library/native/native-ci-wheels.md) |
 
 
 ## 3. Name the cause

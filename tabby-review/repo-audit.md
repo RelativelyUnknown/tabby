@@ -1,6 +1,6 @@
 # Auditing a whole repository
 
-Find what will hurt whoever owns this next: wrong, unsafe, breaking under load, untested where it matters, slow, or not needed. Report only what you can show with a concrete case. This is a report; change nothing unless asked. For security alone, use [security-audit/process.md](security-audit/process.md).
+Find what will hurt whoever owns this next: wrong, unsafe, breaking under load, untested where it matters, slow, or not needed. Report only what you can show with a concrete case. This is a report; change nothing unless asked. For security alone, use [process-and-reporting.md](security-audit/process-and-reporting.md).
 
 ## Map first
 

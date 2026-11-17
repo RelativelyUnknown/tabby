@@ -1,34 +1,42 @@
 ---
 name: hooks
-description: "Use only when the user asks for it: /tabby:hooks, 'turn Tabby hooks on or off'. Installs or removes an optional reminder hook so Claude loads the right Tabby skill on every prompt. Never enable it on your own."
+description: "Use only when the user asks for it: /tabby:hooks, 'turn the Tabby gate on or off'. Reports or changes whether the Tabby quality gate hooks run in this project. Never change it on your own."
 disable-model-invocation: true
 license: MIT
 ---
 
-# Tabby hooks (optional, off by default)
+# Tabby hooks (on by default in Claude Code)
 
-This skill is for Claude Code, which has `UserPromptSubmit` hooks. On other harnesses, paste the text of [remind.txt](remind.txt) into the always-loaded instructions file instead (`AGENTS.md` for OpenCode, `.github/copilot-instructions.md` for Copilot); it costs the same 120 words on every prompt and needs no setting.
+The plugin ships three hooks in [hooks.json](hooks.json), all run by `scripts/gate.py`:
 
-Claude Code decides on its own whether to load a skill, and on short prompts it often does not (measured on 12 November 2026 with `tools/eval/triggers.py`: the right Tabby skill loaded on 46% of unseen prompts without the reminder, 95% with it). The reminder is a `UserPromptSubmit` hook that prints about 120 words of context before each prompt. It runs no other command, reads nothing, and writes nothing.
+- **SessionStart** injects the core rules ([core/TABBY-CORE.md](../core/TABBY-CORE.md)) and the facts `detect.py` finds, so the rules are active on every session without a skill load.
+- **PostToolUse** (Edit, Write) runs the project's own `ruff format` and `ruff check --fix` on the edited `.py` file, only when the project configures ruff. Problems go back to the model.
+- **Stop** checks the diff made during the session for shortcuts (`scripts/guard.py`): added `# type: ignore` or `# noqa`, `Any`, `cast(`, skips without a reason, bare `except`, deleted tests, fewer assertions. It then runs the project's `make check|test|ci|verify` (or `just`) once if one exists. A failure goes back to the model once; it never loops. When the change is large (over 80 changed lines or more than 3 Python files), it asks once for the `tabby-reviewer` subagent ([agents/tabby-reviewer.md](../agents/tabby-reviewer.md)) to read the diff in a fresh context, on two separate axes: the repository's standards and the request.
 
-## `/tabby:hooks on`
+The hooks read the repo and run only the project's own tools. They never install anything and never edit a test.
 
-1. Say what will change, and show the user both pieces before writing anything:
-   - the reminder text, from [remind.txt](remind.txt) (read it with the Read tool and quote it);
-   - the settings entry:
+`.claude/tabby.json` also takes `{"voice": "terse"|"explain"}` (see `/tabby:voice`, which saves a `voice:` line in AGENTS.md), `{"review": false}` (no reviewer request), `review_lines` and `review_files` (thresholds).
 
-```json
-{"hooks": {"UserPromptSubmit": [{"hooks": [{"type": "command", "command": "cat \"$CLAUDE_PROJECT_DIR/.claude/tabby-remind.txt\""}]}]}}
-```
+## Modes
 
-2. Ask: this project only (`.claude/settings.json`, shared with the team when committed; the default) or all projects (`~/.claude/settings.json`, using `$HOME/.claude/tabby-remind.txt`). Wait for a clear yes.
-3. On yes: copy `remind.txt` to `.claude/tabby-remind.txt` (or `~/.claude/tabby-remind.txt`) with the Write tool, then merge the entry into the settings file. Keep every other setting and every other hook; if the file has invalid JSON, stop and say so.
-4. Say that the hook starts with the next prompt in a new session, and how to remove it.
+- **full** (default): everything above.
+- **lite**: the core rules at session start and the diff check at the end only. No ruff on edits, no check command, no reviewer request. For a project where those would be noise.
+- **off**: nothing runs, and the core rules are not injected.
+
+Set `{"mode": "lite"}` in `.claude/tabby.json`, or `TABBY_MODE=lite` in the environment (the environment wins).
 
 ## `/tabby:hooks off`
 
-Remove only the entry whose command mentions `tabby-remind.txt`, and delete that text file. Leave other hooks alone. Report what was removed.
+Create `.claude/tabby.json` with `{"mode": "off"}` (merge if it exists; `{"gate": false}` means the same), or tell the user to set `TABBY_GATE=off` in the environment. Say that it takes effect on the next session.
+
+## `/tabby:hooks on`
+
+Remove the `gate` and `mode` keys from `.claude/tabby.json` (delete the file if it becomes empty) and unset `TABBY_GATE` and `TABBY_MODE`.
 
 ## `/tabby:hooks` with no word
 
-Say whether the entry is present in the project and user settings, and what `on` and `off` do. Change nothing.
+Say whether `.claude/tabby.json` or `TABBY_GATE` turns the gate off, and what `on` and `off` do. Change nothing.
+
+## Other harnesses
+
+OpenCode and Copilot have no plugin hooks here. Paste the text of [core/TABBY-CORE.md](../core/TABBY-CORE.md) into `AGENTS.md` (OpenCode) or `.github/copilot-instructions.md` (Copilot), and run `scripts/guard.py` from pre-commit or CI: `git diff -U0 origin/main | python3 scripts/guard.py`.

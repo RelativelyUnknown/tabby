@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: reuse-existing-slugify
+expected_outcome: |
+  Reuses core.text.slugify for the new URL builder instead of writing a second slug function.
+context:
+  scaffold_script: fixture.sh

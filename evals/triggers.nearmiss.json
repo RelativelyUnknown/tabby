@@ -1,0 +1,98 @@
+[
+ {
+  "query": "Why does `[] is []` print False in Python?",
+  "expect": "none"
+ },
+ {
+  "query": "Is Python or Go better for a small CLI tool?",
+  "expect": "none"
+ },
+ {
+  "query": "What's new in Python 3.14?",
+  "expect": "none"
+ },
+ {
+  "query": "How do I install uv on macOS?",
+  "expect": "none"
+ },
+ {
+  "query": "Recommend a good book for learning Python",
+  "expect": "none"
+ },
+ {
+  "query": "What does the regex ^\\d{3}-\\d{4}$ match?",
+  "expect": "none"
+ },
+ {
+  "query": "Convert this JavaScript function to Go: function add(a, b) { return a + b }",
+  "expect": "none"
+ },
+ {
+  "query": "Write a bash script that runs a command in every subfolder",
+  "expect": "none"
+ },
+ {
+  "query": "What is the difference between pip and conda?",
+  "expect": "none"
+ },
+ {
+  "query": "Explain what a virtual environment is",
+  "expect": "none"
+ },
+ {
+  "query": "What does `python -m http.server` do?",
+  "expect": "none"
+ },
+ {
+  "query": "Give me a one-sentence summary of what asyncio is for",
+  "expect": "none"
+ },
+ {
+  "query": "Write a SQL query that joins orders to customers",
+  "expect": "none"
+ },
+ {
+  "query": "How do I read a CSV in R?",
+  "expect": "none"
+ },
+ {
+  "query": "Write a Dockerfile for a Node.js app",
+  "expect": "none"
+ },
+ {
+  "query": "What is a monad, in plain words?",
+  "expect": "none"
+ },
+ {
+  "query": "Draft an email asking my manager for a day off",
+  "expect": "none"
+ },
+ {
+  "query": "What is the time complexity of a binary search?",
+  "expect": "none"
+ },
+ {
+  "query": "Fix the CSS so the sidebar stays on the left in my Rails app",
+  "expect": "none"
+ },
+ {
+  "query": "List five interesting facts about Guido van Rossum",
+  "expect": "none"
+ },
+ {
+  "query": "What does the walrus operator look like?",
+  "expect": "none"
+ },
+ {
+  "query": "Is it ok to use tabs in Python?",
+  "expect": "none"
+ },
+ {
+  "query": "Rename my files from IMG_001.jpg to holiday-001.jpg with a shell command",
+  "expect": "none"
+ },
+ {
+  "query": "Compare PostgreSQL and MySQL for a hobby project",
+  "expect": "none"
+ }
+]

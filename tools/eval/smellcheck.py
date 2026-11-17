@@ -4,7 +4,7 @@
     python3 tools/eval/smellcheck.py FILE.py [FILE.py ...]     print `file:line rule` for each hit
     python3 tools/eval/smellcheck.py --selftest                 every smell_pairs/<rule>.bad.py must hit <rule>, every .good.py nothing
 
-Rules (each matches a row in tabby/development/code/smells.md): deep-nesting (control flow more than three levels inside a
+Rules (each matches a row in tabby/development/code/code-smells.md): deep-nesting (control flow more than three levels inside a
 function), unbounded-cache (functools.cache, or lru_cache with maxsize=None), validated-mutable-dataclass (a non-frozen
 dataclass with __post_init__ validation, so callers can later set a field past the rule), match-on-bool (match with True or
 False patterns), stub-override (a method that only raises NotImplementedError or passes, in a class that has a base and is

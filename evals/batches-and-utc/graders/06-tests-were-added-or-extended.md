@@ -1,8 +1,7 @@
 ---
-type: file_exists
-path: "tests/**/test_*.py"
-exists: true
+type: llm
+focus: trace
 weight: 1
 ---
 
-Tests were added or extended
+PASS if tests were added or extended under tests/ for the new behaviour. FAIL otherwise.

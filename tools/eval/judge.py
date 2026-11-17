@@ -7,7 +7,7 @@ RESULT_DIR holds <case>.json written by tools/eval/run.py with --keep-temp and b
 and run index it takes the with-skill and without-skill final working directories, builds each one's diff against its base
 commit, and asks a judge model which solution a senior reviewer would rather merge. Every pair is judged twice with A and B
 swapped. The prompt never names the skill, the arm or Tabby; the rubric is plain language drawn from common code-quality
-catalogs and tabby/development/architecture/senior-engineering.md.
+catalogs and tabby/development/architecture/design-under-real-limits.md.
 
 Reported: wins, losses and ties for the with-skill arm over the pairs where both orderings agree, how many pairs the two
 orderings disagreed on (order bias), and mean 1 to 5 scores per criterion. Disagreeing pairs count as ties. Needs `claude`
@@ -29,7 +29,7 @@ CASES = os.path.join(HERE, "..", "..", "evals")
 MAX_DIFF = 14000
 CRITERIA = ["solves_the_real_problem", "minimal_and_fits_the_codebase", "errors_and_invariants", "reuses_what_exists",
             "flat_control_flow", "abstraction_earns_its_coupling", "readable_and_honest_comments",
-            "tests_that_would_catch_a_regression"]
+            "testable_structure", "tests_that_would_catch_a_regression"]
 
 RUBRIC = """You are a senior engineer reviewing two candidate changes (A and B) for the same task. Decide which one you would rather merge.
 
@@ -41,6 +41,7 @@ Judge the code, not the explanation. Criteria, each scored 1 (poor) to 5 (excell
 - flat_control_flow: no more than three levels of nesting; the unhappy path is handled early (guard clauses) and the main logic stays at the top level; long blocks are split into well-named functions with one job each.
 - abstraction_earns_its_coupling: every base class, interface or flag is justified by three or more variants or by deferred or repeated use; a new variant lives beside the old one instead of branching through it; a little repetition is preferred to coupling unrelated code; collaborators are passed in, not built inside; subclassing only for "is a".
 - readable_and_honest_comments: clear names; magic numbers are named; a comment explaining a complex condition is replaced by a named variable or function; comments explain why, not what; no commented-out code; no filler.
+- testable_structure: logic is separable from I/O and time (values in, values out, collaborators passed in), so it can be tested without patching; names and structure let a reader find where a change belongs.
 - tests_that_would_catch_a_regression: tests fail without the change and assert real behaviour; none were weakened or skipped. If the task needed no tests, score both 3.
 
 Do not prefer a candidate for being longer, for having more comments or tests, or for sounding more careful. A smaller correct change beats a larger one.
@@ -81,17 +82,25 @@ def task_of(case):
     return re.sub(r"\A---.*?---\s*", "", t, flags=re.S).strip()
 
 
-def ask(model, task, first, second):
+FAILURES = []
+
+
+def ask(model, task, first, second, tries=3):
+    """One judge call; retried when the reply has no parseable JSON (a usage limit, a timeout, prose). The last reason is kept in FAILURES."""
     body = f"{RUBRIC}\n\n# Task\n{task}\n\n# Candidate A (diff)\n{first}\n\n# Candidate B (diff)\n{second}\n"
-    with tempfile.TemporaryDirectory() as d:
-        rc, out = sh(["claude", "-p", body, "--model", model, "--max-turns", "1", "--output-format", "text"], cwd=d)
-    m = re.search(r"\{.*\}", out, re.S)
-    if not m:
-        return None
-    try:
-        return json.loads(m.group(0))
-    except ValueError:
-        return None
+    for _ in range(tries):
+        with tempfile.TemporaryDirectory() as d:
+            rc, out = sh(["claude", "-p", body, "--model", model, "--max-turns", "1", "--output-format", "text"], cwd=d)
+        m = re.search(r"\{.*\}", out, re.S)
+        if m:
+            try:
+                return json.loads(m.group(0))
+            except ValueError:
+                pass
+        FAILURES.append(f"rc={rc}: {out.strip()[:160]!r}")
+        if "limit" in out.lower():
+            break
+    return None
 
 
 def judge_pair(args):
@@ -152,6 +161,8 @@ def main():
             rows.append(dict(case=case, run=i, verdict=verdict, first=r1.get("reason"), second=r2.get("reason")))
     n = win + loss + tie + split
     print(f"\npairs judged: {n} (unparseable: {bad}); judge {a.judge_model}")
+    for f in dict.fromkeys(FAILURES[-5:]):
+        print("  unparseable reply:", f)
     print(f"with-skill wins {win}, loses {loss}, ties {tie}, orderings disagreed {split}")
     print("\ncriterion                              with   without")
     for c in CRITERIA:

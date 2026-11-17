@@ -6,9 +6,12 @@
 DIR holds <case>.json files (as written by run.py). A case is VALID when none of its runs errored; only valid cases
 enter the means. Reports, per arm and paired per case: mean score, turns, cost per run, and a cost-adjusted score
 (mean score divided by mean cost per run in cents). With --compare, the `with` arm of DIR is set against the `with`
-arm of OTHER_DIR on the cases valid in both (an A/B of two plugin versions).
+arm of OTHER_DIR on the cases valid in both (an A/B of two plugin versions). Cases where the arm without the plugin already\nscores 0.95 or more are reported apart as no-regression checks; the headline delta uses the rest, with a bootstrap interval.
 """
-import json, glob, os, sys, statistics as st, csv
+import json, glob, os, sys, random, statistics as st, csv
+
+
+CEILING = 0.95
 
 
 def load(d):
@@ -43,6 +46,37 @@ def pct(a, b):
     return 100 * (a / b - 1) if b else float("nan")
 
 
+def boot_ci(deltas, n=2000, seed=1):
+    """95% bootstrap interval of the mean paired delta (fixed seed, so a rerun prints the same numbers)."""
+    rng = random.Random(seed)
+    means = sorted(st.mean(rng.choices(deltas, k=len(deltas))) for _ in range(n))
+    return means[int(.025 * n)], means[int(.975 * n)]
+
+
+INDICATOR = ("skill-was-invoked", "indicator-only")
+
+
+def grader_health(cases):
+    """Graders that never discriminate: (dead, vacuous). Dead = failed in every run of every arm (a grader that cannot be
+    satisfied: a wrong path or pattern, or a behaviour no run reaches). Vacuous = passed in every run of every arm (it cannot tell the arms apart).
+    Plugin-fired indicators are skipped: they fail in the arm without the plugin by design. Each item is `case/grader`."""
+    dead, vacuous = [], []
+    for n, c in sorted(cases.items()):
+        seen = {}
+        for runs in c.get("arms", {}).values():
+            for r in runs:
+                for g in r.get("graders", []):
+                    if any(k in g["name"] for k in INDICATOR):
+                        continue
+                    seen.setdefault(g["name"], []).append(bool(g.get("passed")))
+        for name, res in sorted(seen.items()):
+            if not any(res):
+                dead.append(f"{n}/{name}")
+            elif all(res):
+                vacuous.append(f"{n}/{name}")
+    return dead, vacuous
+
+
 def main(argv):
     if not argv:
         print(__doc__); return 1
@@ -66,6 +100,16 @@ def main(argv):
         print(f"paired over {len(paired)} valid cases: with {mw:.3f}, without {mo:.3f} (delta {mw-mo:+.3f}); "
               f"improve {imp}, worse {wor}, tie {len(paired)-imp-wor}; turns {pct(tw,to):+.0f}%, cost {pct(cw,co):+.0f}%")
         print(f"cost-adjusted (score per cent of cost per run): with {mw/(cw*100):.1f}, without {mo/(co*100):.1f}")
+        head = [(n, w, o) for n, w, o in paired if o["score"] < CEILING]
+        ceil = [n for n, w, o in paired if o["score"] >= CEILING]
+        deltas = [w["score"] - o["score"] for _, w, o in head]
+        if deltas:
+            lo, hi = boot_ci(deltas)
+            print(f"headroom cases (without < {CEILING}): {len(head)}; mean delta {st.mean(deltas):+.3f}, 95% bootstrap CI [{lo:+.3f}, {hi:+.3f}]; "
+                  f"median delta {st.median(deltas):+.3f}")
+        reg = [(n, w["score"] - o["score"]) for n, w, o in paired if o["score"] - w["score"] >= .10]
+        print(f"ceiling cases (without >= {CEILING}), read as no-regression checks: {len(ceil)}; "
+              f"regression tax (cases worse by 0.10+): {len(reg)}" + (": " + ", ".join(f"{n} {d:+.2f}" for n, d in sorted(reg, key=lambda x: x[1])) if reg else ""))
     if other:
         oc = {n: c for n, c in load(other).items() if valid(c)}
         both = [n for n in ok if n in oc]
@@ -81,6 +125,10 @@ def main(argv):
             for n, c in sorted(cases.items()):
                 ww, oo = stats(arm(c, "with")), stats(arm(c, "without"))
                 w_.writerow([n, int(n in ok)] + [("%.3f" % x) if x is not None else "" for x in (ww["score"], oo["score"], ww["turns"], oo["turns"], ww["cost"], oo["cost"])])
+    dead, vacuous = grader_health(ok)
+    total = sum(len({g["name"] for runs in c.get("arms", {}).values() for r in runs for g in r.get("graders", []) if not any(k in g["name"] for k in INDICATOR)}) for c in ok.values())
+    print(f"grader health over {total} graders: {len(dead)} never pass in any run of any arm" + (" (a broken path or pattern, or a behaviour out of reach; read one run): " + ", ".join(dead[:15]) + (" ..." if len(dead) > 15 else "") if dead else "") +
+          f"; {len(vacuous)} always pass ({100 * len(vacuous) // max(total, 1)}%), so they cannot separate the arms")
     if bad:
         print("errored (re-run):", ", ".join(bad))
     return 0

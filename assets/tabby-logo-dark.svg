@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 340" width="440" height="340" role="img" aria-labelledby="t d">
+<title id="t">Tabby</title><desc id="d">A tabby cat asleep in a curl, drawn as a solid shape with the ears, cheek, stripes and closed eyes cut out.</desc>
+<style>
+  .breathe { transform-box: fill-box; transform-origin: 50% 100%; animation: breathe 4.5s ease-in-out infinite; }
+  .walker { opacity: 0; animation: walk 3.4s cubic-bezier(.25,.7,.35,1) both, vanish .45s ease-in 3.4s both; }
+  .plop { transform-box: fill-box; transform-origin: 50% 100%; animation: plop .7s ease-out 3.45s both; }
+  .bob { animation: bob .5s ease-in-out infinite; }
+  .legA, .legB { transform-box: fill-box; transform-origin: 50% 10%; }
+  .legA { animation: stride .5s ease-in-out infinite alternate; }
+  .legB { animation: stride .5s ease-in-out infinite alternate-reverse; }
+  .in1, .in2, .in3 { animation: appear .9s ease-out both; }
+  .in1 { animation-delay: 4.1s; } .in2 { animation-delay: 4.7s; } .in3 { animation-delay: 5.3s; }
+  @keyframes breathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.012, 1.03); } }
+  @keyframes walk { from { transform: translateX(-520px); opacity: 1; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes vanish { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes plop { from { opacity: 0; transform: scale(.9, .72); } 60% { opacity: 1; } to { opacity: 1; transform: scale(1, 1); } }
+  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+  @keyframes stride { from { transform: rotate(-26deg); } to { transform: rotate(26deg); } }
+  @keyframes appear { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce) { .breathe, .walker, .plop, .bob, .legA, .legB, .in1, .in2, .in3 { animation: none; } }
+</style>
+<g transform="translate(0 0) scale(1.0) translate(-60 -130)">
+  <defs><mask id="cut" maskUnits="userSpaceOnUse" x="40" y="110" width="480" height="380">
+    <rect x="40" y="110" width="480" height="380" fill="#fff"/>
+    <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M232 318 L236 254 L276 284 Q304 272 332 284 L370 252 L378 322 Q384 384 330 400" stroke-width="13"/>
+      <path d="M262 346 Q278 362 296 346 M326 346 Q342 362 360 346" stroke-width="9"/>
+      <path d="M150 196 Q182 222 170 262 M198 176 Q226 204 218 240 M112 262 Q146 276 142 308" stroke-width="12"/>
+    </g>
+  </mask></defs>
+  <g class="breathe">
+    <g mask="url(#cut)" fill="#f4e9da">
+      <path d="M92 300 C82 206 188 150 288 158 C392 166 444 238 434 322 C424 402 332 444 240 440 C148 436 100 388 92 300 Z"/>
+      <path d="M420 392 Q452 440 488 416" fill="none" stroke="#f4e9da" stroke-width="34" stroke-linecap="round"/>
+    </g>
+    <path d="M472 421 Q480 419 488 416" fill="none" stroke="#2a8f89" stroke-width="34" stroke-linecap="round"/>
+  </g>
+</g>
+</svg>

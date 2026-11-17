@@ -25,6 +25,6 @@ python3 assets/diagram/check.py docs/diagram.svg        # exit 0 is required; fi
 5. **Look once**, if Playwright is available: `node assets/diagram/render.mjs docs/diagram.svg --scale 2` writes light and dark PNGs; check that the focal node reads first and nothing crowds. If it is not available, do not install it: say the picture was checked but not rendered.
 6. **Report:** what it shows, anything assumed, the checker result.
 
-Need more: [style.md](style.md) (look, theme mapping), [connectors.md](connectors.md) (routes, fan-out), [icons.md](icons.md), [types/](index.md) (one page per type), [choosing.md](choosing.md).
+Need more: [style.md](style.md) (look, theme mapping), [connectors-and-icons.md](connectors-and-icons.md) (routes, fan-out, icons), [types.md](types.md) (one section per type), [choosing.md](choosing.md).
 
-If the shell cannot write into the project (a read-only sandbox), print the SVG to stdout (`node assets/diagram/make.mjs spec.json`, no output path) and save it with the Write tool; the same goes for `check.py`, which only reads.
+If the shell cannot write into the project (a read-only sandbox), keep every file inside the project, because the Write tool is refused anywhere else (not `$TMPDIR`, not the home directory). Pass the spec on stdin (`node assets/diagram/make.mjs /dev/stdin <<'EOF' ... EOF`), print the SVG to stdout (no output path), pipe it into `check.py /dev/stdin`, and save the SVG with the Write tool as `docs/diagram.svg`.

@@ -1,6 +1,6 @@
 ---
 name: tabby-docs
-description: "MUST be your first tool call, before writing anything, for any writing about the code: a README, docstrings, a tutorial, how-to, reference or explanation page, changelog or release notes, ADR, runbook, troubleshooting page, CONTRIBUTING, a commit message or PR description, or checking docs against the code. Applies even to a one-line docstring or commit message."
+description: "Load at the start for any writing about the code: a README, docstrings, a tutorial, how-to, reference or explanation page, changelog or release notes, ADR, runbook, troubleshooting page, CONTRIBUTING, a commit message or PR description, or checking docs against the code. Applies even to a one-line docstring or commit message."
 license: MIT
 ---
 
@@ -8,7 +8,14 @@ license: MIT
 
 Documentation lets a reader do or understand something without asking the author. Every sentence either moves the reader toward that or goes.
 
-Read this first for any documentation task, then the page-type leaf listed in `pages.md` (paths are relative to this skill's folder).
+Read this first for any documentation task, then the leaf for the page (paths are relative to this skill's folder):
+
+- `page-types.md`: a tutorial, how-to, reference or explanation page; a page that fits none or mixes two: `placing.md`
+- `docstrings.md`: docstrings and API reference; `code-examples.md`: code samples and shell commands
+- `readme-changelog-commits.md`: a README, a changelog or release notes, a commit message or pull request description
+- `project-docs.md`: CONTRIBUTING, an architecture decision record, a runbook, a troubleshooting page
+- `drift.md`: docs that must change with a code change; auditing docs against code
+- `voice-and-style.md`: voice, word choice and AI writing patterns, for any page
 
 ## Never miss
 
@@ -22,6 +29,6 @@ Read this first for any documentation task, then the page-type leaf listed in `p
 
 1. Outline with headings only; check each heading against the page type.
 2. Draft. Write the example first, run it, then write the prose around it.
-3. Read it as the reader would. Cut every word that carries no information, using the patterns in `ai-patterns.md` and `voice.md`; judge each one in context, because a quoted word or a technical term can stay.
+3. Read it as the reader would. Cut every word that carries no information, using the AI-pattern and editing-pass sections of `voice-and-style.md`; judge each one in context, because a quoted word or a technical term can stay.
 4. Edit pass. Delete sentences that restate the heading, summarize the page, announce what comes next, or praise the software. Check that every step is an action, every claim is specific, every link works.
 5. Report what you changed and which examples you ran, and how.

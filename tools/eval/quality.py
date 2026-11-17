@@ -8,17 +8,22 @@ directory (<trace dir>/../home/cwd) is copied to a scratch folder; evals/quality
 run with pytest (never present while the agent worked). Per run it reports the fraction of hidden tests that pass, whether
 the whole project's own suite is green, ruff errors added, extra smell-rule violations added (B, SIM, TRY, BLE, ERA, PERF, RET, C4, PLR),
 comment lines added, AST smell hits added (tools/eval/smellcheck.py), nesting depth added (deepest control-flow nesting in a function, final minus base), lines added and removed against the base commit, files touched,
-new files, new dependencies, suppressions added (noqa, type: ignore, skip, xfail), plus the run's cost and turns.
+new files, new dependencies, suppressions added (noqa, type: ignore, skip, xfail), tests weakened (a deleted test, removed assertions or a skip, found by scripts/guard.py), plus the run's cost and turns.
 No LLM judge. Needs pytest and ruff on PATH.
 """
 import argparse, ast, csv, json, os, re, shutil, subprocess, sys, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.join(HERE, "..", "..", "scripts"))
+import guard  # noqa: E402
 import smellcheck  # noqa: E402
 HIDDEN = os.path.join(HERE, "..", "..", "evals", "quality", "hidden")
 TOTALS = {"bug-fix-starts-red": 8, "batches-and-utc": 6, "bounded-fan-out-with-deadline": 5,
-          "dedupe-lines-script": 5, "import-rows-some-fail": 4, "tiny-fix-stays-tiny": 2}
+          "dedupe-lines-script": 5, "import-rows-some-fail": 4, "tiny-fix-stays-tiny": 2,
+          "type-error-no-ignore": 3, "reuse-existing-slugify": 3, "pydantic-v2-model": 3, "dry-run-flag-stays-small": 2}
+# cases whose project needs a package the scorer's pytest environment does not have
+REQUIRES = {"pydantic-v2-model": "pydantic>=2.7"}
 SUPPRESS = re.compile(r"noqa|type:\s*ignore|pytest\.mark\.(skip|xfail)|@pytest\.mark\.skip|\.skip\(|xfail")
 
 
@@ -93,6 +98,7 @@ def score_dir(case, src):
     _, diff = sh(["git", "diff", "HEAD", "-U0"], cwd)
     plus = [l[1:] for l in diff.splitlines() if l.startswith("+") and not l.startswith("+++")]
     suppress = sum(1 for l in plus if SUPPRESS.search(l))
+    weakened = sum(1 for v in guard.check_diff(diff) if "deleted;" in v or "assertion(s) removed" in v or "skip/xfail" in v)
     comments = sum(1 for l in plus if re.match(r"\s*#(?!!)", l) and not SUPPRESS.search(l))
     deps = 0
     in_deps = False
@@ -100,10 +106,11 @@ def score_dir(case, src):
         if re.match(r"\s*dependencies\s*=", l) or re.match(r'\s*"[A-Za-z0-9_.\-\[\]]+[<>=!~ ]', l) and "pytest" not in l:
             deps += 1
     shutil.copy(os.path.join(HIDDEN, case, "test_hidden.py"), os.path.join(cwd, "test_hidden.py"))
-    rc, out = sh(["pytest", "-q", "-p", "no:cacheprovider", "--tb=no", "test_hidden.py"], cwd, env)
+    pytest = ["uvx", "--with", REQUIRES[case], "pytest"] if case in REQUIRES else ["pytest"]
+    rc, out = sh(pytest + ["-q", "-p", "no:cacheprovider", "--tb=no", "test_hidden.py"], cwd, env, 300)
     hidden = passed_count(out) / TOTALS[case]
     os.remove(os.path.join(cwd, "test_hidden.py"))
-    rc2, out2 = sh(["pytest", "-q", "-p", "no:cacheprovider", "--tb=no"], cwd, env)
+    rc2, out2 = sh(pytest + ["-q", "-p", "no:cacheprovider", "--tb=no"], cwd, env, 300)
     suite_green = rc2 == 0 or "no tests ran" in out2
     def ruff_count(path, rules="E,F,B,UP"):
         _, o = sh(["ruff", "check", "--select", rules, "--ignore", "PLR2004", "--output-format", "concise", "--no-cache", "."], path)
@@ -121,7 +128,7 @@ def score_dir(case, src):
     smells_added = max(0, ruff_count(cwd, smell) - ruff_count(base, smell))
     shutil.rmtree(work, ignore_errors=True)
     return dict(hidden=round(hidden, 3), suite_green=int(suite_green), ruff=ruff_errs, added=added, removed=removed,
-                files=files, new_files=new_files, suppressions=suppress, dep_lines=deps, smells=smells_added, comments=comments, nest=nest, ast=ast_added)
+                files=files, new_files=new_files, suppressions=suppress, dep_lines=deps, smells=smells_added, comments=comments, nest=nest, ast=ast_added, weakened=weakened)
 
 
 def main():
@@ -155,7 +162,7 @@ def main():
             w.writeheader(); w.writerows(rows)
     # per-arm means
     arms = sorted({r["arm"] for r in rows})
-    keys = ["hidden", "suite_green", "ruff", "added", "removed", "files", "new_files", "suppressions", "dep_lines", "smells", "comments", "nest", "ast", "cost", "turns"]
+    keys = ["hidden", "suite_green", "ruff", "added", "removed", "files", "new_files", "suppressions", "weakened", "dep_lines", "smells", "comments", "nest", "ast", "cost", "turns"]
     print("\narm    n  " + "  ".join(f"{k:>11}" for k in keys))
     for arm in arms:
         rs = [r for r in rows if r["arm"] == arm]

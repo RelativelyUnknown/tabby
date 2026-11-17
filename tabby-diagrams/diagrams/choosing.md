@@ -6,16 +6,16 @@ A diagram answers one question a reader has about structure, order or state. Wri
 
 | The reader asks | Draw | Page |
 | --- | --- | --- |
-| What are the parts and who talks to whom? | architecture | [types/architecture.md](types/architecture.md) |
-| In what order do things happen between parts? | sequence | [types/sequence.md](types/sequence.md) |
-| What states can one thing be in, and what moves it? | state machine | [types/state.md](types/state.md) |
-| What does the data look like? | entity-relationship | [types/entity-relationship.md](types/entity-relationship.md) |
-| What are the steps, and where does it branch? | flowchart | [types/flowchart.md](types/flowchart.md) |
-| Who does each step, and where does work change hands? | swimlane | [types/swimlane.md](types/swimlane.md) |
-| Where does it run? | deployment | [types/deployment.md](types/deployment.md) |
-| What depends on what? | dependency graph | [types/dependency.md](types/dependency.md) |
-| When did or will things happen? | timeline | [types/timeline.md](types/timeline.md) |
-| What sits on what? | layer stack | [types/layers.md](types/layers.md) |
+| What are the parts and who talks to whom? | architecture | [types.md](types.md) |
+| In what order do things happen between parts? | sequence | [types.md](types.md) |
+| What states can one thing be in, and what moves it? | state machine | [types.md](types.md) |
+| What does the data look like? | entity-relationship | [types.md](types.md) |
+| What are the steps, and where does it branch? | flowchart | [types.md](types.md) |
+| Who does each step, and where does work change hands? | swimlane | [types.md](types.md) |
+| Where does it run? | deployment | [types.md](types.md) |
+| What depends on what? | dependency graph | [types.md](types.md) |
+| When did or will things happen? | timeline | [types.md](types.md) |
+| What sits on what? | layer stack | [types.md](types.md) |
 | What changed? | two pictures with identical layout, the difference in the accent | this page |
 
 One type per picture. If you need two, draw two. Read the type's page before drawing.
@@ -24,7 +24,7 @@ One type per picture. If you need two, draw two. Read the type's page before dra
 
 - At most 9 nodes, 12 connections and 2 focal nodes (`check.py` fails more). Past that, split into an overview and a detail picture.
 - Remove test, before reporting done: can a node go (would the reader still understand)? Do two nodes always travel together (merge them)? Is a connection obvious from the layout (remove the line)? Does a label repeat what colour or position already says?
-- A node is a name plus, at most, one short lowercase role. The look, tokens and roles are in [style.md](style.md); connection kinds and label rules are in [connectors.md](connectors.md); icons in [icons.md](icons.md).
+- A node is a name plus, at most, one short lowercase role. The look, tokens and roles are in [style.md](style.md); connection kinds and label rules are in [connectors-and-icons.md](connectors-and-icons.md); icons in [connectors-and-icons.md](connectors-and-icons.md).
 
 ## Build
 

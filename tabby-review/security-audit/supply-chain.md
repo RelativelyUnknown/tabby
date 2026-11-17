@@ -1,8 +1,8 @@
 # Security audit: dependencies and release
 
-A finding needs the same four parts as any other ([process.md](process.md)): a lower-trust party, something they control, the trusted installer or job that consumes it, and what they gain. A floating version or a missing best practice with no such path is a hardening note. Workflows and AI agents in CI are in [ci-workflows.md](ci-workflows.md).
+A finding needs the same four parts as any other ([process-and-reporting.md](process-and-reporting.md)): a lower-trust party, something they control, the trusted installer or job that consumes it, and what they gain. A floating version or a missing best practice with no such path is a hardening note. Workflows and AI agents in CI are in [ci-pipelines.md](ci-pipelines.md).
 
-Read with [dependencies.md](../../tabby/development/dependencies/dependencies.md), which covers vetting and scanning packages. Registry settings, branch protection and environment rules are not in the repository, so a finding that depends on them is `needs validation`.
+Read with [choosing-dependencies.md](../../tabby/development/dependencies/choosing-dependencies.md), which covers vetting and scanning packages. Registry settings, branch protection and environment rules are not in the repository, so a finding that depends on them is `needs validation`.
 
 ## Measure, do not recall
 
@@ -10,9 +10,9 @@ Every figure about someone else's project (how many maintainers, downloads, last
 
 ## Where packages come from
 
-- Two indexes configured without pinning each package to one: a name that exists on the private index can be supplied by the public one. In uv, the private index needs `explicit = true` and the package an entry under `[tool.uv.sources]` ([uv.md](../../tabby/development/dependencies/uv.md)); `--extra-index-url` with pip has no such protection.
+- Two indexes configured without pinning each package to one: a name that exists on the private index can be supplied by the public one. In uv, the private index needs `explicit = true` and the package an entry under `[tool.uv.sources]` ([uv-workflows-ci-docker.md](../../tabby/development/dependencies/uv-workflows-ci-docker.md)); `--extra-index-url` with pip has no such protection.
 - An internal package name that is not registered on PyPI and is installed anywhere without a pinned index.
-- A dependency name one typo away from a popular package, or one the repository's history shows was added by an agent or a paste without the check in `dependencies.md`.
+- A dependency name one typo away from a popular package, or one the repository's history shows was added by an agent or a paste without the check in `choosing-dependencies.md`.
 - An install that does not use the lock (`pip install` in CI beside a committed `uv.lock`, `--frozen` where `--locked` was meant).
 - Build inputs that can change without review: a Git dependency on a branch, a `curl | sh`, a downloaded tool with no checksum, a checksum fetched from the same place as the file.
 
@@ -32,10 +32,10 @@ Wrongly dismissing: "only in debug mode" (check production), "needs local access
 
 ## Release
 
-- Publishing with a stored API token where trusted publishing is possible, or `id-token: write` granted to more than the publish job ([release.md](../../tabby/development/library/shared/release.md)).
+- Publishing with a stored API token where trusted publishing is possible, or `id-token: write` granted to more than the publish job ([release-process.md](../../tabby/development/library/shared/release-process.md)).
 - The published artifact is rebuilt in the publish job instead of being the one that was tested: build once, upload the artifact, publish that file.
 - A release triggered by any tag from any branch, with no environment protection, on a repository where many people can push tags.
 - Secrets, `.env` files, test fixtures or local configuration inside the sdist or wheel: list the archive (`unzip -l dist/*.whl`, `tar tf dist/*.tar.gz`) and read it.
 - Generated files committed without the command that regenerates them, so a reviewer cannot tell an edited file from a generated one.
 
-Report as in [reporting.md](reporting.md).
+Report as in [process-and-reporting.md](process-and-reporting.md).

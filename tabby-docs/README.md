@@ -1,25 +1,24 @@
 # documentation
 
-A skill of the Tabby plugin for writing and editing software documentation by what the reader needs: Diátaxis page types plus history, operations, troubleshooting and governance pages, concise style, runnable examples, and no AI filler.
+A skill of the Tabby plugin for writing and editing software documentation by what the reader needs: Diátaxis page types plus decision, operations, troubleshooting and contributing pages, concise style, runnable examples, and no AI filler.
 
-**Entry point:** [`SKILL.md`](SKILL.md), about 540 tokens: the never-miss rules and a workflow that ends in an edit pass for filler. [`pages.md`](pages.md) lists the page-type leaves.
+**Entry point:** [`SKILL.md`](SKILL.md), about 540 tokens: the never-miss rules and a workflow that ends in an edit pass for filler. It routes to the nine pages below.
 
 ## Layout
 
 ```
-SKILL.md                             rules and workflow
-pages.md                              the page-type leaves, by reader need
-tutorial.md  how-to.md  reference.md  explanation.md         the four reader needs
-docstrings.md  readme.md  changelog.md  placing.md           where and in what form
-commits.md  drift.md                                         commit messages; docs in step with code
-voice.md  style.md  concision.md  ai-patterns.md  code-examples.md
-history/        adr.md                                       decisions and rationale
-operations/     runbook.md                                   incident and setup steps
-troubleshooting/  symptom-fix-matrix.md                      fast fault isolation
-governance/     contributing.md                              rules for collaborators
+SKILL.md                       rules, workflow and the routing to each page
+page-types.md                  tutorial, how-to, reference, explanation
+placing.md                     a page that fits no type or mixes two
+docstrings.md                  docstrings and API reference
+code-examples.md               code samples and shell commands
+readme-changelog-commits.md    README, changelog and release notes, commit messages and PR descriptions
+project-docs.md                CONTRIBUTING, decision records, runbooks, troubleshooting by exact message
+drift.md                       docs in step with code
+voice-and-style.md             voice, word choice, editing pass, AI writing patterns
 ```
 
-Docstring content rules (no conversation residue, no restated signatures) live in [`../tabby/development/code/comments.md`](../tabby/development/code/comments.md).
+Docstring content rules (no conversation residue, no restated signatures) live in [`../tabby/development/code/minimalism-reuse-names.md`](../tabby/development/code/minimalism-reuse-names.md).
 
 ## Evals
 

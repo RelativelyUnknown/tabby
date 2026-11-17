@@ -1,6 +1,6 @@
 # Reviewing a native extension boundary (Rust, C, C++ with Python)
 
-Use with `security-audit/process.md` when the change crosses between Python and native code. A finding needs a concrete input or call sequence; no case, no finding. Static reading is enough to report `needs-validation`; `confirmed` needs a run (a failing test, a sanitizer trace, a crash).
+Use with `security-audit/process-and-reporting.md` when the change crosses between Python and native code. A finding needs a concrete input or call sequence; no case, no finding. Static reading is enough to report `needs-validation`; `confirmed` needs a run (a failing test, a sanitizer trace, a crash).
 
 ## 1. Build the boundary table first
 
@@ -72,4 +72,4 @@ For each size, index or length that crosses from Python, count the sites that us
 
 ## Report
 
-Use the confirmed / needs-validation / rejected split from `security-audit/reporting.md`. For each finding: where (`file:line`), the rule broken, the failing input or call, the smallest fix, and the regression test. Say which of the sanitizer, Miri or test runs you did not perform.
+Use the confirmed / needs-validation / rejected split from `security-audit/process-and-reporting.md`. For each finding: where (`file:line`), the rule broken, the failing input or call, the smallest fix, and the regression test. Say which of the sanitizer, Miri or test runs you did not perform.

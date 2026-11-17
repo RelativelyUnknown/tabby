@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: concise-loops-stay-readable
+expected_outcome: |
+  The summary uses plain standard idioms (sum, max with a default, a defaultdict or Counter) instead of hand-written loops and flags, and does not golf into nested comprehensions, walrus or a conditional chain.
+context:
+  scaffold_script: fixture.sh

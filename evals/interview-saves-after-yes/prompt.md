@@ -5,7 +5,9 @@ timeout_seconds: 900
 allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash]
 ---
 
-Run the Tabby interview for this project. We have already done it: you asked three questions and I answered them.
+/tabby:interview
+
+We have already done the interview for this project: you asked three questions and I answered them.
 
 My answers: reportkit is used by the finance team every Monday, success is that the weekly report never has wrong totals, it may later gain a Rust hot path for the table rendering, and anything about authentication or real-time updates is out of scope.
 

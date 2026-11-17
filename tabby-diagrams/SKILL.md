@@ -1,6 +1,6 @@
 ---
 name: tabby-diagrams
-description: "MUST be your first tool call, before drawing, for any picture of how a system works, as SVG or animated HTML: a diagram, flowchart, picture or layout of architecture, flow, sequence, state, entity-relationship (database tables), deployment (Kubernetes, AWS), data flow, module dependencies, or an explainer animation. It holds the builder and the checkers. Not for web pages or dashboards (tabby-frontend)."
+description: "Load at the start for any picture of how a system works, as SVG or animated HTML: a diagram, flowchart or layout of architecture, flow, sequence, state, entity-relationship (database tables), deployment (Kubernetes, AWS), data flow, module dependencies, or an explainer animation. It holds the builder and the checkers. Not for web pages or dashboards (tabby-frontend)."
 license: MIT
 ---
 
@@ -10,7 +10,7 @@ Say one thing per picture. Delete a node or a line when the picture still works 
 
 - **A diagram:** read `diagrams/quickstart.md` and follow it.
 - **An animation:** read `animation/quickstart.md` and follow it.
-- **Only when a check finding or an unusual request needs it:** `diagrams/style.md` (look, tokens, the `design.md` mapping), `diagrams/connectors.md`, `diagrams/icons.md`, `diagrams/types/` (one page per type), `animation/motion.md`, `animation/pipeline.md`, `animation/formats.md` (video, only if asked).
+- **Only when a check finding or an unusual request needs it:** `diagrams/style.md` (look, tokens, the `design.md` mapping), `diagrams/connectors-and-icons.md`, `diagrams/types.md` (one section per type), `animation/motion.md`, `animation/pipeline-and-formats.md` (video, only if asked).
 
 Never miss:
 

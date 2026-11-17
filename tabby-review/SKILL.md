@@ -1,6 +1,6 @@
 ---
 name: tabby-review
-description: "MUST be your first tool call, before reading files or giving any finding, when asked to review: a diff, branch or pull request ('is this PR ready', 'look over my changes'), audit a repository, security-audit code, dependencies, CI workflows or a release, hunt for bugs or implicit state machines, or check a diagram, animation or page before it ships."
+description: "Load at the start when asked to review: a diff, branch or pull request ('is this PR ready', 'look over my changes'), audit a repository, security-audit code, dependencies, CI workflows or a release, hunt for bugs or implicit state machines, or check a diagram, animation or page before it ships. It holds the review method and the checklists."
 license: MIT
 ---
 
@@ -9,10 +9,10 @@ license: MIT
 Defaults: read the `## Python defaults` section of AGENTS.md; its `report` value sets the format. Paths below are relative to this skill's folder; `../tabby/` is the tabby skill (the rules and smells files that a review checks against).
 
 - A diff, branch or pull request someone asks you to review: read `changes/self-review.md` and follow it.
-- Hunting for bugs ("find bugs in", "what could break", "why might this fail"): read `bug-hunt.md` and `two-places-agree.md` (a rule enforced in one place, the value used in another); they apply to a diff review and a repo audit too.
+- Hunting for bugs ("find bugs in", "what could break", "why might this fail"): read `bug-hunt.md` (it includes checks enforced in one place and used in another, and Python traps worth probing); it applies to a diff review and a repo audit too.
 - Implicit state machines ("find the state machines", a `status` or `state` field, flags that travel together, a required call order): read `state-machines.md`.
 - A change that crosses between Python and Rust, C or C++: also read `native-boundary.md`.
-- A security audit: read `security-audit/process.md`, open every page its "Read next" table points to for what the code shows, and `security-audit/reporting.md`. Dependencies or the release path: also `security-audit/supply-chain.md`; CI workflows: `security-audit/ci-workflows.md`, plus `ci-agents.md` when a step runs an AI agent.
+- A security audit: read `security-audit/process-and-reporting.md` (process, then reporting) and open every page its "Read next" table points to for what the code shows. Dependencies or the release path: also `security-audit/supply-chain.md`; CI workflows: `security-audit/ci-pipelines.md` (its second section covers a step that runs an AI agent).
 - The whole repository (not a diff): read `repo-audit.md`.
 - A diagram, an animation, a page or a README picture: read `design.md` instead.
 
