@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My 2026 on repeat</title>
+<meta property="og:title" content="My 2026 on repeat">
+<meta property="og:description" content="1 hours listened. Top artist: Queen.">
+<style>
+  :root { --bg:#120b24; --fg:#fff; --muted:#b9aee0; --accent:#b6ff5c; --card:#1d1238; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; display:grid; place-items:center; padding:16px;
+    background:var(--bg); color:var(--fg);
+    font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .card { width:100%; max-width:420px; padding:32px 24px; border-radius:28px;
+    background:linear-gradient(160deg,#4b1d95 0%,#1d1238 55%,#0e2a3a 100%); }
+  .year { color:var(--accent); font-weight:800; letter-spacing:.12em; text-transform:uppercase; font-size:13px; }
+  h1 { margin:6px 0 20px; font-size:34px; line-height:1.1; }
+  .hours { background:var(--card); border-radius:18px; padding:18px; margin-bottom:24px; }
+  .hours b { display:block; font-size:52px; line-height:1; color:var(--accent); }
+  .hours span { color:var(--muted); }
+  h2 { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:22px 0 8px; }
+  ol { margin:0; padding:0; list-style:none; }
+  li { display:flex; gap:12px; align-items:baseline; padding:7px 0; border-bottom:1px solid #ffffff14; }
+  li i { font-style:normal; font-weight:800; color:var(--accent); width:1.2em; }
+  li div { flex:1; min-width:0; overflow-wrap:anywhere; }
+  li small { display:block; color:var(--muted); }
+  li em { font-style:normal; color:var(--muted); font-size:13px; white-space:nowrap; }
+  button { margin-top:26px; width:100%; padding:14px; border:0; border-radius:999px; cursor:pointer;
+    background:var(--accent); color:#120b24; font:700 16px inherit; font-family:inherit; }
+  .brand { margin-top:18px; text-align:center; color:var(--muted); font-size:12px; }
+  @media print { button { display:none; } }
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="year">2026 wrapped</div>
+  <h1>My year on repeat</h1>
+  <div class="hours"><b>1</b><span>hours listened</span></div>
+  <h2>Top artists</h2>
+  <ol><li><i>1</i><div>Queen</div><em>6 plays</em></li><li><i>2</i><div>The Weeknd</div><em>5 plays</em></li><li><i>3</i><div>Sabrina Carpenter</div><em>3 plays</em></li><li><i>4</i><div>Lady Gaga</div><em>2 plays</em></li><li><i>5</i><div>Beyoncé</div><em>2 plays</em></li></ol>
+  <h2>Top songs</h2>
+  <ol><li><i>1</i><div>Blinding Lights<small>The Weeknd</small></div><em>5 plays</em></li><li><i>2</i><div>Die With A Smile<small>Lady Gaga &amp; Bruno Mars</small></div><em>4 plays</em></li><li><i>3</i><div>Don&#x27;t Stop Me Now - Live at Wembley 1986 Remaster<small>Queen</small></div><em>3 plays</em></li><li><i>4</i><div>Don’t Stop Me Now<small>Queen</small></div><em>3 plays</em></li><li><i>5</i><div>TEXAS HOLD &#x27;EM<small>Beyoncé</small></div><em>2 plays</em></li></ol>
+  <button id="share" type="button">Share</button>
+  <div class="brand">made with onrepeat</div>
+</main>
+<script>
+  const text = "My 2026 on repeat \ud83c\udfa7\n1 hours listened\n\nTop artists\n1. Queen\n2. The Weeknd\n3. Sabrina Carpenter\n4. Lady Gaga\n5. Beyonc\u00e9\n\nTop songs\n1. Blinding Lights - The Weeknd\n2. Die With A Smile - Lady Gaga & Bruno Mars\n3. Don't Stop Me Now - Live at Wembley 1986 Remaster - Queen\n4. Don\u2019t Stop Me Now - Queen\n5. TEXAS HOLD 'EM - Beyonc\u00e9";
+  const btn = document.getElementById("share");
+  btn.addEventListener("click", async () => {
+    try {
+      if (navigator.share) { await navigator.share({ title: document.title, text }); }
+      else { await navigator.clipboard.writeText(text); btn.textContent = "Copied!"; }
+    } catch (e) { /* user cancelled or clipboard blocked */ }
+  });
+</script>
+</body>
+</html>
