@@ -13,6 +13,16 @@ Guard it when all four hold:
 
 Otherwise name it in the final message ("an export in another encoding would stop it with a clear error") and move on. A guard that needs a design, a flag and a config file is a feature: ask first.
 
+## For each failure that can reach the code
+
+Decide one of three things, and prove the first two with a run:
+
+- **Handle it:** a code path gives the right result.
+- **Reject it loudly:** a specific error, a non-zero exit or a 4xx, and you know what the caller sees. Never a success-shaped result with bad contents.
+- **Note it:** you leave it unhandled on purpose, and the final message says so.
+
+"Handled" without an observed run is a claim, not a result. For an input the code cannot receive, state the invariant that excludes it instead of adding a guard.
+
 ## The usual suspects
 
 | Input | What goes wrong | Guard now | A package, when the guard is not enough |
@@ -30,8 +40,31 @@ Otherwise name it in the final message ("an export in another encoding would sto
 | HTTP replies | an HTML error page where JSON was promised; 429; redirects; no timeout | `timeout=`, `raise_for_status()`, check `Content-Type` before `.json()` | `tenacity` for retries with backoff ([retries-timeouts-circuit-breakers.md](../application/shared/retries-timeouts-circuit-breakers.md)) |
 | JSON from outside | `NaN`; huge integers; the wrong shape | validate the shape at the boundary | `pydantic` for shapes; `orjson` for speed |
 | Email, URL, phone | a regex that rejects real ones | `urllib.parse`, `email.utils.parseaddr` | `email-validator`, `phonenumbers` |
-| A job that runs twice or stops halfway | a half-written file; double inserts | write a temp file and `os.replace`; make the write idempotent | `filelock` for one-at-a-time |
-| Tests that depend on the clock or network | flaky on a different day | pass the clock in; no network in unit tests | `time-machine` or `freezegun` |
+| | Tests that depend on the clock or network | flaky on a different day | pass the clock in; no network in unit tests | `time-machine` or `freezegun` |
+
+### Values and shapes
+
+| Input | What goes wrong | Guard now | A package, when the guard is not enough |
+| --- | --- | --- | --- |
+| Absent against empty | `value or default` replaces a valid `0`, `False` or `""`; `.get()` and `.first()` results used unchecked | `if value is None`; decide what a missing key means and fail where it is missing | |
+| Boundaries | off by one at 0, -1, the limit and limit + 1; one element; the first and last | one test at each edge for any limit, slice or range you write | `hypothesis` finds the edges you did not think of |
+| Duplicates and order | a key you assumed unique; input you assumed sorted | `dict.fromkeys` to dedupe in order; `sorted(...)` before relying on order; fail on a duplicate key | |
+| Text with surprises | a newline or `;` inside a field; emoji; right-to-left text; a name with one word or three | let `csv` quote; store a name as one string, never split on spaces | `nameparser` only if you must split; `pycountry` for country and currency codes |
+| Used-up iterators | a generator, file or cursor read once, then reused and now empty | materialize it on purpose (`list(...)`) or open it again | |
+| Mutable defaults and shared state | a `[]` or `{}` default, or a class attribute, shared by every call | `None` and create inside; `field(default_factory=list)` | |
+| Very large or very small numbers | `float` `nan` and `inf` compare unequal to themselves; huge integers; a percentage over 100 | `math.isfinite` at the boundary; check ranges the code assumes | |
+
+### State, time and the environment
+
+| Situation | What goes wrong | Guard now | A package, when the guard is not enough |
+| --- | --- | --- | --- |
+| Run twice, retried, or stopped halfway | duplicate rows or emails; a half-written file | write a temp file then `os.replace`; make the write idempotent (a key, an upsert) | `filelock` for one-at-a-time |
+| Check, then act | the file changed or the record vanished between the check and the use | do the action and handle the error (EAFP): `try: open(...)`, not `if exists(): open(...)` | |
+| Month ends and calendars | Jan 31 plus a month; Feb 29; DST gaps; a "month" bucket cut at server local time | `calendar.monthrange` to clamp the day; bucket by the date in the user's zone | `python-dateutil` (`relativedelta`) |
+| Line endings | `\r\n` left on the last field; a script saved with CRLF | `newline=""` for CSV; `.splitlines()` over `.split("\n")` | |
+| The other side is down or odd | a timeout, a 500, a reply that is valid JSON of the wrong shape | a timeout, a clear error for the caller, a check of the shape | `pydantic`, `tenacity` |
+| Permissions, a full disk, a cut network | a raw `OSError` traceback; a truncated output file | catch `OSError` around the one call, name the path, leave no partial output | |
+| Environment and locale | a missing environment variable; a locale that changes number or date formats | read settings once at startup and fail with the variable's name; format with explicit patterns, not the locale | `pydantic-settings` |
 
 Add a row's guard only when its input applies to this code.
 

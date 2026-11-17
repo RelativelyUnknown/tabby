@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: month-end-billing-date
+expected_outcome: |
+  Adds months to a date without crashing on the 31st, tests the month-end and leap-year edges, and says what it did for a day that does not exist.
+context:
+  scaffold_script: fixture.sh

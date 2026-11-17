@@ -149,3 +149,9 @@ Ideas only, restated in Tabby's words; nothing vendored and no text copied. Shal
 - NumPy and pandas: C error paths, overflow-checked sizes, `Python.h` first, banned borrowed-reference calls, and the sanitizer and `-Werror` CI split (`.github/workflows`, `tools/ci/check_c_api_usage.py`, `tools/check_python_h_first.py`). Adopted in `library/native/native-c.md` and `native-ci-wheels.md`.
 - Linux: `coding-style.rst`, `deprecated.rst`, and the dev-tools pages (goto cleanup, return conventions, no `strcpy` or VLAs), and `coding-assistants.rst` and `generated-content.rst` (disclosure; only a human certifies sign-off). Adopted in `native-c.md` and `tabby-docs/commits.md`.
 - Ghostty: terminal-state, renderer and build studies informed the data-layout bullets in `native-extension-architecture.md` (offsets instead of pointers, zero as a valid empty state, hard capacity, a generation number on handles).
+
+## Foreseeable-failures checklist (17 November 2026)
+
+- `adamentwistle/fable-skills`, skill `edge-case-sweep` (MIT, copyright 2026 Adam Entwistle). Adapted into `tabby/development/code/foreseeable-failures.md`: the three outcomes for each failure (handle, reject loudly, note), the rule that "handled" needs an observed run, the rule not to guard inputs the code cannot receive, and the checklist families (absent against empty, boundaries, duplicates, called twice or concurrently, stale state, time, a dependency failing). Rewritten in Tabby's words and joined to Python-specific guards and packages.
+- `getsentry/warden`, `code-review/references/python.md` (Functional Source License): read for ideas only, no text copied. It confirmed the patterns "falsey fallback", "used-up iterator" and "mutable default" as high-signal.
+- Read, nothing taken: `olshansk/agent-skills` `cmd-pr-edgecase` (a PR review procedure, not a guard list), `wshobson` `python-anti-patterns` (already covered by `code-smells.md`).
