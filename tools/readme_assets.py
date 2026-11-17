@@ -14,10 +14,10 @@ OUT = pathlib.Path(__file__).resolve().parents[1] / "assets"
 RESULTS = {"without": 0.812, "with": 0.902, "gain_headroom": "+0.141", "better": 34, "worse": 6, "same": 72, "cases": 112}
 
 THEMES = {
-    "light": {"bg": "#fffaf3", "ink": "#16110d", "muted": "#7a6a5a", "whisker": "#5a4636", "panel": "#f6ead9", "line": "#e5d3bb", "bar_off": "#c9b9a4"},
-    "dark": {"bg": "#17120d", "ink": "#f4e9da", "muted": "#a8978a", "whisker": "#e9dccb", "panel": "#241c14", "line": "#3a2d20", "bar_off": "#6a5a4a"},
+    "light": {"bg": "#fbf8ff", "ink": "#1d1530", "muted": "#6f6485", "whisker": "#5a4f6e", "panel": "#f4effb", "line": "#e3d9f3", "bar_off": "#bfb3d6"},
+    "dark": {"bg": "#130f1b", "ink": "#efe8fb", "muted": "#a99fbd", "whisker": "#ddd3ee", "panel": "#1a1524", "line": "#2e2640", "bar_off": "#5e5378"},
 }
-FUR, FUR_DARK, TEAL = "#e8903a", "#b3541a", "#2a8f89"
+FUR, FUR_DARK, TEAL = "#e78fb7", "#b9497e", "#7c5cd6"
 
 STYLE = ""
 

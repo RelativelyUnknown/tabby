@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   The README hero: a seamless 6-second loop. In a terminal, someone types `cat`; an ASCII cat prints, swishes its tail,
-  blinks and says "meow"; then `clear` and back to an empty prompt. Every frame is a pure function of time:
+  blinks, says "meow", washes its face; then `clear` and back to an empty prompt. Every frame is a pure function of time:
   window.render(t) draws the frame at t seconds; build.mjs steps t and records frames. ?theme=dark, ?logo=1 (a tile).
 -->
 <html><head><meta charset="utf-8">
@@ -18,10 +18,10 @@ const DARK = Q.get("theme") === "dark", LOGO = Q.get("logo") === "1";
 const SCALE = Number(Q.get("scale") || 1.5);
 const W = LOGO ? 360 : 1280, H = 360;
 const C = DARK
-  ? { panel: "#1f1812", line: "#2c2219", ink: "#f2e7d8", muted: "#ab9a8b" }
-  : { panel: "#f7ecdd", line: "#ecdcc6", ink: "#17120e", muted: "#7a6a5a" };
-const TERM = { bg: "#15110d", bar: "#221b14", text: "#efe4d4", dim: "#8c7d6e", cat: "#f0973f" };
-const TEAL = "#2fa59e";
+  ? { panel: "#1a1524", line: "#241d31", ink: "#efe8fb", muted: "#a99fbd" }
+  : { panel: "#f4effb", line: "#e8def6", ink: "#1d1530", muted: "#6f6485" };
+const TERM = { bg: "#16121f", bar: "#221b2e", text: "#ece6f6", dim: "#8a80a0", cat: "#f7a8cb" };
+const TEAL = "#8b6cf0";   // the accent: violet (prompt, pills, sparkles)
 window.DUR = 6;
 
 const cv = document.getElementById("c");
@@ -35,17 +35,24 @@ const between = (t, a, b) => t >= a && t < b;
 // ---------- the script: what the terminal shows at time t ----------
 const CMD1 = "cat", CMD2 = "clear";
 const typed = (cmd, t, t0, step) => cmd.slice(0, clamp(Math.floor((t - t0) / step) + 1, 0, cmd.length) * (t >= t0 ? 1 : 0));
-const T_ENTER1 = 1.1, T_CLEAR0 = 4.75, T_ENTER2 = 5.35;
+const T_ENTER1 = 1.1, T_CLEAR0 = 4.95, T_ENTER2 = 5.5;
 
 function catLines(t) {
   // the ASCII cat, with its frame variants
-  const blink = between(t, 2.1, 2.22) || between(t, 4.3, 4.42);
-  const happy = between(t, 2.45, 3.75);
-  const eyes = blink ? "-.-" : happy ? "^.^" : "o.o";
-  const ears = between(t, 3.95, 4.1) || between(t, 4.16, 4.24) ? "/\\_/|" : "/\\_/\\";
+  const clean = between(t, 3.6, 4.55);                    // it washes: licks its paw, then rubs its ear twice
+  const blink = between(t, 2.1, 2.22) || between(t, 4.62, 4.74);
+  const happy = between(t, 2.45, 3.5);
+  const eyes = blink || clean ? "-.-" : happy ? "^.^" : "o.o";
   const swish = Math.floor(t * 4) % 2;
-  const tail = between(t, 1.6, 2.45) || between(t, 3.75, 4.75) ? (swish ? "~" : "S") : "~";
-  return [`   ${ears}`, `  ( ${eyes} )`, `   > ^ <`, `  /     \\`, ` (| | | |)${tail}`];
+  const tail = between(t, 1.6, 2.45) || between(t, 4.55, 4.95) ? (swish ? "~" : "S") : "~";
+  const body = ` (| | | |)${tail}`;
+  if (clean) {
+    const k = t < 3.85 ? 0 : 1 + Math.floor((t - 3.85) / .18) % 2;   // 0 lick, then 1/2 alternate (rubbing)
+    if (k === 0) return ["   /\\_/\\", `  ( ${eyes} )`, "   > ^ <o", "  /     |", body];
+    if (k === 1) return ["   /\\_/\\", `  ( ${eyes} )o`, "   > ^ </", "  /     |", body];
+    return ["   /\\_/\\o", `  ( ${eyes} )/`, "   > ^ <", "  /     |", body];
+  }
+  return ["   /\\_/\\", `  ( ${eyes} )`, "   > ^ <", "  /     \\", body];
 }
 const BUBBLE = [" .------.", "<  ", " '------'"];
 
@@ -56,13 +63,15 @@ function screen(t) {
   if (t < T_ENTER1) { rows.push(prompt(typed(CMD1, t, .5, .17))); return { rows, cursorRow: 0, typing: t >= .5 }; }
   if (t >= T_ENTER2) { rows.push(prompt("")); return { rows, cursorRow: 0, typing: false }; }
   rows.push(prompt(CMD1));
+  const sparkle = between(t, 4.55, 4.95);   // all clean
   const cat = catLines(t), shown = Math.floor((t - 1.2) / .1) + 1;
-  const talk = between(t, 2.45, 4.5), word = "meow".slice(0, clamp(Math.floor((t - 2.6) / .12) + 1, 0, 4));
+  const talk = between(t, 2.45, 3.5), word = "meow".slice(0, clamp(Math.floor((t - 2.6) / .12) + 1, 0, 4));
   for (let i = 0; i < 5; i++) {
     if (i >= shown) break;
     const row = [[cat[i].padEnd(13), TERM.cat]];
     if (talk && i < 3) row.push(i === 1 ? [BUBBLE[1], TERM.text] : [BUBBLE[i], TERM.text]);
     if (talk && i === 1) row.push([word.padEnd(4), TERM.text, true], [" |", TERM.text]);
+    if (sparkle && [0, 2, 4].includes(i)) row.push([["  *", " +", "   *"][i / 2], TEAL, true]);
     rows.push(row);
   }
   const done = t >= 1.75;
@@ -80,11 +89,6 @@ function drawTerminal(g, t, x, y, w, h, size) {
   g.fillStyle = TERM.bar; g.fillRect(x, y, w, 38);
   [["#ff5f57", 0], ["#febc2e", 1], ["#28c840", 2]].forEach(([c, i]) => { g.fillStyle = c; g.beginPath(); g.arc(x + 22 + i * 20, y + 19, 6.5, 0, Math.PI * 2); g.fill(); });
   g.fillStyle = TERM.dim; g.font = `500 15px JBMono`; g.textAlign = "center"; g.fillText("~/tabby", x + w / 2, y + 24);
-  // a Tamagotchi mood meter: the third heart fills when the cat says meow, and empties again with clear
-  const full = t >= 3.0 && t < T_ENTER2 ? 3 : 2;
-  g.textAlign = "right"; g.font = `700 17px JBMono`;
-  g.fillStyle = TERM.dim; g.fillText("mood", x + w - 84, y + 25);
-  for (let i = 0; i < 3; i++) { g.fillStyle = i < full ? "#e5534b" : "#4a3d31"; g.fillText("\u2665", x + w - 62 + i * 20, y + 25); }
   g.textAlign = "left";
 
   const { rows, cursorRow, typing } = screen(t);
@@ -108,13 +112,13 @@ function drawTerminal(g, t, x, y, w, h, size) {
 
 function drawText(g) {
   const x0 = 690;
-  g.fillStyle = C.ink; g.font = "700 132px Fredoka"; g.fillText("Tabby", x0, 200);
-  g.fillStyle = C.muted; g.font = "500 31px Fredoka"; g.fillText("Agent skills for careful Python.", x0 + 4, 250);
+  g.fillStyle = C.ink; g.font = "700 124px Fredoka"; g.fillText("Tabby", x0, 168);   // the y descender clears the tagline
+  g.fillStyle = C.muted; g.font = "500 31px Fredoka"; g.fillText("Agent skills for careful Python.", x0 + 4, 240);
   g.font = "500 21px Fredoka"; let px = x0 + 4;
   for (const label of ["cause before fix", "small diffs", "tests stay green"]) {
     const w = g.measureText(label).width + 34;
-    g.fillStyle = TEAL; g.beginPath(); g.roundRect(px, 276, w, 40, 20); g.fill();
-    g.fillStyle = "#fff"; g.fillText(label, px + 17, 303); px += w + 12;
+    g.fillStyle = TEAL; g.beginPath(); g.roundRect(px, 266, w, 40, 20); g.fill();
+    g.fillStyle = "#fff"; g.fillText(label, px + 17, 293); px += w + 12;
   }
 }
 

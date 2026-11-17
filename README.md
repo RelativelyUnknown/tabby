@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-terminal-dark.webp">
-    <img src="assets/tabby-terminal-light.webp" width="880" alt="Tabby: agent skills for careful Python. In a terminal someone types cat, an ASCII cat prints, blinks, swishes its tail and says meow, then the screen clears.">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-meow-dark.webp">
+    <img src="assets/tabby-meow-light.webp" width="880" alt="Tabby: agent skills for careful Python. In a terminal someone types cat, an ASCII cat prints, blinks, swishes its tail and says meow, then the screen clears.">
   </picture>
 </p>
 
@@ -9,11 +9,11 @@
 Finds the cause before the fix. Reuses before it writes. Keeps the diff small. Never edits a test to get green.</p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Claude%20Code-plugin-2a8f89?style=flat-square" alt="Claude Code plugin">
-  <img src="https://img.shields.io/badge/OpenCode-skills-2a8f89?style=flat-square" alt="OpenCode skills">
-  <img src="https://img.shields.io/badge/GitHub%20Copilot-skills-2a8f89?style=flat-square" alt="GitHub Copilot skills">
-  <img src="https://img.shields.io/badge/Python%20%2B%20Rust%2C%20C%2C%20C%2B%2B%2C%20Zig-2a8f89?style=flat-square" alt="Python, with Rust, C, C++ and Zig behind it">
-  <img src="https://img.shields.io/badge/license-MIT-2a8f89?style=flat-square" alt="MIT licence">
+  <img src="https://img.shields.io/badge/Claude%20Code-plugin-7c5cd6?style=flat-square" alt="Claude Code plugin">
+  <img src="https://img.shields.io/badge/OpenCode-skills-7c5cd6?style=flat-square" alt="OpenCode skills">
+  <img src="https://img.shields.io/badge/GitHub%20Copilot-skills-7c5cd6?style=flat-square" alt="GitHub Copilot skills">
+  <img src="https://img.shields.io/badge/Python%20%2B%20Rust%2C%20C%2C%20C%2B%2B%2C%20Zig-7c5cd6?style=flat-square" alt="Python, with Rust, C, C++ and Zig behind it">
+  <img src="https://img.shields.io/badge/license-MIT-7c5cd6?style=flat-square" alt="MIT licence">
 </p>
 
 <p align="center">
