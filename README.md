@@ -119,7 +119,7 @@ Five skills load on their own when the request matches, and four commands you ru
 | [`tabby-docs`](tabby-docs/) | write a README, docstrings, a tutorial, a changelog, an ADR or a runbook | One page type per reader need, and a check of the docs against the code |
 | [`tabby-diagrams`](tabby-diagrams/) | ask for a diagram, an architecture picture or an animation | A builder that turns a small spec into an SVG or an HTML animation, and checkers for crowded labels, contrast and loop jumps |
 | [`tabby-frontend`](tabby-frontend/) | build a page, dashboard, data app or docs site | A method, design tokens, a list of things it refuses to ship, and `ui-check` for contrast, focus, motion and layout |
-| [`tabby-debt`](tabby-debt/) | `/tabby:tabby-debt` | A ledger of the `# shortcut: <limit>, <trigger>` comments in the repository, with the ones that name no trigger flagged |
+| [`tabby-debt`](tabby-debt/) | run `/tabby:tabby-debt` | Lists every `# shortcut: <limit>, <when to upgrade>` comment (the simplifications the agent left on purpose) as one table, flags the ones that name no trigger to revisit, and exits 1 in CI with `--check` |
 | [`interview`](interview/) | run `/tabby:interview` | Researches the repository read-only, asks at most three questions a round, and saves a `## Tabby` section to `AGENTS.md` |
 | [`voice`](voice/) | run `/tabby:voice terse\|explain\|auto` | Sets whether replies are terse and technical, or explain how the change works in plain words; the default picks from what you say |
 | [`hooks`](hooks/) | run `/tabby:hooks off\|lite\|full` | Turns the quality-gate hooks (Claude Code) off, on or to the light mode |
