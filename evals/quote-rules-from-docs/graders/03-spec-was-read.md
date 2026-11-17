@@ -1,9 +1,7 @@
 ---
-type: tool_used
-tool: Read
-input_match: "pricing\\.md"
-min: 1
+type: llm
+focus: trace
 weight: 1
 ---
 
-docs/pricing.md was read before the rule was written
+PASS if the trace shows docs/pricing.md was read before the rule was written, with any tool (the Read tool, or `cat` or similar in Bash). FAIL if the agent wrote the function without opening it.
