@@ -18,6 +18,7 @@ Run `python3 scripts/detect.py` from this skill's folder (the harness names the 
 - Never edit, delete, skip or loosen an existing test to get green. A test that contradicts the spec: leave it, finish the rest, report it.
 - A bug, failing or flaky test, red CI, crash or wrong output: read `development/workflow/debugging.md` before the first edit.
 - Code that takes a URL, a file path or name, an upload, SQL or shell input, a password or token, or handles a secret: read `development/code/input-and-secrets-security.md` before the first edit.
+- Code that decides something (a permission or eligibility rule, a price, discount or fee, a parser, a state transition) and its tests: read `development/testing/proof-based-testing.md` before writing the tests. State what must be allowed and what must be refused, pin both sides of every boundary, take expected values from the spec, and break the function on purpose once to see a test fail.
 - Find the cause before the fix. No special-casing inputs, no sleeps or retries to hide a symptom. Do not silence tools (`# type: ignore`, `# noqa`, `Any`, looser config). Asked to raise a timeout, limit or retry count so a failure stops: first read what the failing code does; if it is slow or failing for a fixable reason (a query per row, a loop, a missing index), say so and fix it or offer the fix, then do what was asked.
 - A request you cannot state as one change ("make the reports better") gets one to three short questions with suggested answers before any edit. A request that names the change is done, not discussed. A feature with several readings gets a one-page spec and its first slice (`development/workflow/specs-and-slices.md`).
 - "Get rid of" a public name is a deprecation unless nothing outside this repository can use it (`development/workflow/deprecation-and-migration.md`).
@@ -42,7 +43,7 @@ Open leaves with Read at the path given; do not search for them. A one-line fix,
 - an API, queue, cache, ORM or async change: `references/growth.md` first; the final message gives the options, the choice and what stays open
 - Rust, C, C++ or Zig behind a Python API, including moving a function into one: `library/native/native-overview.md`, then the language page it names (`native-rust.md`, `native-c.md`, `native-cpp.md`, `native-zig.md`), and `library/native/native-porting-a-function.md` to move a function
 - opens files, connections, locks, subprocesses or streams: `code/files-connections-locks.md`
-- writes or changes tests: `testing/testing-basics-and-fixtures.md`, `testing/test-smells.md`; with mocks `testing/test-mocking.md`, fixtures (in `testing/testing-basics-and-fixtures.md`), property-based or release-grade `testing/test-rigor-property-and-release.md`
+- writes or changes tests: `testing/testing-basics-and-fixtures.md`, `testing/test-smells.md`; with mocks `testing/test-mocking.md`, fixtures (in `testing/testing-basics-and-fixtures.md`), property-based or release-grade `testing/test-rigor-property-and-release.md`; a rule that decides (see Never miss), a solver search or a mutation audit: `testing/proof-based-testing.md`
 - three or more outcomes, or "all"/"every": `workflow/multi-outcome-gates.md` (a short list, then start); several readings: `workflow/specs-and-slices.md`
 - removes or replaces something: `workflow/deprecation-and-migration.md`
 

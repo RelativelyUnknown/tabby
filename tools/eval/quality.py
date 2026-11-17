@@ -21,9 +21,9 @@ import smellcheck  # noqa: E402
 HIDDEN = os.path.join(HERE, "..", "..", "evals", "quality", "hidden")
 TOTALS = {"bug-fix-starts-red": 8, "batches-and-utc": 6, "bounded-fan-out-with-deadline": 5,
           "dedupe-lines-script": 5, "import-rows-some-fail": 4, "tiny-fix-stays-tiny": 2,
-          "type-error-no-ignore": 3, "reuse-existing-slugify": 3, "pydantic-v2-model": 3, "dry-run-flag-stays-small": 2}
+          "type-error-no-ignore": 3, "reuse-existing-slugify": 3, "pydantic-v2-model": 3, "dry-run-flag-stays-small": 2, "pricing-rule-laws": 20, "quote-rules-from-docs": 42}
 # cases whose project needs a package the scorer's pytest environment does not have
-REQUIRES = {"pydantic-v2-model": "pydantic>=2.7"}
+REQUIRES = {"pydantic-v2-model": "pydantic>=2.7", "pricing-rule-laws": "hypothesis>=6", "quote-rules-from-docs": "hypothesis>=6"}
 SUPPRESS = re.compile(r"noqa|type:\s*ignore|pytest\.mark\.(skip|xfail)|@pytest\.mark\.skip|\.skip\(|xfail")
 
 

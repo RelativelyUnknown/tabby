@@ -10,6 +10,7 @@ Defaults: read the `## Python defaults` section of AGENTS.md; its `report` value
 
 - A diff, branch or pull request someone asks you to review: read `changes/self-review.md` and follow it.
 - Hunting for bugs ("find bugs in", "what could break", "why might this fail"): read `bug-hunt.md` (it includes checks enforced in one place and used in another, and Python traps worth probing); it applies to a diff review and a repo audit too.
+- A diff that changes decision logic (permissions, eligibility, pricing, parsing) or adds or edits property tests, contracts or mutation settings: also read `proof-checks.md`.
 - Implicit state machines ("find the state machines", a `status` or `state` field, flags that travel together, a required call order): read `state-machines.md`.
 - A change that crosses between Python and Rust, C or C++: also read `native-boundary.md`.
 - A security audit: read `security-audit/process-and-reporting.md` (process, then reporting) and open every page its "Read next" table points to for what the code shows. Dependencies or the release path: also `security-audit/supply-chain.md`; CI workflows: `security-audit/ci-pipelines.md` (its second section covers a step that runs an AI agent).

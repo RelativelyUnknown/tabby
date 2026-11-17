@@ -13,4 +13,7 @@ Same format as [code-smells.md](../code/code-smells.md): the smell, `→`, the f
 - State changed and not restored → `monkeypatch`, `tmp_path`
 - A new test in a new folder when the project's tests live elsewhere → put it where the project's tests already live, with their naming
 - The unit under test mocked → mock only network, clock, randomness and third-party APIs
+- A property or contract that only forbids ("never allow X") → add the if-and-only-if: what must be allowed; a function that refuses everything must fail it ([proof-based-testing.md](proof-based-testing.md))
+- A law, `@invariant` or `@ensure` loosened, an `assume()` added or a strategy narrowed to get green → fix the code; a law that contradicts the spec goes to the user
+- "Proved" or "verified" said of a Hypothesis or CrossHair run → "searched, no counterexample in budget N"
 - Tests of trivial getters, the language or a library, added to raise coverage → delete them
