@@ -18,7 +18,7 @@ const FPS = 30;
 const FILMS = {
   hero: { page: "hero.html", out: "tabby-meow", w: 1280, h: 360, loop: true, logo: true },
   effect: { page: "effect.html", out: "tabby-effect", w: 760, h: 384, loop: false, lossless: true },
-  quality: { page: "quality.html", out: "tabby-quality", w: 760, h: 402, loop: false, lossless: true },
+  quality: { page: "quality.html", out: "tabby-quality", w: 760, h: 356, loop: false, lossless: true },
 };
 const require = createRequire(import.meta.url);
 let pw;   // a local install first, then a global one

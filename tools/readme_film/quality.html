@@ -15,7 +15,6 @@
 const QUALITY = {
   cases: 10, runs: 30,
   rows: [ // label, with, without, format, higher is better
-    ["Hidden tests passed", 99.2, 97.3, (v) => v.toFixed(1) + "%", true],
     ["Lines added per run", 49.0, 59.9, (v) => v.toFixed(0), false],
     ["Runs that weakened a test", 0, 3, (v) => v.toFixed(0), false],
     ["Runs that added a dependency", 0, 2, (v) => v.toFixed(0), false],
@@ -27,7 +26,7 @@ const QUALITY = {
 const Q = new URLSearchParams(location.search);
 const DARK = Q.get("theme") === "dark";
 const SCALE = Number(Q.get("scale") || 1.5);
-const W = 760, H = 402;
+const W = 760, H = 356;
 const C = DARK
   ? { panel: "#1a1524", line: "#2e2640", ink: "#efe8fb", muted: "#a99fbd", track: "#2b2339", off: "#5e5378" }
   : { panel: "#f4effb", line: "#e3d9f3", ink: "#1d1530", muted: "#6f6485", track: "#e6ddf4", off: "#bfb3d6" };
