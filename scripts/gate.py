@@ -182,6 +182,15 @@ def check_command(proj):
     return None
 
 
+SCRATCH = re.compile(r"(^|/)(\.?scratch[^/]*|[^/]*_scratch[^/]*|[^/]*_tmp\.[a-z]+|tmp_[^/]*|probe[^/]*)(/|$)", re.I)
+
+
+def scratch_files(proj):
+    """Untracked files and folders whose names say they are throwaway (scratch, probe, tmp)."""
+    out = run(["git", "ls-files", "--others", "--exclude-standard"], proj).stdout.split("\n")
+    return sorted({f for f in out if f and SCRATCH.search(f)})
+
+
 def stop(data):
     proj = project(data)
     if disabled(proj) or data.get("stop_hook_active"):
@@ -195,6 +204,13 @@ def stop(data):
     if new:
         print("Tabby gate: the diff added shortcuts. Fix each, then finish with your full summary of the change as the final message (what changed, what you ran and the result), not only the fix-up.\n- " + "\n- ".join(new[:10]), file=sys.stderr)
         return 2
+    if not state.get("scratch_asked"):
+        left = scratch_files(proj)
+        if left:
+            state["scratch_asked"] = True
+            sf.write_text(json.dumps(state))
+            print("Tabby gate: throwaway files are still in the project: " + ", ".join(left[:6]) + ". Delete them (or move them out of the project), then finish with your full summary of the change as the final message. If you cannot delete them, say so in that message.", file=sys.stderr)
+            return 2
     if mode(proj) == "lite":
         return 0
     cmd = check_command(proj)

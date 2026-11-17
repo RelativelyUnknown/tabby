@@ -87,6 +87,15 @@ class Gate(unittest.TestCase):
                            capture_output=True, text=True, env=env)
         return r.stdout
 
+    def test_leftover_scratch_files_are_asked_about_once(self):
+        d = self.repo()
+        (d / ".scratch").mkdir()
+        (d / ".scratch/probe.py").write_text("print(1)\n")
+        code, err = stop(d, "s10")
+        self.assertEqual(code, 2)
+        self.assertIn(".scratch/", err)
+        self.assertEqual(stop(d, "s10")[0], 0)
+
     def test_voice_line_follows_the_setting(self):
         d = self.repo()
         self.assertNotIn("Reply voice", self.start(d))
