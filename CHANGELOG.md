@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+- The interview's answers steer the coding agent (new core rule 12): it names the `## Tabby` lines that shape a task, builds the seam the next `growth:` item needs and rejects choices one would have to undo, checks its work against `goals:`, and does not re-ask what `decided:`, the code or the git history records. "Keep replies short" is now rule 13.
+- Project memory is written back: a task that builds a `growth:` item, adds a module or is given a decision in chat updates the section in the same task (`growth.md`, `memory-check.md`). The Stop hook asks once when a session changed the project's shape (build files, new modules, native sources) and left `AGENTS.md` untouched; this request also runs in `lite` mode.
+- In Claude Code the SessionStart hook prints the `## Tabby` and `## Python defaults` sections, so sessions decide from them without a `CLAUDE.md` import.
+- The interview saves `name:` (a project without one was named after the plugin) and an empty `decided:` line; an item goes in `growth:` or `out-of-scope:`, never both; the restate checks the lines against each other.
+- The "run the interview skill" line is offered only when there is no `## Tabby` section.
+- A requirement the user changes may update the existing test that pins the old behaviour (core rule 2); the requested behaviour is never left unbuilt to keep an old test or message intact.
+- The reviewer request counts only files changed in this session, so a turn that changed nothing gets none; it and the memory request come in one message. The reviewer also checks the change against the `## Tabby` section.
+- Native ports keep the Python reference in the package as the importable fallback, and a growth seam for native code takes a batch.
+
 ## 0.2.0
 
 - Replies match the reader (core rule 12): result first, plus a short how-it-works for a user who says they are learning, no lessons for an experienced one. `/tabby:voice terse|explain|auto` (or `TABBY_VOICE`, `{"voice": ...}` in `.claude/tabby.json`) sets it by hand.

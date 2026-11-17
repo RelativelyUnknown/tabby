@@ -98,6 +98,8 @@ The cost and time figures come from the agents' own `result` events.
 
 ## Bugs in Tabby this run found
 
+This branch fixes 1–8 (see `CHANGELOG.md`, Unreleased); 9 drops as a side effect, because the reviewer is no longer asked on a turn that changed nothing. The runs above used the version before those fixes.
+
 1. **The interview does not save the project's name.** `purpose:` describes the tool but never names it, and in step 1 the agent named the package `tabby`. Fix: add a `name:` line.
 2. **The "run the interview skill" line appears when a `## Tabby` section already exists.** It showed up in steps 1, 2, 3 and 5, and when I asked why, the agent ignored the question.
 3. **Memory is never written back.** `growth.md` ("When an item becomes real") says to move the item to `goals:`, write an ADR and update `reviewed:`. That never happened, so `map:` still says "the repo is empty", and step 4 offered to remove the Rust I had asked for. A Stop-hook nudge ("a growth item became real: update AGENTS.md") would cover most of it.

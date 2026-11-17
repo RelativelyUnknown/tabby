@@ -9,9 +9,9 @@ license: MIT
 
 The plugin ships three hooks in [hooks.json](hooks.json), all run by `scripts/gate.py`:
 
-- **SessionStart** injects the core rules ([core/TABBY-CORE.md](../core/TABBY-CORE.md)) and the facts `detect.py` finds, so the rules are active on every session without a skill load.
+- **SessionStart** injects the core rules ([core/TABBY-CORE.md](../core/TABBY-CORE.md)), the facts `detect.py` finds and, when AGENTS.md has one, the `## Tabby` and `## Python defaults` sections the interview saved, so the rules and the project's decisions are active on every session without a skill load or a `CLAUDE.md` import.
 - **PostToolUse** (Edit, Write) runs the project's own `ruff format` and `ruff check --fix` on the edited `.py` file, only when the project configures ruff. Problems go back to the model.
-- **Stop** checks the diff made during the session for shortcuts (`scripts/guard.py`): added `# type: ignore` or `# noqa`, `Any`, `cast(`, skips without a reason, bare `except`, deleted tests, fewer assertions. It then runs the project's `make check|test|ci|verify` (or `just`) once if one exists. A failure goes back to the model once; it never loops. When the change is large (over 80 changed lines or more than 3 Python files), it asks once for the `tabby-reviewer` subagent ([agents/tabby-reviewer.md](../agents/tabby-reviewer.md)) to read the diff in a fresh context, on two separate axes: the repository's standards and the request.
+- **Stop** checks the diff made during the session for shortcuts (`scripts/guard.py`): added `# type: ignore` or `# noqa`, `Any`, `cast(`, skips without a reason, bare `except`, deleted tests, fewer assertions. It then runs the project's `make check|test|ci|verify` (or `just`) once if one exists. A failure goes back to the model once; it never loops. When the change made in this session is large (over 80 changed lines or more than 3 Python files; files already changed before the session started do not count), it asks once for the `tabby-reviewer` subagent ([agents/tabby-reviewer.md](../agents/tabby-reviewer.md)) to read the diff in a fresh context, on two separate axes: the repository's standards and the request. When the session changed the project's shape (a build or check file, a new module, native sources) and AGENTS.md has a `## Tabby` section the session did not touch, it asks once for the section to be brought up to date, so the next session decides from facts that are still true. Both requests come in one message.
 
 The hooks read the repo and run only the project's own tools. They never install anything and never edit a test.
 
@@ -20,7 +20,7 @@ The hooks read the repo and run only the project's own tools. They never install
 ## Modes
 
 - **full** (default): everything above.
-- **lite**: the core rules at session start and the diff check at the end only. No ruff on edits, no check command, no reviewer request. For a project where those would be noise.
+- **lite**: the core rules and project memory at session start; at the end, the diff check and the request to update the `## Tabby` section when the session added new facts. No ruff on edits, no check command, no reviewer request. For a project where those would be noise.
 - **off**: nothing runs, and the core rules are not injected.
 
 Set `{"mode": "lite"}` in `.claude/tabby.json`, or `TABBY_MODE=lite` in the environment (the environment wins).

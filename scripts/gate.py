@@ -3,16 +3,20 @@
 
     gate.py session-start | post-edit | stop      (hook JSON arrives on stdin)
 
-session-start  prints the core rules and detect.py facts as context; records current violations as a baseline
+session-start  prints the core rules, detect.py facts and the ## Tabby project memory as context; records current violations
+               and already-changed files as a baseline
 post-edit      runs the project's own ruff on the edited .py file; exit 2 with the problems if it complains
-stop           exit 2 if the diff added new shortcuts (guard.py), the project's make/just check fails, or the diff is large
-               (over 80 lines or 3 files; once) and the tabby-reviewer subagent has not been asked to read it
+stop           exit 2 if the diff added new shortcuts (guard.py), the project's make/just check fails, or (once each) this
+               session's change is large (over 80 lines or 3 files) and the tabby-reviewer subagent has not read it, or it
+               changed the project's shape (build files, new modules, native code) and left the ## Tabby section untouched
 
-Modes: full (default), lite (core rules and the diff check; no ruff hook, no check command, no reviewer request) and off. Set TABBY_MODE,
+Modes: full (default), lite (core rules, project memory, the diff check and the AGENTS.md update request; no ruff hook, no check command,
+no reviewer request) and off. Set TABBY_MODE,
 or {"mode": "lite"} in .claude/tabby.json. Off: TABBY_GATE=off, or {"gate": false} in .claude/tabby.json; {"review": false} turns off only the reviewer request
 (`review_lines` and `review_files` set its thresholds). Never loops: a stop already
 continued by this hook (stop_hook_active) passes. Any internal error exits 0, so a bug here never blocks work.
 """
+import hashlib
 import json
 import os
 import pathlib
@@ -27,6 +31,9 @@ HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(HERE))
 import guard  # noqa: E402
+
+SHAPE_FILES = ("pyproject.toml", "Cargo.toml", "setup.py", "setup.cfg", "Makefile", "justfile", "noxfile.py", "tox.ini")
+SHAPE_SUFFIXES = (".rs", ".c", ".cpp", ".h", ".zig", ".pyx")
 
 
 def read_input():
@@ -67,21 +74,63 @@ def settings(proj):
         return {}
 
 
-def diff_size(proj):
-    """(changed lines, files) over tracked and untracked .py files."""
-    lines = files = 0
-    for ln in run(["git", "diff", "HEAD", "--numstat", "--", "*.py"], proj).stdout.splitlines():
-        a, r, _ = (ln.split("\t") + ["", "", ""])[:3]
-        if a.isdigit() and r.isdigit():
-            lines += int(a) + int(r)
-            files += 1
-    for f in run(["git", "ls-files", "--others", "--exclude-standard", "--", "*.py"], proj).stdout.split():
+def dirty_files(proj):
+    """{path: content hash} for every modified or untracked file, so a stop can tell what this session changed."""
+    out = {}
+    for ln in run(["git", "status", "--porcelain", "-uall", "--no-renames"], proj).stdout.splitlines()[:2000]:
+        path = ln[3:].strip().strip('"')
         try:
-            lines += len((proj / f).read_text(errors="ignore").splitlines())
-            files += 1
+            out[path] = hashlib.sha1((proj / path).read_bytes()).hexdigest()
         except OSError:
-            pass
+            out[path] = "deleted"
+    return out
+
+
+def session_changes(proj, state):
+    """Paths changed since session start; with no recorded baseline, every dirty file counts."""
+    before = state.get("dirty", {})
+    return {p for p, h in dirty_files(proj).items() if before.get(p) != h}
+
+
+def diff_size(proj, changed):
+    """(changed lines, files) over the .py files in `changed`."""
+    numstat = {}
+    for ln in run(["git", "diff", "HEAD", "--numstat", "--", "*.py"], proj).stdout.splitlines():
+        a, r, path = (ln.split("\t") + ["", "", ""])[:3]
+        if a.isdigit() and r.isdigit():
+            numstat[path] = int(a) + int(r)
+    lines = files = 0
+    for f in (p for p in changed if p.endswith(".py")):
+        if f in numstat:
+            lines += numstat[f]
+        else:
+            try:
+                lines += len((proj / f).read_text(errors="ignore").splitlines())
+            except OSError:
+                continue
+        files += 1
     return lines, files
+
+
+def tabby_memory(proj):
+    """The ## Tabby and ## Python defaults sections of AGENTS.md, or "" when there is no ## Tabby section."""
+    try:
+        text = (proj / "AGENTS.md").read_text(errors="ignore")
+    except OSError:
+        return ""
+    keep = re.findall(r"^## (?:Tabby|Python defaults)\b.*?(?=^## |\Z)", text, re.M | re.S)
+    return "\n\n".join(k.strip() for k in keep) if any(k.startswith("## Tabby") for k in keep) else ""
+
+
+def shape_changes(proj, changed):
+    """Changed files that alter what the ## Tabby section describes: build and check files, new modules, native code."""
+    untracked = set(run(["git", "ls-files", "--others", "--exclude-standard"], proj).stdout.split())
+    return sorted(
+        p for p in changed
+        if pathlib.PurePath(p).name in SHAPE_FILES
+        or p.endswith(SHAPE_SUFFIXES)
+        or (p in untracked and p.endswith(".py") and not re.search(r"(^|/)(tests?/|test_[^/]*\.py$|[^/]*_test\.py$|conftest\.py$)", p))
+    )
 
 
 def run(cmd, cwd, timeout=120):
@@ -146,11 +195,17 @@ def session_start(data):
     voice = voice_line(proj)
     if voice:
         print(voice)
-    if not disabled(proj):
-        try:
-            state_file(data).write_text(json.dumps({"baseline": current_violations(proj), "checked": False}))
-        except Exception:
-            pass
+    memory = tabby_memory(proj)
+    if memory:
+        print("Project memory from AGENTS.md, saved by the interview. It is already set up: never suggest running the interview. "
+              "Decide with it: before designing, name the lines that bear on the task (goals, growth, constraints, out-of-scope, "
+              "ask-first, never) and build so the next growth item is cheap; a choice that a line rules out is a bug, not a style "
+              "question. Do not re-ask what it records as decided. When the work changes a fact in it, update the section in the "
+              "same task.\n\n" + memory)
+    try:
+        state_file(data).write_text(json.dumps({"baseline": current_violations(proj), "checked": False, "dirty": dirty_files(proj)}))
+    except Exception:
+        pass
     return 0
 
 
@@ -191,6 +246,32 @@ def scratch_files(proj):
     return sorted({f for f in out if f and SCRATCH.search(f)})
 
 
+def memory_ask(proj, state, session):
+    """Once per session: the session changed the project's shape but left the ## Tabby section as it was."""
+    if state.get("memory_asked") or "AGENTS.md" in session or not tabby_memory(proj):
+        return ""
+    shape = shape_changes(proj, session)
+    if not shape:
+        return ""
+    state["memory_asked"] = True
+    return ("This change touched " + ", ".join(shape[:6]) + " but not AGENTS.md. Its ## Tabby section is what the next session decides from. "
+            "Compare it with what you built: a growth item that is now real moves to goals (with an ADR if it is hard to reverse); "
+            "update map, commands, constraints, kind and open where they changed, record decisions the user made in this conversation "
+            "(an approval, a changed requirement) in decided:, and set reviewed:. Edit only the lines that changed. If nothing in it changed, "
+            "say \"AGENTS.md still matches\" in your final message.")
+
+
+def ask(sf, state, asks):
+    """Send the pending requests in one message (exit 2), or pass."""
+    asks = [a for a in asks if a]
+    if not asks:
+        return 0
+    sf.write_text(json.dumps(state))
+    print("Tabby gate: " + "\n\n".join(asks) + "\n\nThen finish with your full summary of the change as the final message "
+          "(what you changed, what you ran and the result, what you declined and why), not only a verdict.", file=sys.stderr)
+    return 2
+
+
 def stop(data):
     proj = project(data)
     if disabled(proj) or data.get("stop_hook_active"):
@@ -211,8 +292,9 @@ def stop(data):
             sf.write_text(json.dumps(state))
             print("Tabby gate: throwaway files are still in the project: " + ", ".join(left[:6]) + ". Delete them (or move them out of the project), then finish with your full summary of the change as the final message. If you cannot delete them, say so in that message.", file=sys.stderr)
             return 2
+    session = session_changes(proj, state)
     if mode(proj) == "lite":
-        return 0
+        return ask(sf, state, [memory_ask(proj, state, session)])
     cmd = check_command(proj)
     changed = run(["git", "status", "--porcelain", "--", "*.py"], proj).stdout.strip()
     if cmd and changed and not state.get("checked"):
@@ -224,16 +306,16 @@ def stop(data):
             print(f"Tabby gate: `{' '.join(cmd)}` failed. Fix the cause, do not weaken tests. Then finish with your full summary as the final message:\n{tail}", file=sys.stderr)
             return 2
     cfg = settings(proj)
+    asks = []
     if cfg.get("review") is not False and not state.get("review_asked"):
-        lines, files = diff_size(proj)
+        lines, files = diff_size(proj, session)
         if lines > int(cfg.get("review_lines", REVIEW_LINES)) or files > int(cfg.get("review_files", REVIEW_FILES)):
             state["review_asked"] = True
-            sf.write_text(json.dumps(state))
-            print(f"Tabby gate: this is a large change ({lines} changed lines in {files} Python files). Run the `tabby-reviewer` subagent once, "
-                  "giving it the task in the user's words, the command `git diff HEAD` and the command `git ls-files --others --exclude-standard` for new files (it reads them in full). Do not stage files to make them show up. Fix what it confirms, then finish with your full summary of the change as the final message (what you changed, what you ran and the result, what you declined and why), not only the reviewer's verdict. "
-                  "Turn this off with {\"review\": false} in .claude/tabby.json.", file=sys.stderr)
-            return 2
-    return 0
+            asks.append(f"This is a large change ({lines} changed lines in {files} Python files). Run the `tabby-reviewer` subagent once, "
+                        "giving it the task in the user's words, the command `git diff HEAD` and the command `git ls-files --others --exclude-standard` for new files (it reads them in full). Do not stage files to make them show up. Fix what it confirms. "
+                        "Turn this off with {\"review\": false} in .claude/tabby.json.")
+    asks.append(memory_ask(proj, state, session))
+    return ask(sf, state, asks)
 
 
 def main():
