@@ -1,30 +1,60 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/cat-head-dark.png">
-    <img src="assets/cat-head-light.png" width="150" alt="The Tabby logo: a painted tabby cat's head, orange in light mode and grey in dark mode.">
+    <img src="assets/cat-head-light.png" width="140" alt="The Tabby logo: a painted tabby cat's head, orange in light mode and grey in dark mode.">
   </picture>
 </p>
 
-# Tabby
+<h1 align="center">Tabby</h1>
 
-Tabby is a set of six agent skills for Python projects, and for the Rust, C, C++ and Zig code behind a Python API. It works in OpenCode, GitHub Copilot and Claude Code. It makes the agent find the cause before the fix, reuse before it writes, keep the diff small, and never edit a test to get green.
+<p align="center"><strong>Agent skills that make your coding agent write Python like a careful senior engineer.</strong><br>
+Finds the cause before the fix. Reuses before it writes. Keeps the diff small. Never edits a test to get green.</p>
 
-![6 skills](https://img.shields.io/badge/skills-6-2a8f89?style=flat-square)
-![OpenCode, Copilot, Claude Code](https://img.shields.io/badge/works%20in-OpenCode%20%7C%20Copilot%20%7C%20Claude%20Code-2a8f89?style=flat-square)
-![MIT licence](https://img.shields.io/badge/license-MIT-2a8f89?style=flat-square)
+<p align="center">
+  <img src="https://img.shields.io/badge/Claude%20Code-plugin-2a8f89?style=flat-square" alt="Claude Code plugin">
+  <img src="https://img.shields.io/badge/OpenCode-skills-2a8f89?style=flat-square" alt="OpenCode skills">
+  <img src="https://img.shields.io/badge/GitHub%20Copilot-skills-2a8f89?style=flat-square" alt="GitHub Copilot skills">
+  <img src="https://img.shields.io/badge/Python%20%2B%20Rust%2C%20C%2C%20C%2B%2B%2C%20Zig-2a8f89?style=flat-square" alt="Python, with Rust, C, C++ and Zig behind it">
+  <img src="https://img.shields.io/badge/license-MIT-2a8f89?style=flat-square" alt="MIT licence">
+</p>
+
+<p align="center">
+  <a href="#install">Install</a> ·
+  <a href="#see-it-work">See it work</a> ·
+  <a href="#whats-inside">What's inside</a> ·
+  <a href="#the-rules-it-holds">The rules</a> ·
+  <a href="#measured-effect">Measured effect</a> ·
+  <a href="TESTING.md">Testing</a>
+</p>
 
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/cat-sleeping-dark.png">
-    <img src="assets/cat-sleeping-light.png" width="560" alt="A tabby cat asleep in a curl, painted in brushstrokes: orange in light mode and grey in dark mode.">
+    <img src="assets/cat-sleeping-light.png" width="520" alt="A tabby cat asleep in a curl, painted in brushstrokes: orange in light mode and grey in dark mode.">
   </picture>
 </p>
 
+## Why Tabby
+
+A capable model writes working Python most of the time. The cost shows up in review: a test quietly loosened, a `# type: ignore` where a fix belonged, a helper that already existed, a 400-line diff for a 20-line change. Tabby is a short set of rules the agent always follows, plus the reference pages for the area you are touching.
+
+| Without Tabby | With Tabby |
+| --- | --- |
+| Edits or skips a failing test to get green | Leaves the test alone and reports the contradiction |
+| Silences the type checker with `# type: ignore` or `Any` | Narrows the type or fixes the code |
+| Writes a new helper | Looks for an existing one, then the standard library, then a community package |
+| Retries or sleeps until the symptom goes away | Finds why it fails |
+| Trusts the sample rows | Asks what a real file, locale or clock does on a bad day |
+| Ends with "done" | Ends with what changed, what ran and what is left |
+
 ## Install
 
-Tabby is plain `SKILL.md` folders in the open [Agent Skills](https://agentskills.io/specification) format, so one copy of each folder works in all three tools. Pick your tool:
+Tabby is plain `SKILL.md` folders in the open [Agent Skills](https://agentskills.io/specification) format, so one copy of each folder works in all three tools.
 
-**Claude Code.** Run these as two separate prompts:
+<details open>
+<summary><strong>Claude Code</strong> (plugin, hooks on by default)</summary>
+
+Run these as two separate prompts:
 
 ```
 /plugin marketplace add RelativelyUnknown/my-skills
@@ -36,7 +66,12 @@ Tabby is plain `SKILL.md` folders in the open [Agent Skills](https://agentskills
 
 On Claude Code 2.1.275 or later, one command does both: `/plugin install tabby --marketplace RelativelyUnknown/my-skills`.
 
-**OpenCode and GitHub Copilot.** Clone the repository and copy the skills into your project:
+</details>
+
+<details>
+<summary><strong>OpenCode and GitHub Copilot</strong></summary>
+
+Clone the repository and copy the skills into your project:
 
 ```
 git clone https://github.com/RelativelyUnknown/my-skills
@@ -48,6 +83,11 @@ python3 ../my-skills/tools/install.py agents
 
 Install Tabby only from `RelativelyUnknown/my-skills` on GitHub.
 
+</details>
+
+<details>
+<summary><strong>What works where</strong></summary>
+
 | | Claude Code | OpenCode | GitHub Copilot |
 | --- | --- | --- | --- |
 | Skills load when the request matches | yes | yes | yes |
@@ -58,7 +98,11 @@ Install Tabby only from `RelativelyUnknown/my-skills` on GitHub.
 | Read-only reviewer subagent | `agents/tabby-reviewer.md`, asked for after a large change | `install.py opencode` writes `.opencode/agents/` (not run here) | `install.py github` writes `.github/agents/*.agent.md` (not run here) |
 | Paste the core rules for you | n/a | `install.py opencode --core AGENTS.md` | `install.py github --core .github/copilot-instructions.md` |
 
-## Example
+</details>
+
+Install Tabby only from `RelativelyUnknown/my-skills` on GitHub.
+
+## See it work
 
 Give the agent this bug report:
 
@@ -73,9 +117,9 @@ python3 tools/eval/run.py --out results --cases bug-fix-starts-red --plugin . --
 python3 tools/eval/summarise.py results
 ```
 
-## The six skills
+## What's inside
 
-The harness keeps the six descriptions in context (about 2,400 characters, roughly 600 tokens). When a task matches one, it loads that skill's body and only the files the body names for that task. The skills point at each other by relative path, so keep the folders side by side.
+Five skills load on their own when the request matches, and four commands you run yourself.
 
 | Skill | The agent loads it when you | What it adds |
 | --- | --- | --- |
@@ -86,17 +130,21 @@ The harness keeps the six descriptions in context (about 2,400 characters, rough
 | [`tabby-frontend`](tabby-frontend/) | build a page, dashboard, data app or docs site | A method, design tokens, a list of things it refuses to ship, and `ui-check` for contrast, focus, motion and layout |
 | [`tabby-debt`](tabby-debt/) | `/tabby:debt` | A ledger of the `# shortcut: <limit>, <trigger>` comments in the repository, with the ones that name no trigger flagged |
 | [`interview`](interview/) | run `/tabby:interview` | Researches the repository read-only, asks at most three questions a round, and saves a `## Tabby` section to `AGENTS.md` |
+| [`voice`](voice/) | run `/tabby:voice terse\|explain\|auto` | Sets whether replies are terse and technical, or explain how the change works in plain words; the default picks from what you say |
+| [`hooks`](hooks/) | run `/tabby:hooks off\|lite\|full` | Turns the quality-gate hooks (Claude Code) off, on or to the light mode |
 
 The core rules in [`core/TABBY-CORE.md`](core/TABBY-CORE.md) are always on. In Claude Code, hooks in [`hooks/`](hooks/) inject them at session start, run the project's ruff on edited files, and at the end of a turn check the diff for shortcuts (added suppressions, skipped or weakened tests, bare `except`) and run the project's check command once. Modes: `full`, `lite` (core rules and the diff check only) and `off`, set with `TABBY_MODE` or `{"mode": "lite"}` in `.claude/tabby.json`. Large changes also get one request for the read-only `tabby-reviewer` subagent. In the other tools the core lives in the instructions file (see the table above).
 
 ## The rules it holds
 
-- Done means the real problem is solved and verified by running the code. Passing tests are evidence, not the goal.
-- It never edits, deletes, skips or loosens an existing test to get green.
-- It finds the cause before the fix. No special-casing inputs, no sleeps or retries to hide a symptom.
-- It does not silence tools (`# type: ignore`, `# noqa`, `Any`, looser config).
-- It keeps the diff small. It adds no dependency, changes no public API and makes no commit or push unless you ask.
-- It uses your project's own tools, and reuses in this order: your project, the standard library, the community's standard library, then code you write yourself.
+- **Done means verified.** The real problem is solved and the code has been run. Passing tests are evidence, not the goal.
+- **Tests are not yours to bend.** It never edits, deletes, skips or loosens an existing test to get green.
+- **Cause before fix.** No special-casing inputs, no sleeps or retries to hide a symptom.
+- **No silencing.** No `# type: ignore`, `# noqa`, `Any` or looser config to make a tool quiet.
+- **Small diff.** No new dependency, public API change, commit or push unless you ask.
+- **Your tools first.** It uses your project's runner, formatter and checker, and reuses in this order: your project, the standard library, the community's standard library, then code you write.
+- **Real data fails.** Code that reads files, exports, API replies, dates or money guards the known failures (encodings, locale numbers, empty input, near-miss matches) and recommends a package when a guard would grow into a feature.
+- **Replies match the reader.** Result first; a short how-it-works if you say you are learning; no lessons if you are not (`/tabby:voice`).
 
 ## Project memory
 
@@ -104,24 +152,27 @@ Tabby does the task first and never interviews you before it. Project memory liv
 
 ## Measured effect
 
-The same agent with and without Tabby on Claude Haiku 5.5 (`claude plugin eval`, 112 cases, regex and model-judged graders, 3 runs per case, November 2026):
+Same agent, with and without Tabby, on Claude Haiku 5.5 (`claude plugin eval`, 112 cases, regex and model-judged graders, 3 runs per case, November 2026).
 
-| | Without Tabby | With Tabby | Delta |
-| --- | --- | --- | --- |
-| Mean score, all cases | 0.812 | 0.902 | +0.090 |
-| Cases where the agent scores under 0.95 without Tabby (74) | | | +0.141 (95% interval +0.093 to +0.194) |
+```
+Mean score over all cases
+  without Tabby  ████████████████████████████████░░░░░░░░  0.812
+  with Tabby     ████████████████████████████████████░░░░  0.902   +0.090
 
-Across the suite, 34 cases improve by 0.10 or more, 6 get worse and 72 stay within 0.10. A run with Tabby takes about 25% more turns and costs about 59% more, because of the core rules, the end-of-turn checks and the reviewer subagent.
+Cases where the agent scores under 0.95 without Tabby (74)
+  gain           +0.141   (95% interval +0.093 to +0.194)
+```
+
+34 cases improve by 0.10 or more, 6 get worse and 72 stay within 0.10. A run with Tabby takes about 25% more turns and costs about 59% more, because of the core rules, the end-of-turn checks and the reviewer subagent.
 
 On the cases with hidden tests, runs with Tabby had fewer ruff errors, smaller diffs and no weakened tests; the score does not capture that. This is one model, one suite and 3 runs per case, so differences under about 0.05 are noise.
 
-### Re-measuring
+<details>
+<summary><strong>Re-run it yourself</strong></summary>
 
-How to re-run the evals, read the summary (headroom cases, bootstrap interval, regression list) and run the ablation arms is in [TESTING.md](TESTING.md). **Check the eval environment first:** the sandbox needs pytest and the fixtures' packages installed, or every score measures that handicap.
+How to re-run the evals, read the summary and run the ablation arms is in [TESTING.md](TESTING.md). Check the eval environment first: the sandbox needs pytest and the fixtures' packages installed, or every score measures that handicap. All 112 cases, grouped by what they check, are in the [case catalogue](TESTING.md#case-catalogue).
 
-### What each case tests
-
-All 105 cases, grouped by what they check, with the request, the pass condition and the graders for each, are in the [case catalogue in TESTING.md](TESTING.md#case-catalogue).
+</details>
 
 ## Links
 
