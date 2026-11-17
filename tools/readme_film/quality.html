@@ -49,7 +49,7 @@ window.render = (t) => {
   g.beginPath(); g.roundRect(1, 1, W - 2, H - 2, 22); g.fill(); g.stroke();
   g.fillStyle = C.ink; g.font = F(700, 28); g.fillText("Code quality", 36, 54);
   g.fillStyle = C.muted; g.font = F(500, 16);
-  g.fillText(`${q.cases} cases scored with hidden tests the agent never saw, ${q.runs} runs each way`, 36, 80);
+  g.fillText(`${q.cases} cases, ${q.runs} runs each way, the same agent with and without Tabby`, 36, 80);
   // legend
   g.fillStyle = PINK; g.beginPath(); g.roundRect(36, 98, 22, 10, 5); g.fill();
   g.fillStyle = C.muted; g.font = F(500, 14); g.fillText("with Tabby", 64, 108);

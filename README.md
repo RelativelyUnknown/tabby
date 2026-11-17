@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-meow-dark.webp">
-    <img src="assets/tabby-meow-light.webp" width="880" alt="Tabby: agent skills for careful Python. In a terminal someone types cat, an ASCII cat prints, blinks, swishes its tail and says meow, then the screen clears.">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-cat-dark.webp">
+    <img src="assets/tabby-cat-light.webp" width="880" alt="Tabby: agent skills for careful Python. In a terminal someone types cat, an ASCII cat prints, blinks, swishes its tail and says meow, then the screen clears.">
   </picture>
 </p>
 
@@ -154,12 +154,12 @@ Same agent, with and without Tabby, on Claude Haiku 5.5 (`claude plugin eval`, 1
 
 34 cases improve by 0.10 or more, 6 get worse and 72 stay within 0.10. A run with Tabby takes about 25% more turns and costs about 59% more, because of the core rules, the end-of-turn checks and the reviewer subagent.
 
-The score does not capture everything. On the cases scored with hidden tests the agent never saw, the code itself:
+The score does not capture everything. What the code itself looked like, on 10 cases checked in detail:
 
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-quality-dark.webp">
-    <img src="assets/tabby-quality-light.webp" width="760" alt="Code quality on 10 cases with hidden tests, 30 runs each way. With Tabby against without: lines added per run 49 against 60; runs that weakened a test 0 against 3; runs that added a dependency 0 against 2; comment lines added per run 0.0 against 0.7. Cost per run $0.015 against $0.009, 10 against 7 turns.">
+    <img src="assets/tabby-quality-light.webp" width="760" alt="Code quality on 10 cases, 30 runs each way. With Tabby against without: lines added per run 49 against 60; runs that weakened a test 0 against 3; runs that added a dependency 0 against 2; comment lines added per run 0.0 against 0.7. Cost per run $0.015 against $0.009, 10 against 7 turns.">
   </picture>
 </p>
 

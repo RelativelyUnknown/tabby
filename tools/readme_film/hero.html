@@ -22,7 +22,9 @@ const C = DARK
   : { panel: "#f4effb", line: "#e8def6", ink: "#1d1530", muted: "#6f6485" };
 const TERM = { bg: "#16121f", bar: "#221b2e", text: "#ece6f6", dim: "#8a80a0", cat: "#f7a8cb" };
 const TEAL = "#8b6cf0";   // the accent: violet (prompt, pills, sparkles)
-window.DUR = 6;
+// The script below is timed in story seconds (0-6); SPEED stretches it, so the loop plays slower without re-timing every key.
+const SPEED = 0.6;
+window.DUR = 6 / SPEED;
 
 const cv = document.getElementById("c");
 cv.width = W * SCALE; cv.height = H * SCALE; cv.style.width = W + "px"; cv.style.height = H + "px";
@@ -151,7 +153,7 @@ function drawLogo(g) {
 }
 
 window.render = (t) => {
-  t = ((t % DUR) + DUR) % DUR;
+  t = (((t % DUR) + DUR) % DUR) * SPEED;
   ctx.setTransform(SCALE, 0, 0, SCALE, 0, 0); ctx.clearRect(0, 0, W, H);
   if (LOGO) { drawLogo(ctx); return; }
   ctx.fillStyle = C.panel; ctx.beginPath(); ctx.roundRect(0, 0, W, H, 28); ctx.fill();
