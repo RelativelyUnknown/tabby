@@ -13,6 +13,6 @@ Never miss:
 - Read `design.md` (or `DESIGN.md`) and the project's existing pages, CSS framework and theme config first, and match them. A redesign only when it is asked.
 - Build with the tools the project already has (Tailwind, Bootstrap, Pico, Streamlit theme, MkDocs Material). Do not add a second styling system.
 - Content that exists: no invented figures, names or logos.
-- Check by measuring: `node assets/interfaces/ui-check.mjs <url or file>` (Playwright Chromium; ask before installing), then look at the page at 390 px and 1280 px, in light and dark, with the keyboard. A finding is fixed or waived with a reason in `.tabby-ui-waivers.json`. Say what was measured, what you looked at and what you did not check.
+- Check by measuring: `node assets/interfaces/ui-check.mjs <url or file>` (Playwright Chromium; ask before installing). Playwright here is the Node package, not Python's: run `ui-check` itself to find out, and only its message `Playwright is not installed here` means it is missing (`python3 -c "import playwright"` failing says nothing). Then look at the page at 390 px and 1280 px, in light and dark, with the keyboard. A finding is fixed or waived with a reason in `.tabby-ui-waivers.json`. Say what was measured, what you looked at and what you did not check; a page change you have not measured and looked at is not done.
 
 A diagram or an explainer animation is the `tabby-diagrams` skill, not this one. Defaults come from `## Tabby` or `## Python defaults` in AGENTS.md.

@@ -69,7 +69,7 @@ decided: (filled by later tasks) 2026-11-12 song matching in Rust, approved in c
   - queue worker or scheduler: `application/workers`
   - anything else: `code`
 - `reviewed:` carries the short commit hash the facts were checked at; the drift check starts from it.
-- `name:` is asked if the user has not given one; a project without a name gets named after the plugin by mistake.
+- `name:` is asked if the user has not given one; a project without a name gets named after the plugin by mistake. Suggest names from the user's own words (what it does, their group's slang), never from Tabby's name or the tool's.
 - `decided:` starts empty. Later tasks append decisions the user makes in conversation (an approval, a changed requirement, a rejected option), dated, so no later session asks again.
 - `docs:` lists the page types to keep current (`documentation/pages.md`): a library usually gets README, reference, how-to, changelog; a service gets README, runbook, ADR.
 - Add `design` to `modules:` only when the user wants diagrams or explainers.

@@ -13,17 +13,18 @@ Everything needed for a first correct diagram. Write the file first, then look; 
   "edges": [{ "from": "api", "to": "queue", "label": "ENQUEUE", "kind": "main" }] }
 ```
 
-3. **Place on the 4 px grid.** A node is about `64 + 8.8 × len(name)` or `64 + 6.6 × len(role)` px wide (the longer), plus 16. Next node on a row: `x + width + 104` when the connector has a label (`+ 64` without). Rows 88 px apart. Zones 24 px outside their nodes. `icon` is a Tabler name: `node assets/diagram/make.mjs --icons <word>` lists matches (`server`, `database`, `stack-2`, `cpu`, `device-desktop`, `cloud`, `clock`). Exactly one `focal` node. If the repository has a `design.md`, add `"theme": { "accent": "#...", "surface": "#...", "ink": "#...", "font": "..." }` from it and say what was not applied ([style.md](style.md)).
-4. **Build, then check:**
+3. **Group, then stack.** Put what the reader must tell apart in zones (for an architecture: the front ends, the shared core, storage), and stack rows rather than stretching one long row: keep the picture at most 1040 px wide, or `check.py` fails its labels as too small once a README column shrinks it.
+4. **Place on the 4 px grid.** A node is about `64 + 8.8 × len(name)` or `64 + 6.6 × len(role)` px wide (the longer), plus 16. Next node on a row: `x + width + 104` when the connector has a label (`+ 64` without). Rows 88 px apart. Zones 24 px outside their nodes. `icon` is a Tabler name: `node assets/diagram/make.mjs --icons <word>` lists matches (`server`, `database`, `stack-2`, `cpu`, `device-desktop`, `cloud`, `clock`). Exactly one `focal` node. If the repository has a `design.md`, add `"theme": { "accent": "#...", "surface": "#...", "ink": "#...", "font": "..." }` from it and say what was not applied ([style.md](style.md)).
+5. **Build, then check:**
 
 ```bash
 node assets/diagram/make.mjs spec.json docs/diagram.svg
 python3 assets/diagram/check.py docs/diagram.svg        # exit 0 is required; fix findings in the spec, not the SVG
 ```
 
-   Typical findings: a label too close to an arrowhead (widen the gap), a node off the grid (warning), too many nodes. The file now exists and is valid.
-5. **Look once**, if Playwright is available: `node assets/diagram/render.mjs docs/diagram.svg --scale 2` writes light and dark PNGs; check that the focal node reads first and nothing crowds. If it is not available, do not install it: say the picture was checked but not rendered.
-6. **Report:** what it shows, anything assumed, the checker result.
+   Typical findings: a label too close to an arrowhead (widen the gap), labels too small because the picture is too wide (stack it), a node off the grid (warning), too many nodes. The file now exists and is valid.
+6. **Look once**, if Playwright is available: `node assets/diagram/render.mjs docs/diagram.svg --scale 2` writes light and dark PNGs; check that the focal node reads first and nothing crowds. If it is not available, do not install it: say the picture was checked but not rendered.
+7. **Report:** what it shows, anything assumed, the checker result.
 
 Need more: [style.md](style.md) (look, theme mapping), [connectors-and-icons.md](connectors-and-icons.md) (routes, fan-out, icons), [types.md](types.md) (one section per type), [choosing.md](choosing.md).
 

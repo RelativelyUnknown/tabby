@@ -10,6 +10,10 @@
 - A requirement the user changes may update the existing test that pins the old behaviour (core rule 2); the requested behaviour is never left unbuilt to keep an old test or message intact.
 - The reviewer request counts only files changed in this session, so a turn that changed nothing gets none; it and the memory request come in one message. The reviewer also checks the change against the `## Tabby` section.
 - Native ports keep the Python reference in the package as the importable fallback, and a growth seam for native code takes a batch.
+- The debt ledger is `/tabby:tabby-debt` in Claude Code (the docs said `/tabby:debt`, which does not exist). Deliberate limits now get a `# shortcut:` comment when they are written (core rule 7), and an empty ledger leads to a list of unmarked limits to mark.
+- The frontend and diagram skills say how to tell whether Playwright is there (run `ui-check` or the renderer; Python's `import playwright` says nothing), and an unmeasured page change is not done.
+- `check.py` measures text at the size it is shown in a README or docs column (at most 1040 px wide), so a long, wide diagram fails as too small to read; the quickstart says to group into zones and stack rows.
+- The interview suggests project names from the user's words, never from Tabby's.
 
 ## 0.2.0
 
