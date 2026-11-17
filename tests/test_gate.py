@@ -81,6 +81,29 @@ class Gate(unittest.TestCase):
         (d / "a.py").write_text("x = 2  # type: ignore\n")
         self.assertEqual(stop(d, "s5", stop_hook_active=True)[0], 0)
 
+    def start(self, d, voice=None):
+        env = {**__import__("os").environ, "TABBY_VOICE": voice or ""}
+        r = subprocess.run([sys.executable, str(GATE), "session-start"], input=json.dumps({"session_id": f"v-{uuid.uuid4().hex}", "cwd": str(d)}),
+                           capture_output=True, text=True, env=env)
+        return r.stdout
+
+    def test_voice_line_follows_the_setting(self):
+        d = self.repo()
+        self.assertNotIn("Reply voice", self.start(d))
+        (d / ".claude").mkdir()
+        (d / ".claude/tabby.json").write_text('{"voice": "explain"}')
+        self.assertIn("Reply voice: explanatory", self.start(d))
+        self.assertIn("Reply voice: terse", self.start(d, voice="terse"))
+
+    def test_reviewer_request_names_new_files_and_forbids_staging(self):
+        d = self.repo()
+        for i in range(5):
+            (d / f"m{i}.py").write_text("\n".join(f"v{j} = {j}" for j in range(30)) + "\n")
+        code, err = stop(d, "s9")
+        self.assertEqual(code, 2)
+        self.assertIn("git ls-files --others", err)
+        self.assertIn("Do not stage", err)
+
 
 if __name__ == "__main__":
     unittest.main()

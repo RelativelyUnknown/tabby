@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: no-lessons-for-a-senior
+expected_outcome: |
+  Adds the --upper flag and the final message is a short result with no tutorial for a user who writes as an experienced engineer.
+context:
+  scaffold_script: fixture.sh

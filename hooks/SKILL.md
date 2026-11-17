@@ -15,7 +15,7 @@ The plugin ships three hooks in [hooks.json](hooks.json), all run by `scripts/ga
 
 The hooks read the repo and run only the project's own tools. They never install anything and never edit a test.
 
-`.claude/tabby.json` also takes `{"review": false}` (no reviewer request), `review_lines` and `review_files` (thresholds).
+`.claude/tabby.json` also takes `{"voice": "terse"|"explain"}` (see `/tabby:voice`), `{"review": false}` (no reviewer request), `review_lines` and `review_files` (thresholds).
 
 ## Modes
 

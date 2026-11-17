@@ -16,6 +16,7 @@
     "./tabby-frontend",
     "./tabby-debt",
     "./interview",
+    "./voice",
     "./hooks"
   ]
 }

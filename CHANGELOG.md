@@ -2,6 +2,9 @@
 
 ## 0.2.0
 
+- Replies match the reader (core rule 12): result first, plus a short how-it-works for a user who says they are learning, no lessons for an experienced one. `/tabby:voice terse|explain|auto` (or `TABBY_VOICE`, `{"voice": ...}` in `.claude/tabby.json`) sets it by hand.
+- Personal or financial data files go in `.gitignore` before the first commit, and nothing is staged unasked; the reviewer request lists new files with `git ls-files --others` so it never needs `git add -N`.
+- Diagram and animation quickstarts for a read-only sandbox keep every file inside the project (spec on stdin).
 - Always-on core rules (`core/TABBY-CORE.md`), injected at session start in Claude Code; `tools/install.py --core FILE` appends them to AGENTS.md for other tools.
 - Quality-gate hooks, on by default (`hooks/hooks.json`, `scripts/gate.py`, `scripts/guard.py`): ruff on edited files, a diff check for suppressions, skipped or weakened tests and swallowed errors, and the project's check command once at the end. Off with `TABBY_GATE=off` or `.claude/tabby.json`.
 - Skill descriptions no longer say "MUST be your first tool call"; `interview` is user-invoked only; the optional reminder hook is removed.

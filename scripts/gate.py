@@ -115,6 +115,18 @@ def ruff_configured(proj):
         return False
 
 
+VOICES = {
+    "terse": "Reply voice: terse and technical. Result, evidence, what is left; no explanations of how things work.",
+    "explain": "Reply voice: explanatory. Result first, then a short how-it-works in plain words; name each new idea once.",
+}
+
+
+def voice_line(proj):
+    """The reply-voice line for session start: TABBY_VOICE or {"voice": ...} in .claude/tabby.json; auto (the default) adds nothing."""
+    v = os.environ.get("TABBY_VOICE", "").lower() or str(settings(proj).get("voice", "auto")).lower()
+    return VOICES.get(v, "")
+
+
 def session_start(data):
     proj = project(data)
     if disabled(proj):
@@ -122,6 +134,9 @@ def session_start(data):
     print((ROOT / "core/TABBY-CORE.md").read_text())
     r = run([sys.executable, str(ROOT / "tabby/scripts/detect.py"), str(proj)], proj, 20)
     print(r.stdout)
+    voice = voice_line(proj)
+    if voice:
+        print(voice)
     if not disabled(proj):
         try:
             state_file(data).write_text(json.dumps({"baseline": current_violations(proj), "checked": False}))
@@ -190,7 +205,7 @@ def stop(data):
             state["review_asked"] = True
             sf.write_text(json.dumps(state))
             print(f"Tabby gate: this is a large change ({lines} changed lines in {files} Python files). Run the `tabby-reviewer` subagent once, "
-                  "giving it the task in the user's words and the command `git diff HEAD`. Fix what it confirms, then finish with your full summary of the change as the final message (what you changed, what you ran and the result, what you declined and why), not only the reviewer's verdict. "
+                  "giving it the task in the user's words, the command `git diff HEAD` and the command `git ls-files --others --exclude-standard` for new files (it reads them in full). Do not stage files to make them show up. Fix what it confirms, then finish with your full summary of the change as the final message (what you changed, what you ran and the result, what you declined and why), not only the reviewer's verdict. "
                   "Turn this off with {\"review\": false} in .claude/tabby.json.", file=sys.stderr)
             return 2
     return 0
