@@ -1,6 +1,6 @@
 # With Tabby: the whole conversation
 
-Claude Code (`claude -p`, Sonnet 5.5) with `--plugin-dir` pointing at this repository. I played the user; I did not edit the code. Each step heading marked *new session* started a fresh session, the way you come back to a project on another day. Agent replies are the final message of each turn, unedited.
+Claude Code (`claude -p`, Sonnet 5.5) with `--plugin-dir` pointing at this repository. I played the user and never edited the code. Each heading marked *new session* started a fresh session, the way you come back to a project on another day. Agent replies are the final message of each turn, unedited.
 
 ## Interview, round 1
 
@@ -342,3 +342,22 @@ The card is done and the review found nothing that blocks it. Run `uv run onrepe
 - **A crash that was already there:** a track name with a broken unicode character (a lone surrogate in the JSON) crashes in the Rust merge call (`song_key`). It happens with or without `--card`. I didn't fix it because it's outside this request. It's unlikely in a normal Spotify export. I can fix it if you want.
 
 I didn't commit or stage anything.
+
+## Step 5: an unplanned feature (new session)
+
+**Me:**
+
+> new idea!! can u add a month by month thing? like my #1 song for every month of the year. it should show in the terminal AND on the share card
+
+**Agent** *(tools: Agent 1, Bash 9, Skill 1; $0.28)*:
+
+Your #1 song for each month now shows in the terminal and on the share card. After the last edit, `uv run ruff check` passes and `uv run pytest` shows 81 passed. I haven't run it on a real export or opened the card in a browser.
+
+- **Terminal:** a new "Top song each month" section lists Jan to Dec as `Song - Artist (N plays)`. A month with no plays shows `-`.
+- **Card:** the same list sits under the top songs. Months with no plays are left out, so the card stays short. The reviewer pointed out that "every month" could read as complete, so say if you'd rather the card show `-` rows like the terminal does.
+- **How it ranks:** a month's #1 reuses the yearly song code, so it uses the same song merging and 30-second skip rule. The month comes from the UTC timestamp, the same as the year. If two songs tie for a month, the one played first wins.
+- **Files:** the changes are in `onrepeat/wrapped.py`, `onrepeat/card.py`, the README and one new test in `tests/test_wrapped.py`. The test covers the terminal output, the card, HTML escaping, an empty month and a play from another year being ignored.
+- **Review:** the reviewer found one problem. The `--card` help text still said "top 5s and hours only", and I changed it to "top 5s, hours and monthly #1s".
+- **Formatting:** `ruff format` ran over `onrepeat/` and `tests/`, so it may have touched lines beyond mine. The repo has no commits, so I can't show you that diff.
+
+AGENTS.md is out of date. It lists the share card as out of scope and says the repo is empty, but the card and Apple Music support already exist. Run `/tabby:interview` to save your purpose and limits for later tasks.

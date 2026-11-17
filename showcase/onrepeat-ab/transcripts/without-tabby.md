@@ -1,8 +1,8 @@
-# Without Tabby: the whole conversation
+# Without Tabby, told the plans: the whole conversation
 
-Claude Code (`claude -p`, Sonnet 5.5) with no plugin. Same user (me), same messages from step 2 on. Agent replies are the final message of each turn, unedited.
+Claude Code (`claude -p`, Sonnet 5.5) with no plugin. My first message gave the same future plans the Tabby interview recorded. Same messages as the Tabby run from step 2 on. Agent replies are the final message of each turn, unedited.
 
-## Step 1: v1, Spotify (the pitch and the build in one message)
+## Step 1: v1, Spotify (the pitch and the plans in one message)
 
 **Me:**
 
@@ -149,3 +149,30 @@ You get two things:
 The card only has the summary, with no timestamps or raw history. Song titles are escaped so a weird title can't break the page.
 
 The code is in `src/onrepeat/share.py`, with the `--share` flag in `cli.py` and a "Share it" section in the README. I didn't commit anything. I also didn't publish the card as a link, because that would put your listening habits online. If you want that once you've run it on your real data, tell me.
+
+## Step 5: an unplanned feature (new session)
+
+**Me:**
+
+> new idea!! can u add a month by month thing? like my #1 song for every month of the year. it should show in the terminal AND on the share card
+
+**Agent** *(tools: Bash 6; $0.14)*:
+
+The month-by-month list now shows up in the terminal output and on the share card. The 16 tests pass and ruff is clean. I haven't opened the generated HTML card in a browser, so I haven't looked at how it renders.
+
+- **Terminal:** a new section lists each month's #1 song, one line per month, after the top songs.
+  ```
+  Your #1 song, month by month
+    Jan  Blinding Lights - The Weeknd (14 plays)
+    Feb  ...
+  ```
+- **Share card:** a "Month by month" section sits after Top songs, with the song and artist for each month. I left play counts off to keep it compact.
+- **Pasted text:** the plain-text version from `--share` and the Share button also includes the month list.
+
+**Details**
+- **Which songs count:** it uses the same rules as your top songs. Plays under 30 seconds don't count, and remasters and Apple/Spotify spellings of one song merge within a month.
+- **Empty months:** months with no plays are left out, not shown blank.
+- **Month boundaries:** months are UTC, like the year, so a listen at 11:30pm on the 31st can land in the next month.
+- **Ties:** if two songs tie for a month, the Rust song merger picks one. I didn't add a tiebreak of my own.
+
+The changes are in `stats.py`, `cli.py` and `share.py`, plus two new tests and a README line. Nothing is committed.

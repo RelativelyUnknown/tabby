@@ -9,6 +9,11 @@ from onrepeat.models import Play
 # so a song you skipped after 5s shouldn't count as a "play" in your top songs.
 MIN_PLAY_MS = 30_000
 
+MONTH_NAMES = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+]  # fmt: skip
+
 
 @dataclass(frozen=True)
 class Wrapped:
@@ -16,6 +21,8 @@ class Wrapped:
     hours_listened: float
     top_artists: list[tuple[str, int]]  # (artist, plays)
     top_songs: list[tuple[str, str, int]]  # (artist, track, plays)
+    # month number (1-12) -> (artist, track, plays); months with no plays are left out
+    monthly_top: dict[int, tuple[str, str, int]]
 
 
 def plays_in_year(plays: Iterable[Play], year: int) -> list[Play]:
@@ -38,11 +45,19 @@ def build_wrapped(plays: Iterable[Play], year: int, top_n: int = 5) -> Wrapped:
     # one, but "Espresso (sped up)" stays separate. See rust/canon.rs.
     songs = _songmatch.top_songs([(p.artist, p.track) for p in real], top_n)
 
+    # #1 song of each month (UTC months, same as the year). Same merging as above.
+    monthly_top: dict[int, tuple[str, str, int]] = {}
+    for month in range(1, 13):
+        pairs = [(p.artist, p.track) for p in real if p.played_at.month == month]
+        if pairs:
+            monthly_top[month] = _songmatch.top_songs(pairs, 1)[0]
+
     return Wrapped(
         year=year,
         hours_listened=total_ms / 3_600_000,
         top_artists=artists.most_common(top_n),
         top_songs=songs,
+        monthly_top=monthly_top,
     )
 
 

@@ -154,3 +154,27 @@ def test_same_song_merges_across_versions_and_services():
     top = {t: n for _, t, n in build_wrapped(plays, 2023).top_songs}
     assert sorted(top.values()) == [1, 1, 2, 2, 2]
     assert top["Espresso"] == 1 and top["Espresso (sped up)"] == 1
+
+
+def test_monthly_top_song_per_month():
+    plays = plays_from(
+        entry("Jan Hit", "X", ts="2023-01-05T12:00:00Z"),
+        entry("Jan Hit", "X", ts="2023-01-06T12:00:00Z"),
+        entry("Jan Other", "Y", ts="2023-01-07T12:00:00Z"),
+        entry("Mar Hit", "Z", ts="2023-03-01T12:00:00Z"),
+        entry("Skipped", "Q", ms=1_000, ts="2023-04-01T12:00:00Z"),
+    )
+    m = build_wrapped(plays, 2023).monthly_top
+    assert m == {1: ("X", "Jan Hit", 2), 3: ("Z", "Mar Hit", 1)}
+
+
+def test_monthly_shows_in_terminal_and_share_card(tmp_path, capsys):
+    (tmp_path / "Streaming_History_Audio_2023_0.json").write_text(
+        json.dumps([entry("Jan <b>Hit", "X", ts="2023-01-05T12:00:00Z")])
+    )
+    card = tmp_path / "card.html"
+    assert main([str(tmp_path), "--year", "2023", "--share", str(card)]) == 0
+    out = capsys.readouterr().out
+    assert "month by month" in out and "Jan  Jan <b>Hit - X" in out
+    html = card.read_text(encoding="utf-8")
+    assert "Month by month" in html and "Jan &lt;b&gt;Hit" in html

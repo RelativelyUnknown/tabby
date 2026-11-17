@@ -18,6 +18,10 @@ from onrepeat.spotify import ExportError, Play
 # Spotify counts a stream only after 30 seconds; shorter plays are skips.
 MIN_STREAM_MS = 30_000
 TOP_N = 5
+MONTHS = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+]  # fmt: skip
 
 
 @dataclass(frozen=True, slots=True)
@@ -26,6 +30,7 @@ class Wrapped:
     hours: float
     top_artists: list[tuple[str, int]]
     top_songs: list[tuple[tuple[str, str], int]]
+    monthly_top: list[tuple[tuple[str, str], int] | None]  # Jan..Dec, None if no plays
 
 
 def song_key(play: Play) -> tuple[str, str]:
@@ -50,6 +55,13 @@ def top_songs(streams: list[Play]) -> list[tuple[tuple[str, str], int]]:
     return [(_display(spellings[k]), n) for k, n in counts.most_common(TOP_N)]
 
 
+def monthly_top(streams: list[Play]) -> list[tuple[tuple[str, str], int] | None]:
+    by_month: defaultdict[int, list[Play]] = defaultdict(list)
+    for p in streams:
+        by_month[p.played_at.month].append(p)
+    return [top_songs(by_month[m])[0] if by_month[m] else None for m in range(1, 13)]
+
+
 def load_plays(folder: Path) -> list[Play]:
     plays = spotify.load_plays(folder) + apple.load_plays(folder)
     if not plays:
@@ -72,7 +84,15 @@ def build_wrapped(plays: list[Play], year: int) -> Wrapped | None:
         hours=sum(p.ms_played for p in in_year) / 3_600_000,
         top_artists=Counter(p.artist for p in streams).most_common(TOP_N),
         top_songs=top_songs(streams),
+        monthly_top=monthly_top(streams),
     )
+
+
+def _month_song(top: tuple[tuple[str, str], int] | None) -> str:
+    if top is None:
+        return "-"
+    (track, artist), n = top
+    return f"{track} - {artist} ({n} plays)"
 
 
 def render(w: Wrapped) -> str:
@@ -90,6 +110,10 @@ def render(w: Wrapped) -> str:
         f"  {i}. {track} - {artist} ({n} plays)"
         for i, ((track, artist), n) in enumerate(w.top_songs, 1)
     ]
+    lines += ["", "Top song each month"]
+    lines += [
+        f"  {name}: {_month_song(top)}" for name, top in zip(MONTHS, w.monthly_top)
+    ]
     return "\n".join(lines)
 
 
@@ -106,7 +130,7 @@ def main(argv: list[str] | None = None) -> int:
         "--card",
         type=Path,
         metavar="FILE.html",
-        help="also write a shareable HTML card (top 5s and hours only) to this file",
+        help="also write a shareable HTML card (top 5s, hours and monthly #1s) to this file",
     )
     args = parser.parse_args(argv)
 

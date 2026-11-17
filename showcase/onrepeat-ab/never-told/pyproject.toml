@@ -1,0 +1,33 @@
+[project]
+name = "onrepeat"
+version = "0.1.0"
+description = "Spotify Wrapped, whenever you want it. Reads your extended streaming history export."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+onrepeat = "onrepeat.cli:main"
+
+[build-system]
+requires = ["maturin>=1.7,<2"]
+build-backend = "maturin"
+
+[tool.maturin]
+# Mixed project: Python in src/onrepeat, Rust (rust/lib.rs) becomes onrepeat._songkey
+python-source = "src"
+module-name = "onrepeat._songkey"
+features = ["python"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "ruff>=0.17.5",
+]
+
+[tool.ruff.lint]
+# E/F = basic errors, I = import sorting, B = common bugs, UP = modern syntax
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

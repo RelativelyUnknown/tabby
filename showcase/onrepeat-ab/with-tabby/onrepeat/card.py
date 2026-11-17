@@ -2,7 +2,7 @@
 
 from html import escape
 
-from onrepeat.wrapped import Wrapped
+from onrepeat.wrapped import MONTHS, Wrapped
 
 _PAGE = """<!doctype html>
 <html lang="en">
@@ -24,6 +24,9 @@ _PAGE = """<!doctype html>
   ol {{ margin: 0; padding-left: 1.4em; }}
   li {{ margin: 6px 0; font-weight: 600; overflow-wrap: anywhere; }}
   li span {{ display: block; font-weight: 400; opacity: .85; font-size: .9rem; }}
+  ul {{ margin: 0; padding: 0; list-style: none; }}
+  ul li {{ display: flex; gap: 12px; margin: 4px 0; font-weight: 400; }}
+  ul b {{ flex: none; width: 2.6em; opacity: .8; }}
 </style>
 </head>
 <body>
@@ -34,6 +37,8 @@ _PAGE = """<!doctype html>
   <ol>{artists}</ol>
   <h2>Top songs</h2>
   <ol>{songs}</ol>
+  <h2>Top song each month</h2>
+  <ul>{months}</ul>
 </main>
 </body>
 </html>
@@ -49,4 +54,11 @@ def render_card(w: Wrapped) -> str:
         f"<li>{escape(track)}<span>{escape(artist)} · {n} plays</span></li>"
         for (track, artist), n in w.top_songs
     )
-    return _PAGE.format(year=w.year, hours=w.hours, artists=artists, songs=songs)
+    months = "".join(
+        f"<li><b>{name}</b><i>{escape(top[0][0])} · {escape(top[0][1])}</i></li>"
+        for name, top in zip(MONTHS, w.monthly_top)
+        if top is not None
+    )
+    return _PAGE.format(
+        year=w.year, hours=w.hours, artists=artists, songs=songs, months=months
+    )

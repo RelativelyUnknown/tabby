@@ -7,7 +7,7 @@ summary numbers (no timestamps, no raw history).
 
 from html import escape
 
-from onrepeat.stats import Wrapped
+from onrepeat.stats import MONTH_NAMES, Wrapped
 
 _PAGE = """<!doctype html>
 <html lang="en">
@@ -36,6 +36,8 @@ _PAGE = """<!doctype html>
   li i {{ font-style:normal; font-weight:800; color:var(--accent); width:1.2em; }}
   li div {{ flex:1; min-width:0; overflow-wrap:anywhere; }}
   li small {{ display:block; color:var(--muted); }}
+  li b.mo {{ font-style:normal; font-weight:800; color:var(--accent); width:2.6em; font-size:13px;
+    text-transform:uppercase; letter-spacing:.06em; }}
   li em {{ font-style:normal; color:var(--muted); font-size:13px; white-space:nowrap; }}
   button {{ margin-top:26px; width:100%; padding:14px; border:0; border-radius:999px; cursor:pointer;
     background:var(--accent); color:#120b24; font:700 16px inherit; font-family:inherit; }}
@@ -52,6 +54,7 @@ _PAGE = """<!doctype html>
   <ol>{artists}</ol>
   <h2>Top songs</h2>
   <ol>{songs}</ol>
+  {months_section}
   <button id="share" type="button">Share</button>
   <div class="brand">made with onrepeat</div>
 </main>
@@ -77,6 +80,12 @@ def share_text(w: Wrapped) -> str:
     lines += [f"{i}. {a}" for i, (a, _) in enumerate(w.top_artists, 1)]
     lines += ["", "Top songs"]
     lines += [f"{i}. {t} - {a}" for i, (a, t, _) in enumerate(w.top_songs, 1)]
+    if w.monthly_top:
+        lines += ["", "#1 song, month by month"]
+        lines += [
+            f"{MONTH_NAMES[m - 1][:3]}: {t} - {a}"
+            for m, (a, t, _) in sorted(w.monthly_top.items())
+        ]
     return "\n".join(lines)
 
 
@@ -92,6 +101,12 @@ def render_html(w: Wrapped) -> str:
         f"<em>{n} plays</em></li>"
         for i, (a, t, n) in enumerate(w.top_songs, 1)
     )
+    months = "".join(
+        f'<li><b class="mo">{MONTH_NAMES[m - 1][:3]}</b>'
+        f"<div>{escape(t)}<small>{escape(a)}</small></div></li>"
+        for m, (a, t, _) in sorted(w.monthly_top.items())
+    )
+    months_section = f"<h2>Month by month</h2><ol>{months}</ol>" if months else ""
     top_artist = w.top_artists[0][0] if w.top_artists else "-"
     # "</" would let a song title close the <script> tag early.
     text_js = json.dumps(share_text(w)).replace("</", "<\\/")
@@ -101,5 +116,6 @@ def render_html(w: Wrapped) -> str:
         top_artist=escape(top_artist, quote=True),
         artists=artists,
         songs=songs,
+        months_section=months_section,
         text_js=text_js,
     )

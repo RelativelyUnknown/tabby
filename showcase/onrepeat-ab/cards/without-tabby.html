@@ -25,6 +25,8 @@
   li i { font-style:normal; font-weight:800; color:var(--accent); width:1.2em; }
   li div { flex:1; min-width:0; overflow-wrap:anywhere; }
   li small { display:block; color:var(--muted); }
+  li b.mo { font-style:normal; font-weight:800; color:var(--accent); width:2.6em; font-size:13px;
+    text-transform:uppercase; letter-spacing:.06em; }
   li em { font-style:normal; color:var(--muted); font-size:13px; white-space:nowrap; }
   button { margin-top:26px; width:100%; padding:14px; border:0; border-radius:999px; cursor:pointer;
     background:var(--accent); color:#120b24; font:700 16px inherit; font-family:inherit; }
@@ -41,11 +43,12 @@
   <ol><li><i>1</i><div>Queen</div><em>6 plays</em></li><li><i>2</i><div>The Weeknd</div><em>5 plays</em></li><li><i>3</i><div>Sabrina Carpenter</div><em>3 plays</em></li><li><i>4</i><div>Lady Gaga</div><em>2 plays</em></li><li><i>5</i><div>Beyoncé</div><em>2 plays</em></li></ol>
   <h2>Top songs</h2>
   <ol><li><i>1</i><div>Blinding Lights<small>The Weeknd</small></div><em>5 plays</em></li><li><i>2</i><div>Die With A Smile<small>Lady Gaga &amp; Bruno Mars</small></div><em>4 plays</em></li><li><i>3</i><div>Don&#x27;t Stop Me Now - Live at Wembley 1986 Remaster<small>Queen</small></div><em>3 plays</em></li><li><i>4</i><div>Don’t Stop Me Now<small>Queen</small></div><em>3 plays</em></li><li><i>5</i><div>TEXAS HOLD &#x27;EM<small>Beyoncé</small></div><em>2 plays</em></li></ol>
+  <h2>Month by month</h2><ol><li><b class="mo">Mar</b><div>Blinding Lights<small>The Weeknd</small></div></li><li><b class="mo">Jul</b><div>Die With A Smile<small>Lady Gaga &amp; Bruno Mars</small></div></li></ol>
   <button id="share" type="button">Share</button>
   <div class="brand">made with onrepeat</div>
 </main>
 <script>
-  const text = "My 2026 on repeat \ud83c\udfa7\n1 hours listened\n\nTop artists\n1. Queen\n2. The Weeknd\n3. Sabrina Carpenter\n4. Lady Gaga\n5. Beyonc\u00e9\n\nTop songs\n1. Blinding Lights - The Weeknd\n2. Die With A Smile - Lady Gaga & Bruno Mars\n3. Don't Stop Me Now - Live at Wembley 1986 Remaster - Queen\n4. Don\u2019t Stop Me Now - Queen\n5. TEXAS HOLD 'EM - Beyonc\u00e9";
+  const text = "My 2026 on repeat \ud83c\udfa7\n1 hours listened\n\nTop artists\n1. Queen\n2. The Weeknd\n3. Sabrina Carpenter\n4. Lady Gaga\n5. Beyonc\u00e9\n\nTop songs\n1. Blinding Lights - The Weeknd\n2. Die With A Smile - Lady Gaga & Bruno Mars\n3. Don't Stop Me Now - Live at Wembley 1986 Remaster - Queen\n4. Don\u2019t Stop Me Now - Queen\n5. TEXAS HOLD 'EM - Beyonc\u00e9\n\n#1 song, month by month\nMar: Blinding Lights - The Weeknd\nJul: Die With A Smile - Lady Gaga & Bruno Mars";
   const btn = document.getElementById("share");
   btn.addEventListener("click", async () => {
     try {

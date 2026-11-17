@@ -6,7 +6,7 @@ from onrepeat.apple import load_apple_plays
 from onrepeat.loader import load_plays
 from onrepeat.models import Play
 from onrepeat.share import render_html, share_text
-from onrepeat.stats import Wrapped, available_years, build_wrapped
+from onrepeat.stats import MONTH_NAMES, Wrapped, available_years, build_wrapped
 
 
 def render(w: Wrapped) -> str:
@@ -22,6 +22,12 @@ def render(w: Wrapped) -> str:
     lines += [
         f"  {i}. {t} - {a} ({n} plays)" for i, (a, t, n) in enumerate(w.top_songs, 1)
     ]
+    if w.monthly_top:
+        lines += ["", "Your #1 song, month by month"]
+        lines += [
+            f"  {MONTH_NAMES[m - 1][:3]}  {t} - {a} ({n} plays)"
+            for m, (a, t, n) in sorted(w.monthly_top.items())
+        ]
     return "\n".join(lines)
 
 

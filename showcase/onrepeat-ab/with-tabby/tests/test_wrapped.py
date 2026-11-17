@@ -229,3 +229,26 @@ def test_card_unwritable_path_is_a_clean_error(tmp_path, capsys):
     bad = tmp_path / "missing-dir" / "c.html"
     assert main(["2024", str(folder), "--card", str(bad)]) == 1
     assert "cannot write card" in capsys.readouterr().err
+
+
+def test_top_song_each_month_in_terminal_and_card(tmp_path, capsys):
+    rows = [
+        row("2024-01-05T10:00:00Z", 60_000, "Jan Hit", "A"),
+        row("2024-01-06T10:00:00Z", 60_000, "Jan Hit", "A"),
+        row("2024-01-07T10:00:00Z", 60_000, "Other", "B"),
+        row("2024-03-01T10:00:00Z", 60_000, "<Mar>", "C"),
+        row("2023-02-01T10:00:00Z", 60_000, "Last Year", "D"),
+    ]
+    folder = write_export(tmp_path / "data", rows)
+    w = build_wrapped(load_plays(folder), 2024)
+    assert w.monthly_top[0] == (("Jan Hit", "A"), 2)
+    assert w.monthly_top[1] is None
+    card = tmp_path / "c.html"
+    assert main(["2024", str(folder), "--card", str(card)]) == 0
+    out = capsys.readouterr().out
+    assert "Jan: Jan Hit - A (2 plays)" in out
+    assert "Feb: -" in out
+    html = card.read_text(encoding="utf-8")
+    assert "<b>Jan</b><i>Jan Hit · A</i>" in html
+    assert "&lt;Mar&gt;" in html
+    assert "Last Year" not in out and "Last Year" not in html

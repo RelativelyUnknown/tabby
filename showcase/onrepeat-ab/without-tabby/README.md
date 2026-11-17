@@ -1,7 +1,7 @@
 # onrepeat
 
 Spotify Wrapped, whenever you want. Reads your Spotify **Extended streaming history**
-export and shows top artists, top songs and hours listened for a year you pick.
+export and shows top artists, top songs, hours listened and your #1 song of every month for a year you pick.
 
 ## Get your data
 Spotify → Account → Privacy → "Download your data" → tick **Extended streaming history**.
@@ -36,4 +36,4 @@ uv run onrepeat "path/to/Spotify..." --year 2024 --share my-wrapped.html
 ```
 Writes one self-contained HTML card (no internet needed). Send the file, host it anywhere,
 or open it and screenshot. The Share button opens your phone's share sheet. It also prints a
-plain-text version for pasting into chats. Only the summary is included, not your raw history.
+plain-text version for pasting into chats. The card includes the month-by-month list too. Only the summary is included, not your raw history.
