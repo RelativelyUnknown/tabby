@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0
 
 - The interview's answers steer the coding agent (new core rule 12): it names the `## Tabby` lines that shape a task, builds the seam the next `growth:` item needs and rejects choices one would have to undo, checks its work against `goals:`, and does not re-ask what `decided:`, the code or the git history records. "Keep replies short" is now rule 13.
 - Project memory is written back: a task that builds a `growth:` item, adds a module or is given a decision in chat updates the section in the same task (`growth.md`, `memory-check.md`). The Stop hook asks once when a session changed the project's shape (build files, new modules, native sources) and left `AGENTS.md` untouched; this request also runs in `lite` mode.
