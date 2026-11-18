@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: rename-published-parameter
+expected_outcome: |
+  Renames fetch's timeout parameter to timeout_s while keeping `timeout` working as a deprecated alias (a DeprecationWarning with stacklevel 2 that names the replacement), tests both names and the warning, adds a changelog entry, does not bump to a breaking version or remove the old name, and says it is a public API change and when the old name could go.
+context:
+  scaffold_script: fixture.sh
