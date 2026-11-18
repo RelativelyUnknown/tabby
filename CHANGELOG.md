@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- `experiments/io-uring-comparison/`: a rerunnable comparison of one vague request (a Rust and io_uring library for Python, then "make it faster") with and without Tabby, with the prompts, the benchmark script and the results. One run each; the README of the folder lists how the author, Claude, may have skewed it. Linked from the "Measured effect" section of the root README.
+
 - New tagline, "The daily toolkit for Python developers.", in the README and the hero banner. The line under it names what the skills cover: code, tests, reviews, docs, diagrams and animation.
 
 - Skills renamed to drop the `tabby-` prefix: `tabby-review` is `review`, `tabby-docs` is `docs`, `tabby-diagrams` is `diagrams`, `tabby-frontend` is `frontend` and `tabby-debt` is `debt`. In Claude Code the plugin name already namespaces them (`/tabby:review`, `/tabby:debt`), which removes the stutter of `/tabby:tabby-debt`. The core skill stays `tabby`, and the read-only subagent stays `tabby-reviewer`. Folders, `plugin.json`, the installer, tests, docs links and the "skill was invoked" indicator in all 93 eval graders were updated together. In a flat install (`.agents/skills/`) the generic names `review` and `docs` can collide with another skill of the same name; the installer skips an existing folder unless `--force` is given.
