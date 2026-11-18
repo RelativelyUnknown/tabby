@@ -1,6 +1,6 @@
 ---
-name: tabby-frontend
-description: "Load at the start for anything a user sees in a browser from a Python project: a page, form (login, signup), table, chart, dashboard, report page or internal tool UI; a Jinja or Django template or admin screen; a Streamlit, Dash or Gradio app; a docs site (MkDocs, Sphinx); a landing page; an accessibility, mobile or dark-mode fix. Not for diagrams or animations (tabby-diagrams)."
+name: frontend
+description: "Load at the start for anything a user sees in a browser from a Python project: a page, form (login, signup), table, chart, dashboard, report page or internal tool UI; a Jinja or Django template or admin screen; a Streamlit, Dash or Gradio app; a docs site (MkDocs, Sphinx); a landing page; an accessibility, mobile or dark-mode fix. Not for diagrams or animations (diagrams)."
 license: MIT
 ---
 
@@ -15,4 +15,4 @@ Never miss:
 - Content that exists: no invented figures, names or logos.
 - Check by measuring: `node assets/interfaces/ui-check.mjs <url or file>` (Playwright Chromium; ask before installing). Playwright here is the Node package, not Python's: run `ui-check` itself to find out, and only its message `Playwright is not installed here` means it is missing (`python3 -c "import playwright"` failing says nothing). Then look at the page at 390 px and 1280 px, in light and dark, with the keyboard. A finding is fixed or waived with a reason in `.tabby-ui-waivers.json`. Say what was measured, what you looked at and what you did not check; a page change you have not measured and looked at is not done.
 
-A diagram or an explainer animation is the `tabby-diagrams` skill, not this one. Defaults come from `## Tabby` or `## Python defaults` in AGENTS.md.
+A diagram or an explainer animation is the `diagrams` skill, not this one. Defaults come from `## Tabby` or `## Python defaults` in AGENTS.md.

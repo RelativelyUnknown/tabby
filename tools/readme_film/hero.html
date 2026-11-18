@@ -134,14 +134,16 @@ function drawTerminal(g, t, x, y, w, h, size) {
 
 function drawText(g) {
   const x0 = 690;
-  g.fillStyle = C.ink; g.font = "700 124px Fredoka"; g.fillText("Tabby", x0, 168);   // the y descender clears the tagline
-  g.fillStyle = C.muted; g.font = "500 31px Fredoka"; g.fillText("Agent skills for careful Python.", x0 + 4, 240);
+  g.fillStyle = C.ink; g.font = "700 124px Fredoka"; g.fillText("Tabby", x0, 150);   // the y descender clears the tagline
+  g.fillStyle = C.muted; g.font = "500 31px Fredoka"; g.fillText("Agent skills for careful Python.", x0 + 4, 212);
   g.font = "500 21px Fredoka"; let px = x0 + 4;
   for (const label of ["cause before fix", "small diffs", "tests stay green"]) {
     const w = g.measureText(label).width + 34;
-    g.fillStyle = TEAL; g.beginPath(); g.roundRect(px, 266, w, 40, 20); g.fill();
-    g.fillStyle = "#fff"; g.fillText(label, px + 17, 293); px += w + 12;
+    g.fillStyle = TEAL; g.beginPath(); g.roundRect(px, 238, w, 40, 20); g.fill();
+    g.fillStyle = "#fff"; g.fillText(label, px + 17, 265); px += w + 12;
   }
+  // the marketing line: what the skills do for the code and for the tests
+  g.fillStyle = C.ink; g.font = "600 30px Fredoka"; g.fillText("Cleaner code. Tests that can actually fail.", x0 + 4, 330);
 }
 
 function drawLogo(g) {

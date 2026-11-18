@@ -1,6 +1,6 @@
-# tabby-frontend
+# frontend
 
-A skill of the Tabby plugin for anything a person sees in a browser from a Python project: a page, a form, a table, a dashboard, an internal tool, a Jinja or Django template or admin screen, a Streamlit, Dash or Gradio app, a docs site or a README picture. A diagram or explainer animation is [`tabby-diagrams`](../tabby-diagrams/).
+A skill of the Tabby plugin for anything a person sees in a browser from a Python project: a page, a form, a table, a dashboard, an internal tool, a Jinja or Django template or admin screen, a Streamlit, Dash or Gradio app, a docs site or a README picture. A diagram or explainer animation is [`diagrams`](../diagrams/).
 
 **Entry point:** [`SKILL.md`](SKILL.md), which sends the agent to [`interfaces/index.md`](interfaces/index.md) for the method.
 

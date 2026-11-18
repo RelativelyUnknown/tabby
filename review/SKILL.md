@@ -1,5 +1,5 @@
 ---
-name: tabby-review
+name: review
 description: "Load at the start when asked to review: a diff, branch or pull request ('is this PR ready', 'look over my changes'), audit a repository, security-audit code, dependencies, CI workflows or a release, hunt for bugs or implicit state machines, or check a diagram, animation or page before it ships. It holds the review method and the checklists."
 license: MIT
 ---

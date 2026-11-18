@@ -1,6 +1,6 @@
 ---
-name: tabby-debt
-description: "Use only when the user asks for it: /tabby:tabby-debt (Claude Code), /tabby-debt elsewhere, 'list our shortcuts', 'show the technical debt ledger'. Lists the deliberate `# shortcut:` comments in a repository with their limits and triggers, and flags the ones that name no trigger. Never run it on your own."
+name: debt
+description: "Use only when the user asks for it: /tabby:debt (Claude Code), /debt elsewhere, 'list our shortcuts', 'show the technical debt ledger'. Lists the deliberate `# shortcut:` comments in a repository with their limits and triggers, and flags the ones that name no trigger. Never run it on your own."
 disable-model-invocation: true
 license: MIT
 ---

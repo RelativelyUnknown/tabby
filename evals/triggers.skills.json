@@ -49,31 +49,31 @@
  },
  {
   "query": "review my branch against main before I open the PR",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "audit this FastAPI service for security problems",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Write a README for the package",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "write release notes for 1.4.0",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "add docstrings to the public functions in stats.py",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "write an ADR for moving the queue to Postgres",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "draw an architecture diagram of our services",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "the PyO3 function panics on empty input, fix it",
@@ -241,26 +241,26 @@
  },
  {
   "query": "Draw an architecture diagram of the checkout flow for the docs",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Make a short animation of how a request travels through the service",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Fix the accessibility problems on the orders page",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Review this dashboard before we ship it",
   "expect": [
-   "tabby-review",
-   "tabby-frontend"
+   "review",
+   "frontend"
   ]
  },
  {
   "query": "Add a light and dark mode switch to the MkDocs site",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Update every caller of get_user to the new signature and fix all the failing tests",
@@ -268,13 +268,13 @@
  },
  {
   "query": "Draw the states a job can be in as a diagram",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Design a README header image for this Python library",
   "expect": [
-   "tabby-diagrams",
-   "tabby-frontend"
+   "diagrams",
+   "frontend"
   ]
  },
  {
@@ -291,66 +291,66 @@
  },
  {
   "query": "Build a Streamlit page that shows signups per day",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Make the Jinja order template look better on mobile",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Add a status dashboard page to the Django admin",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Add a landing page for the library to the docs site",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Add a bar chart of monthly revenue to the Dash app",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Draw an ER diagram of the database tables",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Make a sequence diagram of the login flow",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Animate how the queue and the worker interact",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Draw the deployment of our service on AWS",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Check this diagram I made before I put it in the README",
   "expect": [
-   "tabby-review",
-   "tabby-diagrams"
+   "review",
+   "diagrams"
   ]
  },
  {
   "query": "Audit our GitHub workflows and the release path",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Review the PR diff for noise and silenced tests",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Write the commit message for this change",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Does the README still match the code?",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Write a runbook for the nightly import job",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Add retries to the Slack notifier",

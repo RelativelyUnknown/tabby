@@ -1,6 +1,6 @@
 # debt
 
-A skill of the Tabby plugin that keeps a ledger of the shortcuts you chose on purpose. You run it yourself (`/tabby:tabby-debt` in Claude Code, `/tabby-debt` in the other tools); the agent never starts it on its own.
+A skill of the Tabby plugin that keeps a ledger of the shortcuts you chose on purpose. You run it yourself (`/tabby:debt` in Claude Code, `/debt` in the other tools); the agent never starts it on its own.
 
 **Entry point:** [`SKILL.md`](SKILL.md). The work is done by [`scripts/shortcuts.py`](scripts/shortcuts.py), which uses only the standard library.
 
@@ -15,7 +15,7 @@ Tabby's rule is that a deliberate limit is written down where it lives, in one c
 rows = [r for r in rows if r["id"] == key]  # shortcut: linear scan, move to an index past 10k rows
 ```
 
-The agent adds these comments as it works (core rule 7 in [`../core/TABBY-CORE.md`](../core/TABBY-CORE.md)), and the reviewer checks that each one names both parts ([`../tabby-review/changes/self-review.md`](../tabby-review/changes/self-review.md)). `tabby-debt` is the other half: it collects every marker into one table, so the list is read in one sitting instead of rediscovered by accident.
+The agent adds these comments as it works (core rule 7 in [`../core/TABBY-CORE.md`](../core/TABBY-CORE.md)), and the reviewer checks that each one names both parts ([`../review/changes/self-review.md`](../review/changes/self-review.md)). `debt` is the other half: it collects every marker into one table, so the list is read in one sitting instead of rediscovered by accident.
 
 ## What it does
 
@@ -44,8 +44,8 @@ The flagged row is the useful one: "whole file read into memory" says what is si
 ## In CI
 
 ```
-python3 tabby-debt/scripts/shortcuts.py . --check    # exit 1 when any marker is flagged
-python3 tabby-debt/scripts/shortcuts.py . --json     # the rows as JSON
+python3 debt/scripts/shortcuts.py . --check    # exit 1 when any marker is flagged
+python3 debt/scripts/shortcuts.py . --json     # the rows as JSON
 ```
 
 `--check` fails only for a marker with no limit or no trigger; a project with no markers passes. It does not fail because shortcuts exist.

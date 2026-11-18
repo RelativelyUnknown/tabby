@@ -43,7 +43,7 @@ These are what an interface drifts into when nobody decides. Each is a default, 
 - Generic claims ("a seamless, powerful platform"), forced contrast ("Not a tool. A platform."), and puffery. Say what it does.
 - The same sentence repeated inside one block; filler in a button; an error with no way out.
 - Figures, quotes, logos or testimonials the project does not have. Mark a placeholder as one.
-- Em dashes used as a tic. (See `voice-and-style.md` in the `tabby-docs` skill for the wider list.)
+- Em dashes used as a tic. (See `voice-and-style.md` in the `docs` skill for the wider list.)
 
 ## Never the whole page
 

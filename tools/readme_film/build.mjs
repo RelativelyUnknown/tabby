@@ -14,11 +14,11 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "../..");
 const FPS = 30;
 // lossless: flat cards, where lossy compression speckles the empty bars.
-// loop: true repeats forever (frames 0 .. DUR, end excluded, so the seam is clean); false plays once and holds the last frame.
+// loop: true repeats forever (frames 0 .. DUR, end excluded, so the seam is clean). Every film loops; the cards hold the finished state, fade out and start again.
 const FILMS = {
   hero: { page: "hero.html", out: "tabby-cat", w: 1280, h: 360, loop: true, logo: true },
-  effect: { page: "effect.html", out: "tabby-effect", w: 760, h: 384, loop: false, lossless: true },
-  quality: { page: "quality.html", out: "tabby-quality", w: 760, h: 356, loop: false, lossless: true },
+  effect: { page: "effect.html", out: "tabby-effect", w: 760, h: 384, loop: true, lossless: true },
+  quality: { page: "quality.html", out: "tabby-quality", w: 760, h: 356, loop: true, lossless: true },
 };
 const require = createRequire(import.meta.url);
 let pw;   // a local install first, then a global one

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Tabby security audit report",
-  "description": "Checked by tabby-review/scripts/validate_findings.py. Buckets and fields follow security-audit/process-and-reporting.md.",
+  "description": "Checked by review/scripts/validate_findings.py. Buckets and fields follow security-audit/process-and-reporting.md.",
   "type": "object",
   "required": ["verdict", "findings", "coverage"],
   "properties": {

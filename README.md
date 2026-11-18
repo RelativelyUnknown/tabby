@@ -1,11 +1,12 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-cat-dark.webp">
-    <img src="assets/tabby-cat-light.webp" width="880" alt="Tabby: agent skills for careful Python. In a terminal someone types cat, an ASCII cat prints, blinks, swishes its tail and says meow, then the screen clears.">
+    <img src="assets/tabby-cat-light.webp" width="880" alt="Tabby: agent skills for careful Python. Cleaner code. Tests that can actually fail. In a terminal someone types cat, an ASCII cat prints, blinks, swishes its tail and says meow, then the screen clears, and the loop starts again.">
   </picture>
 </p>
 
-<p align="center"><strong>Agent skills that make your coding agent write Python like a careful senior engineer.</strong><br>
+<p align="center"><strong>Cleaner code. Tests that can actually fail.</strong><br>
+Agent skills that make your coding agent write Python like a careful senior engineer.<br>
 Finds the cause before the fix. Reuses before it writes. Keeps the diff small. Never edits a test to get green.</p>
 
 <p align="center">
@@ -113,7 +114,7 @@ python3 tools/eval/summarise.py results
 - **Hooks check afterwards** (Claude Code): ruff on edited files, a diff check for loosened tests and silenced checkers, the project's check command once. See [`hooks/`](hooks/).
 - **Project memory is optional.** `/tabby:interview` saves what the code cannot say (users, growth, limits) to `AGENTS.md`, and later tasks decide from it. See [`interview/`](interview/).
 
-After you install, nothing needs setting up: ask for a Python change. Run `/tabby:interview` once if you want the agent to know where the project is going, and `/tabby:tabby-debt` whenever you want the list of shortcuts it left on purpose.
+After you install, nothing needs setting up: ask for a Python change. Run `/tabby:interview` once if you want the agent to know where the project is going, and `/tabby:debt` whenever you want the list of shortcuts it left on purpose.
 
 ## What's inside
 
@@ -122,11 +123,11 @@ Five skills load on their own when the request matches, and four commands you ru
 | Skill | The agent loads it when you | What it adds |
 | --- | --- | --- |
 | [`tabby`](tabby/) | write, fix, test, speed up, package or release Python, or the Rust, C, C++ or Zig behind it | Rules the agent never skips, and files on errors, typing, dependencies and uv, CI, performance, libraries, services, design, and native layouts, PyO3, the C API and wheels |
-| [`tabby-review`](tabby-review/) | ask for a review of a diff or pull request, a repository audit or a security audit | Self-review, a security audit that separates confirmed bugs from look-alikes, and a checklist for the Python and native boundary |
-| [`tabby-docs`](tabby-docs/) | write a README, docstrings, a tutorial, a changelog, an ADR or a runbook | One page type per reader need, and a check of the docs against the code |
-| [`tabby-diagrams`](tabby-diagrams/) | ask for a diagram, an architecture picture or an animation | A builder that turns a small spec into an SVG or an HTML animation, and checkers for crowded labels, contrast and loop jumps |
-| [`tabby-frontend`](tabby-frontend/) | build a page, dashboard, data app or docs site | A method, design tokens, a list of things it refuses to ship, and `ui-check` for contrast, focus, motion and layout |
-| [`tabby-debt`](tabby-debt/) | run `/tabby:tabby-debt` | Lists every `# shortcut: <limit>, <when to upgrade>` comment (the simplifications the agent left on purpose) as one table, flags the ones that name no trigger to revisit, and exits 1 in CI with `--check` |
+| [`review`](review/) | ask for a review of a diff or pull request, a repository audit or a security audit | Self-review, a security audit that separates confirmed bugs from look-alikes, and a checklist for the Python and native boundary |
+| [`docs`](docs/) | write a README, docstrings, a tutorial, a changelog, an ADR or a runbook | One page type per reader need, and a check of the docs against the code |
+| [`diagrams`](diagrams/) | ask for a diagram, an architecture picture or an animation | A builder that turns a small spec into an SVG or an HTML animation, and checkers for crowded labels, contrast and loop jumps |
+| [`frontend`](frontend/) | build a page, dashboard, data app or docs site | A method, design tokens, a list of things it refuses to ship, and `ui-check` for contrast, focus, motion and layout |
+| [`debt`](debt/) | run `/tabby:debt` | Lists every `# shortcut: <limit>, <when to upgrade>` comment (the simplifications the agent left on purpose) as one table, flags the ones that name no trigger to revisit, and exits 1 in CI with `--check` |
 | [`interview`](interview/) | run `/tabby:interview` | Researches the repository read-only, asks at most three questions a round, and saves a `## Tabby` section to `AGENTS.md` |
 | [`voice`](voice/) | run `/tabby:voice terse\|explain\|auto` | Sets whether replies are terse and technical, or explain how the change works in plain words; the default picks from what you say |
 | [`hooks`](hooks/) | run `/tabby:hooks on\|off` | Shows, turns on or turns off the quality-gate hooks (Claude Code); the light `lite` mode is set in `.claude/tabby.json` or with `TABBY_MODE` |

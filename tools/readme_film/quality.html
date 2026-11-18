@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
-  The README's code-quality card, animated once: each row's two bars (with and without Tabby) grow while the numbers count
-  up, one row after another. The numbers come from tools/eval/quality.py on the last full run; update QUALITY below.
+  The README's code-quality card, animated as a loop: each row's two bars (with and without Tabby) grow while the numbers count
+  up, one row after another. The numbers come from tools/eval/quality.py on the last full run; update QUALITY below. The finished card holds, fades out and starts again.
 -->
 <html><head><meta charset="utf-8">
 <style>
@@ -81,5 +81,18 @@ window.render = (t) => {
     g.globalAlpha = 1;
   }
 };
+// Loop: hold the finished card, fade the content out to the empty panel, fade the next pass in. The seam is an empty panel.
+(() => {
+  const ANIM = window.DUR, HOLD = 1.8, FADE = .5, IN = .3, draw = window.render;
+  window.DUR = ANIM + HOLD + FADE;
+  window.render = (t) => {
+    draw(Math.min(t, ANIM));
+    const a = Math.min(clamp(t / IN), 1 - clamp((t - (window.DUR - FADE)) / FADE));
+    if (a < 1) {
+      g.setTransform(SCALE, 0, 0, SCALE, 0, 0); g.globalAlpha = 1 - a; g.fillStyle = C.panel;
+      g.beginPath(); g.roundRect(3, 3, W - 6, H - 6, 20); g.fill(); g.globalAlpha = 1;
+    }
+  };
+})();
 Promise.all([document.fonts.load("700 20px Fredoka"), document.fonts.load("500 20px Fredoka")]).then(() => { window.render(0); window.READY = true; });
 </script></body></html>

@@ -1,6 +1,6 @@
 ---
 name: tabby
-description: "Load at the start of any Python code task, before reading files or editing, including a bug report that only describes a symptom (a failing or flaky test, red CI, a crash, a 500, wrong output, a hang, a leak, a slowdown, a duplicate run): fix a bug, add a feature, flag or endpoint, refactor, add types or tests, make code faster, add a dependency, set up CI, cut a release, bind Rust, C, C++ or Zig. It holds the project detection and the rules and pages for each area. Applies even when the task looks simple. Reviews, docs, diagrams and web pages use tabby-review, tabby-docs, tabby-diagrams and tabby-frontend."
+description: "Load at the start of any Python code task, before reading files or editing, including a bug report that only describes a symptom (a failing or flaky test, red CI, a crash, a 500, wrong output, a hang, a leak, a slowdown, a duplicate run): fix a bug, add a feature, flag or endpoint, refactor, add types or tests, make code faster, add a dependency, set up CI, cut a release, bind Rust, C, C++ or Zig. It holds the project detection and the rules and pages for each area. Applies even when the task looks simple. Reviews, docs, diagrams and web pages use review, docs, diagrams and frontend."
 allowed-tools: Bash(python3 *detect.py*)
 ---
 
@@ -20,7 +20,10 @@ Run `python3 scripts/detect.py` from this skill's folder (the harness names the 
 - Writing, reviewing, rating or cleaning up tests: read `development/testing/test-quality-scorecard.md` before reporting. Each new test is seen to fail once when the code under it is broken, and the reply names what stays untested.
 - Code that takes a URL, a file path or name, an upload, SQL or shell input, a password or token, or handles a secret: read `development/code/input-and-secrets-security.md` before the first edit.
 - Code that decides something (a permission or eligibility rule, a price, discount or fee, a parser, a state transition) and its tests: read `development/testing/proof-based-testing.md` before writing the tests. State what must be allowed and what must be refused, pin both sides of every boundary, take expected values from the spec, and break the function on purpose once to see a test fail.
-- A design choice, before the first edit: a rule, format or number that would live in more than one place (`development/architecture/coupling-and-connascence.md`: keep one definition, say where); a boundary between layers (`architecture-fitness-functions.md`: add a check that fails when it is crossed); a record with flags or optional fields that can disagree, or a status with transitions (`parse-dont-validate.md`: make the bad combination impossible in one place). A rename, or a changed shape, of anything others can use: `development/workflow/deprecation-and-migration.md` (expand, migrate, contract: the old form keeps working and warns).
+- A rule, format, rate or literal that would end up in more than one file, or two parts that must agree: read `development/architecture/coupling-and-connascence.md` before the first edit. One definition, used by every caller, and the reply says where it lives and how many places had it.
+- A layer or package boundary stated in the request ("the domain must not import the web layer", "core stays free of I/O"): read `development/architecture/architecture-fitness-functions.md` before the first edit, and add an automated check that fails when the boundary is crossed (an import-linter contract or a test over the imports). A sentence in a comment or the reply does not keep a rule.
+- A record or class with a status, flags or optional fields, or functions that move it between states (ship, cancel, approve): read `development/architecture/parse-dont-validate.md` before the first edit, and make the invalid combinations impossible to build in one place (a type per state, or one transition function), not a check repeated in each function.
+- A rename or changed shape of anything others can use (a parameter, a payload, a column): `development/workflow/deprecation-and-migration.md`. The old form keeps working and warns; remove it later.
 - Adding, removing or tidying a package: read `development/dependencies/dependency-hygiene.md` (match imports to the declared list by import name, and look beyond Python files: a Dockerfile, a script, an entry point).
 - Find the cause before the fix. No special-casing inputs, no sleeps or retries to hide a symptom. Do not silence tools (`# type: ignore`, `# noqa`, `Any`, looser config). Asked to raise a timeout, limit or retry count so a failure stops: first read what the failing code does; if it is slow or failing for a fixable reason (a query per row, a loop, a missing index), say so and fix it or offer the fix, then do what was asked.
 - A request you cannot state as one change ("make the reports better") gets one to three short questions with suggested answers before any edit. A request that names the change is done, not discussed. A feature with several readings gets a one-page spec and its first slice (`development/workflow/specs-and-slices.md`).
@@ -67,7 +70,7 @@ By kind of project (`project-kind-detection.md` names it; read only the line for
 
 ## Other Tabby skills
 
-Review or audit: `tabby-review`. README, docstrings, changelog, ADR, commit message: `tabby-docs`. A diagram or animation: `tabby-diagrams`. A page, dashboard or docs site: `tabby-frontend`. Each loads on its own; use it instead of improvising.
+Review or audit: `review`. README, docstrings, changelog, ADR, commit message: `docs`. A diagram or animation: `diagrams`. A page, dashboard or docs site: `frontend`. Each loads on its own; use it instead of improvising.
 
 ## Project memory
 

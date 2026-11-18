@@ -4,7 +4,7 @@ import sys
 import tempfile
 import unittest
 
-SCRIPT = pathlib.Path(__file__).resolve().parents[1] / "tabby-debt/scripts/shortcuts.py"
+SCRIPT = pathlib.Path(__file__).resolve().parents[1] / "debt/scripts/shortcuts.py"
 
 
 def run(root, *flags):

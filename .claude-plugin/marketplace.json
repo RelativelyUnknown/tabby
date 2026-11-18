@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "tabby",
-      "description": "Nine skills for Python projects: tabby (development, with Rust, C, C++ and Zig extensions), tabby-review, tabby-docs, tabby-diagrams and tabby-frontend, plus the commands interview, tabby-debt, voice and hooks, which run only when asked.",
+      "description": "Nine skills for Python projects: tabby (development, with Rust, C, C++ and Zig extensions), review, docs, diagrams and frontend, plus the commands interview, debt, voice and hooks, which run only when asked.",
       "source": "./",
       "category": "development"
     }

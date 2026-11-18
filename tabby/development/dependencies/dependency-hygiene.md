@@ -16,7 +16,7 @@ Run them inside the project's environment with the package installed (`uv run de
 ## Rules
 
 - A new tool follows the ladder and `ask-first:`; the project's own lint config may already include these (ruff's `F401`, `F841`). Use the project's tool before adding one.
-- `vulture` and `deptry` find *candidates*. Before removing, apply the dead-code check from [repo-audit.md](../../../tabby-review/repo-audit.md): entry points in `pyproject.toml`, framework registration, `getattr` and plugin loading, and `git log -S<name>`. A public name of a library is never dead because nothing inside calls it.
+- `vulture` and `deptry` find *candidates*. Before removing, apply the dead-code check from [repo-audit.md](../../../review/repo-audit.md): entry points in `pyproject.toml`, framework registration, `getattr` and plugin loading, and `git log -S<name>`. A public name of a library is never dead because nothing inside calls it.
 - A dependency imported only under `TYPE_CHECKING` or in one rarely run script is still a dependency; say which group it belongs to.
 - A removal changes the lock file: show the diff, run the tests, and say what else it pulled out.
 - Pin the direction, not every version: a library declares ranges, an application locks ([choosing-dependencies.md](choosing-dependencies.md)).

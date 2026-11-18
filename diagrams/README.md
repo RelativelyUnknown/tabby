@@ -1,6 +1,6 @@
-# tabby-diagrams
+# diagrams
 
-A skill of the Tabby plugin for pictures of how a system works: a static diagram (SVG) or a short explainer animation (one self-contained HTML file). It loads when you ask for a diagram, flowchart, architecture picture, state or entity-relationship diagram, deployment picture or animation. A screen, dashboard or docs site is [`tabby-frontend`](../tabby-frontend/).
+A skill of the Tabby plugin for pictures of how a system works: a static diagram (SVG) or a short explainer animation (one self-contained HTML file). It loads when you ask for a diagram, flowchart, architecture picture, state or entity-relationship diagram, deployment picture or animation. A screen, dashboard or docs site is [`frontend`](../frontend/).
 
 **Entry point:** [`SKILL.md`](SKILL.md). The two quickstarts are [`diagrams/quickstart.md`](diagrams/quickstart.md) and [`animation/quickstart.md`](animation/quickstart.md).
 

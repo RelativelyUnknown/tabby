@@ -29,10 +29,10 @@ Fix by lowering the strength, moving the two parts closer, or cutting the degree
 
 A finding names both places, the kind and the input or change that breaks it: `billing/invoice.py:88 and web/forms.py:41 both write the tax rounding as round(x * 1.19, 2) (algorithm): changing the rate in one leaves the other charging the old amount. Move it to one function.` Without the second place and a change that breaks it, it is a smell, not a finding.
 
-[`tabby-review/scripts/cochange.py`](../../../tabby-review/scripts/cochange.py) finds pairs the imports do not show: files that change together in git history with no import between them are usually sharing a meaning or an algorithm. See [architecture-fitness-functions.md](architecture-fitness-functions.md) to keep a boundary from decaying once it is drawn.
+[`review/scripts/cochange.py`](../../../review/scripts/cochange.py) finds pairs the imports do not show: files that change together in git history with no import between them are usually sharing a meaning or an algorithm. See [architecture-fitness-functions.md](architecture-fitness-functions.md) to keep a boundary from decaying once it is drawn.
 
 ## When writing code
 
 - Before adding a second copy of a literal, a format, a rounding rule or a regex, check whether the first lives anywhere reusable (`git grep`). Two copies are connascence of meaning or algorithm waiting for its change.
 - Positional values past two or three: a dataclass or keyword-only parameters. A boolean flag in a call (`save(x, True)`): a keyword (`save(x, overwrite=True)`).
-- A required call order is a state machine nobody wrote down: make the wrong order impossible ([parse-dont-validate.md](parse-dont-validate.md)) or see [`tabby-review/state-machines.md`](../../../tabby-review/state-machines.md).
+- A required call order is a state machine nobody wrote down: make the wrong order impossible ([parse-dont-validate.md](parse-dont-validate.md)) or see [`review/state-machines.md`](../../../review/state-machines.md).

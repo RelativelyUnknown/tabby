@@ -1,6 +1,6 @@
 # tabby
 
-The main skill of the Tabby plugin. It loads at the start of any Python code task (fix a bug, add a feature, refactor, add tests or types, speed something up, add a dependency, set up CI, cut a release, bind Rust, C, C++ or Zig) and holds the rules the agent always follows plus the reference pages for each area. Reviews, docs, diagrams and web pages use the sibling skills (`tabby-review`, `tabby-docs`, `tabby-diagrams`, `tabby-frontend`).
+The main skill of the Tabby plugin. It loads at the start of any Python code task (fix a bug, add a feature, refactor, add tests or types, speed something up, add a dependency, set up CI, cut a release, bind Rust, C, C++ or Zig) and holds the rules the agent always follows plus the reference pages for each area. Reviews, docs, diagrams and web pages use the sibling skills (`review`, `docs`, `diagrams`, `frontend`).
 
 **Entry point:** [`SKILL.md`](SKILL.md) (a short router, about 95 lines). The pages are loaded one at a time, only for the area the task touches, so the agent reads a few hundred lines for a task, not the 75 files in this folder.
 

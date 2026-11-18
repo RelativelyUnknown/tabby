@@ -1,6 +1,6 @@
 ---
-name: tabby-diagrams
-description: "Load at the start for any picture of how a system works, as SVG or animated HTML: a diagram, flowchart or layout of architecture, flow, sequence, state, entity-relationship (database tables), deployment (Kubernetes, AWS), data flow, module dependencies, or an explainer animation. It holds the builder and the checkers. Not for web pages or dashboards (tabby-frontend)."
+name: diagrams
+description: "Load at the start for any picture of how a system works, as SVG or animated HTML: a diagram, flowchart or layout of architecture, flow, sequence, state, entity-relationship (database tables), deployment (Kubernetes, AWS), data flow, module dependencies, or an explainer animation. It holds the builder and the checkers. Not for web pages or dashboards (frontend)."
 license: MIT
 ---
 
@@ -21,4 +21,4 @@ Never miss:
 
 Needs: Node 22 for the builders; Playwright Chromium to render and to check motion; ffmpeg only for video. Ask before installing any of them; if one is missing, say what was not checked. Playwright is the Node package: run the renderer or `check-motion.mjs` to find out (they say when it is missing); Python's `import playwright` failing says nothing about it.
 
-Defaults come from `## Tabby` or `## Python defaults` in AGENTS.md. Ask only what is still unknown. A screen, dashboard, template or docs site is the `tabby-frontend` skill, not this one.
+Defaults come from `## Tabby` or `## Python defaults` in AGENTS.md. Ask only what is still unknown. A screen, dashboard, template or docs site is the `frontend` skill, not this one.

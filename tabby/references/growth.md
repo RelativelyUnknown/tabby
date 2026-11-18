@@ -41,7 +41,7 @@ Do these in the same task that builds the item; the next session decides from th
 1. Re-read `out-of-scope:` and `constraints:`. Ask if the task conflicts.
 2. Read the leaf for that kind of work: `development/library/native/native-overview.md` for a first Rust, C or C++ module (`native-porting-a-function.md` to move an existing function), `development/application/apis/http/http-service-design.md` for a first endpoint, `development/library/shared/public-api-design.md` for a first public release.
 3. For a first data structure, representation or algorithm choice, read `development/architecture/data-structure-and-algorithm-fit.md`.
-4. Write one ADR (`project-docs.md` in the `tabby-docs` skill): the decision, the alternatives, what would change it.
+4. Write one ADR (`project-docs.md` in the `docs` skill): the decision, the alternatives, what would change it.
 5. Move the item from `growth:` to `goals:` or delete it. Update `map:`, `commands:` and `open:` where the build changed them, add the user's approval to `decided:` with the date, and update `reviewed:`. Say in the final message which lines changed.
 
 ## Smells

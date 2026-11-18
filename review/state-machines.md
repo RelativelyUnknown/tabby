@@ -40,6 +40,6 @@ Run what you can: build the illegal state in a test and call the next function; 
 
 ## 4. Report
 
-The list of machines found (name, where the state lives, how many states), the table for any that has a finding, and each finding with file and line, the sequence of events that reaches it, and what happens. Draw one with the `tabby-diagrams` skill when the user wants a picture; a state diagram only helps when it shows the missing arrows.
+The list of machines found (name, where the state lives, how many states), the table for any that has a finding, and each finding with file and line, the sequence of events that reaches it, and what happens. Draw one with the `diagrams` skill when the user wants a picture; a state diagram only helps when it shows the missing arrows.
 
 Making a machine explicit (an `Enum`, one function that is the only writer, a transition table, a database `CHECK` or compare-and-set) is the fix when the table shows illegal states or two writers. Where the table shows none, leave the code alone and say so.

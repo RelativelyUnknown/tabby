@@ -5,7 +5,7 @@ import sys
 import tempfile
 import unittest
 
-SCRIPTS = pathlib.Path(__file__).resolve().parents[1] / "tabby-review/scripts"
+SCRIPTS = pathlib.Path(__file__).resolve().parents[1] / "review/scripts"
 GIT = ["git", "-c", "user.email=t@example.com", "-c", "user.name=t"]
 
 

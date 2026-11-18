@@ -65,147 +65,147 @@
  },
  {
   "query": "can you review the diff on this branch",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Audit this repo for dead code and bloat",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Look through the last 3 commits for mistakes",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Do a security audit of our dependencies and CI",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Does this change break the Rust/Python boundary?",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Please critique this implementation before I merge",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Check the PyO3 bindings for unsound unsafe blocks",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Evaluate the animation I made, does it work?",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Review PR 214",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Check whether my tests were weakened in this change",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Add docstrings to the public functions in client.py",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Document the architecture decision to use Postgres",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Create a CONTRIBUTING.md",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Write a runbook for the queue backing up",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Is the README still accurate?",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Draft a troubleshooting page for the common install errors",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Fix the typos and make the README clearer",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Document how to run the project locally",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "add an upgrade guide for v2",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Document the environment variables the service reads",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Make a diagram of how a request flows through the API",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Sketch a sequence diagram for the login flow",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "animate how a message travels through the queue",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Draw the data flow from ingest to warehouse",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "turn this description of the pipeline into a diagram",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Make an animated diagram for the README that shows the cache",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Illustrate the deploy pipeline as a picture",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "build an animated HTML explainer of the event loop",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Make the admin page responsive on mobile",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Create a Streamlit app to explore the dataset",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "The Jinja page has contrast problems, fix them",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Build a Gradio demo for the model",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "the buttons on the settings page are too small on phones",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Make the Sphinx docs look better",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Add a hero section to the project website",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Build a Dash app with a filter and a graph",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Explain how decorators work",

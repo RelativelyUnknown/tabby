@@ -1,6 +1,6 @@
 # Native boundary smells (Rust, C or C++ behind Python)
 
-Same format as [code-smells.md](../../code/code-smells.md): the smell, `→`, the fix. The rules are in [native-rust.md](native-rust.md) and [native-c.md](native-c.md); the review checklist is `native-boundary.md` in the `tabby-review` skill (`../tabby-review/`).
+Same format as [code-smells.md](../../code/code-smells.md): the smell, `→`, the fix. The rules are in [native-rust.md](native-rust.md) and [native-c.md](native-c.md); the review checklist is `native-boundary.md` in the `review` skill (`../review/`).
 
 ## Rust and PyO3
 

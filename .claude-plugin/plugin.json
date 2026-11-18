@@ -10,11 +10,11 @@
   "repository": "https://github.com/RelativelyUnknown/tabby",
   "skills": [
     "./tabby",
-    "./tabby-review",
-    "./tabby-docs",
-    "./tabby-diagrams",
-    "./tabby-frontend",
-    "./tabby-debt",
+    "./review",
+    "./docs",
+    "./diagrams",
+    "./frontend",
+    "./debt",
     "./interview",
     "./voice",
     "./hooks"

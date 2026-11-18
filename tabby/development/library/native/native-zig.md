@@ -17,7 +17,7 @@ Same shape as [native-rust.md](native-rust.md) and [native-c.md](native-c.md), a
 - **Memory.** Zig has no borrow checker; every allocation takes an explicit `std.mem.Allocator`, so ownership is a parameter you choose, not inferred. Pick the allocator deliberately (an arena for a request's lifetime, the general-purpose allocator elsewhere) and free on the same side that allocated, as in C.
 - **Errors.** Map Zig's error unions (`!T`) to Python exceptions at the module boundary; never let a Zig `error` or a `@panic` cross into Python unconverted.
 - **Safety checks.** Zig's `ReleaseSafe` build mode keeps bounds and overflow checks in a build that is still fast; use it for the extension's release build rather than `ReleaseFast`, which strips them, unless a profile shows the checks themselves are the bottleneck.
-- **Boundary review.** The checklist in `native-boundary.md` in the `tabby-review` skill (`../tabby-review/`) (reference counts, error translation, buffer lifetime, layout) applies the same way; only the per-language syntax differs.
+- **Boundary review.** The checklist in `native-boundary.md` in the `review` skill (`../review/`) (reference counts, error translation, buffer lifetime, layout) applies the same way; only the per-language syntax differs.
 
 ## What a large Zig codebase does
 
