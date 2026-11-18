@@ -174,7 +174,7 @@ The score does not capture everything. What the code itself looked like, on 10 c
 
 This is one model, one suite and 3 runs per case, so differences under about 0.05 are noise.
 
-A second, hands-on check is in [`experiments/io-uring-comparison/`](experiments/io-uring-comparison/): the same vague request to an agent with and without Tabby, building a Rust and io_uring library for Python. One run each, so it shows what the difference looks like in practice, not how large it is: Tabby's version had the more complete tests, fallback and docs, and it was slower to produce; the plain version found the faster design for 1 MB files. The folder has the prompts, the benchmark script and the notes on how I, Claude, may have skewed it, so you can rerun it.
+A second, hands-on check is in [`experiments/io-uring-comparison/`](experiments/io-uring-comparison/): the same vague request to an agent with and without Tabby, building a Rust and io_uring library for Python. One run each, so it shows what the difference looks like in practice, not how large it is: the Tabby run came with more tests, a fallback and up-to-date docs and took more steps to get there, while the plain run happened to land on a faster design for 1 MB files. The folder has the prompts, the benchmark script and the notes on how I, Claude, may have skewed it, so you can rerun it.
 
 <details>
 <summary><strong>Re-run it yourself</strong></summary>
