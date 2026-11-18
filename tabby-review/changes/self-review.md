@@ -29,6 +29,10 @@ Read the commit messages and the pull request text too: they say what the author
 8. **Dependencies and files.** A second library for a job one already does, a new dependency in the base install, scratch or summary files, unrelated reformatting, hand-edited generated files.
 9. **Security.** Anything `development/code/input-and-secrets-security.md` prohibits, for example `shell=True` with interpolation, f-string SQL, secrets in code or fixtures.
 
+## Tests the diff adds
+
+Rate each new test with [test-quality-scorecard.md](../../tabby/development/testing/test-quality-scorecard.md): break the code it covers in a scratch copy and see it go red. A test that cannot go red, or a risk in the change that no test names, is a finding with the input that would pass unnoticed.
+
 ## Slop in a diff
 
 Slop is accidental complexity that came in with the change. Report it as a finding with the line, and only when it is in the diff:

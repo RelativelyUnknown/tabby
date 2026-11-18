@@ -23,6 +23,12 @@ One page, in the project's convention (`docs/specs/<name>.md` if it has a docs f
 - Each slice names its test and the command that shows it works. After two or three slices, stop and check the result against the success criteria before going on.
 - Build slice one, report it, and say what the next slices would be. Do not build the whole plan on assumptions nobody has confirmed.
 
+## Walking skeleton: the first slice of something new
+
+For a new feature or service that crosses several layers (input, logic, storage, output), make slice one a *walking skeleton*: the thinnest path that runs from the real entry point to the real output with each part as a stub that does one fixed thing. A request goes in, a hard-coded answer comes out through every layer, and one end-to-end test and the run command exist. Then fill each part in, one slice at a time, with that test green throughout.
+
+It finds the wrong assumptions that cost most (a library that cannot do it, a format that does not match, a layer that needs a different shape) while they are cheap. Skip it for a change inside one layer, and do not let the skeleton grow into the full design before the second slice.
+
 ## Task list
 
 For work over several slices: numbered tasks, each with the files it touches, its test, and its verify command; a checkpoint line after each group of two or three. Keep it in the reply or the spec, not as a new tracking file nobody asked for.

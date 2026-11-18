@@ -13,9 +13,10 @@ Find what will hurt whoever owns this next: wrong, unsafe, breaking under load, 
 1. **Bug:** a wrong result, a crash, a missed edge (empty, zero, last item, rounding, time zones), two places applying the same rule differently.
 2. **Risk:** unsafe handling of input, secrets in code, data loss (swallowed errors, writes in the wrong order, no transaction). Pass these to the security audit if they need tracing.
 3. **Load:** fine for one user, wrong for many: check-then-write races, a query per item, a list or cache that only grows, per-process state that must be shared, quadratic work on caller-sized input.
-4. **Missing test:** risky logic (a branch, a parser, money, a data write) with no test that would fail if it broke. One good test, not coverage.
+4. **Missing test:** risky logic (a branch, a parser, money, a data write) with no test that would fail if it broke. One good test, not coverage. To check that a test would fail, use [test-quality-scorecard.md](../tabby/development/testing/test-quality-scorecard.md) (`scripts/mutation_probe.py` on a scratch copy).
 5. **Speed:** only large slowdowns are findings; small ones are suggestions.
-6. **Lean:** code that can go: unused code, options and flags nobody sets, a second helper doing the same job, a dependency doing what the standard library does, an abstraction with one implementation.
+6. **Lean:** code that can go: unused code, options and flags nobody sets, a second helper doing the same job, a dependency doing what the standard library does, an abstraction with one implementation. Declared and imported packages that do not match: [dependency-hygiene.md](../tabby/development/dependencies/dependency-hygiene.md) (`deptry`, `vulture`; candidates, not proof).
+7. **Coupling:** a rule, format or literal written in two places that must agree, a boundary that the code crosses the wrong way, files that always change together. Run `python3 scripts/cochange.py <project>` from this skill's folder and open both files of each pair with no import link; name the kind with [coupling-and-connascence.md](../tabby/development/architecture/coupling-and-connascence.md). A pair that only shares a feature (a model and its migration) is not a finding.
 
 ## Before you report
 

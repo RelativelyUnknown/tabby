@@ -12,6 +12,8 @@ changes/self-review.md                       silenced checks, weakened tests, sm
 bug-hunt.md                                  probes, checks enforced in one place and used in another, Python traps
 state-machines.md                            implicit state machines: status fields, flags that travel together
 repo-audit.md                                whole-repository audit: bugs, risk, load, missing tests, what to delete
+scripts/cochange.py                          file pairs that change together in git with no import between them (hidden coupling)
+scripts/mutation_probe.py                    break one file one change at a time; list survivors and tests that never went red
 native-boundary.md                           per-function table and checklist for the Python to Rust or C boundary
 design.md                                    diagram, animation or interface: a judgment pass and a measured pass, kept apart
 security-audit/process-and-reporting.md      trace input to sink, try to disprove each candidate; confirmed / needs-validation / rejected
