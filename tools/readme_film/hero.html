@@ -136,9 +136,9 @@ function drawText(g) {
   const x0 = 690;
   g.fillStyle = C.ink; g.font = "700 124px Fredoka"; g.fillText("Tabby", x0, 150);   // the y descender clears the tagline
   g.fillStyle = C.muted; g.font = "500 31px Fredoka"; g.fillText("Agent skills for careful Python.", x0 + 4, 212);
-  // what the skills focus on: two rows of rounded tags
+  // the rules it holds (README, "The rules it holds"): two rows of rounded tags
   g.font = "500 21px Fredoka";
-  const rows = [["cause before fix", "tests that can fail", "small diffs"], ["reviews & audits", "docs, diagrams, UI", "Rust · C · Zig"]];
+  const rows = [["cause before fix", "small diffs", "reuse first"], ["tests never bent", "no silencing", "run before done"]];
   rows.forEach((labels, r) => {
     let px = x0 + 4;
     for (const label of labels) {
