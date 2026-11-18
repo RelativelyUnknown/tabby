@@ -12,6 +12,7 @@ import argparse
 import ast
 import itertools
 import json
+import os
 import pathlib
 import subprocess
 import sys
@@ -113,4 +114,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except BrokenPipeError:  # output piped to `head` and closed early
+        os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
+        sys.exit(0)
