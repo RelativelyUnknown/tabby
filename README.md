@@ -5,8 +5,7 @@
   </picture>
 </p>
 
-<p align="center"><strong>Cleaner code. Tests that can actually fail.</strong><br>
-Agent skills that make your coding agent write Python like a careful senior engineer.<br>
+<p align="center"><strong>Agent skills that make your coding agent write Python like a careful senior engineer.</strong><br>
 Finds the cause before the fix. Reuses before it writes. Keeps the diff small. Never edits a test to get green.</p>
 
 <p align="center">
