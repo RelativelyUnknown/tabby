@@ -1,12 +1,12 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/tabby-cat-dark.webp">
-    <img src="assets/tabby-cat-light.webp" width="880" alt="Tabby: careful Python, from first edit to review. In a terminal someone types cat, an ASCII cat prints, blinks, swishes its tail and says meow, then the screen clears, and the loop starts again.">
+    <img src="assets/tabby-cat-light.webp" width="880" alt="Tabby: the daily toolkit for Python developers. In a terminal someone types cat, an ASCII cat prints, blinks, swishes its tail and says meow, then the screen clears, and the loop starts again.">
   </picture>
 </p>
 
-<p align="center"><strong>Careful Python, from the first edit to the review.</strong><br>
-Agent skills that make your coding agent write, test, review and document Python like a careful senior engineer.<br>
+<p align="center"><strong>The daily toolkit for Python developers.</strong><br>
+Agent skills for code, tests, reviews, docs, diagrams and animation, all held to the rules of a careful senior engineer.<br>
 Finds the cause before the fix. Reuses before it writes. Keeps the diff small. Never edits a test to get green.</p>
 
 <p align="center">

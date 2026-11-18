@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- New tagline, "Careful Python, from first edit to review.", in the README and the hero banner; the line under it says the skills write, test, review and document Python.
+- New tagline, "The daily toolkit for Python developers.", in the README and the hero banner. The line under it names what the skills cover: code, tests, reviews, docs, diagrams and animation.
 
 - Skills renamed to drop the `tabby-` prefix: `tabby-review` is `review`, `tabby-docs` is `docs`, `tabby-diagrams` is `diagrams`, `tabby-frontend` is `frontend` and `tabby-debt` is `debt`. In Claude Code the plugin name already namespaces them (`/tabby:review`, `/tabby:debt`), which removes the stutter of `/tabby:tabby-debt`. The core skill stays `tabby`, and the read-only subagent stays `tabby-reviewer`. Folders, `plugin.json`, the installer, tests, docs links and the "skill was invoked" indicator in all 93 eval graders were updated together. In a flat install (`.agents/skills/`) the generic names `review` and `docs` can collide with another skill of the same name; the installer skips an existing folder unless `--force` is given.
 - The three README animations all loop forever. The two cards that played once (measured effect, code quality) now hold the finished state, fade out and start again. The hero banner shows six rounded tags, each one a rule from the README's "The rules it holds": cause before fix, small diffs, reuse first, tests never bent, no silencing, run before done. The numbers on the effect and quality cards were not changed.
