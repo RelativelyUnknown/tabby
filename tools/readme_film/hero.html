@@ -136,14 +136,17 @@ function drawText(g) {
   const x0 = 690;
   g.fillStyle = C.ink; g.font = "700 124px Fredoka"; g.fillText("Tabby", x0, 150);   // the y descender clears the tagline
   g.fillStyle = C.muted; g.font = "500 31px Fredoka"; g.fillText("Agent skills for careful Python.", x0 + 4, 212);
-  g.font = "500 21px Fredoka"; let px = x0 + 4;
-  for (const label of ["cause before fix", "small diffs", "tests stay green"]) {
-    const w = g.measureText(label).width + 34;
-    g.fillStyle = TEAL; g.beginPath(); g.roundRect(px, 238, w, 40, 20); g.fill();
-    g.fillStyle = "#fff"; g.fillText(label, px + 17, 265); px += w + 12;
-  }
-  // the marketing line: what the skills do for the code and for the tests
-  g.fillStyle = C.ink; g.font = "600 30px Fredoka"; g.fillText("Cleaner code. Tests that can actually fail.", x0 + 4, 330);
+  // what the skills focus on: two rows of rounded tags
+  g.font = "500 21px Fredoka";
+  const rows = [["cause before fix", "tests that can fail", "small diffs"], ["reviews & audits", "docs, diagrams, UI", "Rust · C · Zig"]];
+  rows.forEach((labels, r) => {
+    let px = x0 + 4;
+    for (const label of labels) {
+      const w = g.measureText(label).width + 30, y = 238 + r * 50;
+      g.fillStyle = TEAL; g.beginPath(); g.roundRect(px, y, w, 40, 20); g.fill();
+      g.fillStyle = "#fff"; g.fillText(label, px + 15, y + 27); px += w + 10;
+    }
+  });
 }
 
 function drawLogo(g) {
