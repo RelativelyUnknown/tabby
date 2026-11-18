@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: order-states-ship-and-cancel
+expected_outcome: |
+  Adds ship and cancel for Order with tests, so a shipped order cannot be cancelled, a cancelled order cannot be shipped and neither happens twice, with the invalid combinations of status, shipped_at and cancelled_reason ruled out in one place (a state per class, an enum with a transition table, or validation in the constructor) rather than flag checks repeated in each function, raising a clear error for an illegal transition.
+context:
+  scaffold_script: fixture.sh

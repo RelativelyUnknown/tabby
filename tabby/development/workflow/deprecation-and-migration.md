@@ -28,6 +28,16 @@ Default to **advisory** (warn, document, leave it working). **Compulsory** (a re
 - Replacing a dependency: put it behind one module first, migrate callers to that module, change the implementation, remove the dependency from `pyproject.toml` last and check what else it pulled in.
 - Dropping a Python version: raise `requires-python` in a minor release, update the CI matrix, delete the compatibility code, and say so in the changelog.
 
+## Expand, migrate, contract
+
+Any change that two sides must agree on (a function signature, an event or payload shape, a column, a config key) goes in three separate steps, each safe to deploy and to roll back alone:
+
+1. **Expand:** add the new form beside the old. The old keeps working; the new is accepted and, where it is data, written as well. Tests cover both.
+2. **Migrate:** move readers and callers to the new form, a few at a time; backfill old data. Check that nothing still uses the old form (a log line or `warnings` count on the old path, `git grep`, a query for old rows).
+3. **Contract:** remove the old form only after step 2 shows zero use for the period you stated. This is the "Removing" section below.
+
+Three commits or three releases, not one: one commit that does all three cannot be rolled back halfway. A rename is the same: new name, old name as a deprecated alias, callers move, old name goes.
+
 ## Removing
 
 Only when callers are gone, the deprecation has lasted the stated releases, and the changelog has a "Removed" entry with the migration. A breaking removal follows the version rules in [package-layout-and-versioning.md](../library/shared/package-layout-and-versioning.md).

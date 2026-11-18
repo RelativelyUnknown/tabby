@@ -25,63 +25,63 @@
  },
  {
   "query": "Is this pull request safe to merge?",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Look over my changes for anything I missed",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Do a security pass over the upload handler",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Write the contributing guide",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Document how to deploy this service",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Draft the changelog entry for this fix",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Explain the architecture in prose for new developers",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Sketch how data flows from the API to the warehouse",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Make a visual of the retry state machine",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Show the request lifecycle as an animation",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "Diagram the modules and who imports whom",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "The settings page looks broken on a phone",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Build an admin screen to list failed jobs",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Make our Gradio demo look professional",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Add a dark theme to the Sphinx docs",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Write a haiku about databases",

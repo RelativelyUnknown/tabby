@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: vat-rate-in-three-places
+expected_outcome: |
+  Changes VAT from 19 to 21 percent everywhere it is applied (invoice, checkout preview and export), updates the tests whose numbers follow from the rate, ends with the rate defined in one place that the three modules use, and says in the reply that the rule was written three times and where it lives now.
+context:
+  scaffold_script: fixture.sh

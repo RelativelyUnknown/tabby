@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: rate-the-tests-you-wrote
+expected_outcome: |
+  Judges which tests in tests/test_refunds.py are worth keeping, removes or strengthens the ones that cannot fail (an isinstance check, an `is not None`), adds tests that pin the 30 and 60 day boundaries and the zero amount, leaves refunds.py alone, breaks the rule on purpose to see a test go red, and says in the reply which tests it kept, dropped and added and what is still untested.
+context:
+  scaffold_script: fixture.sh

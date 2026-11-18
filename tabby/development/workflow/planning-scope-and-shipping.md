@@ -14,6 +14,10 @@ Planning is cheap compared with undoing a wrong change. Ask: what is the smalles
 
 Done means the real problem is solved, verified by running the code, and explainable. Passing tests are evidence, not the goal. Before you report done (for a multi-part request, run the gates from `workflow/multi-outcome-gates.md` first): run the full suite and the project's check command, list every new dependency and every changed or removed test, and check the diff once for anything you did not mean to change (an unrelated edit, a scratch file, a leftover print). Write against [code-smells.md](../code/code-smells.md) as you go; do not rely on a cleanup pass.
 
+### Pre-mortem
+
+Before reporting a change that touches money, data, a public name, a migration or a deploy, assume it failed in production a month from now and write the most likely cause in one line: "the backfill locked the table", "a caller outside the repo passed a positional argument", "the new rule rejects the legacy rows". Then check that cause now (run it, grep for it, test it) or put it in the report as unverified. Skip it for a change whose worst case you can name and undo in a minute.
+
 ### Report (`report`, default `normal`)
 
 Plain and factual. No "production-ready", "robust" or "comprehensive", no celebration, no emojis. Show the exact command and its real output; separate what you verified from what should work.

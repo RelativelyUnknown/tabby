@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tabby security audit report",
+  "description": "Checked by review/scripts/validate_findings.py. Buckets and fields follow security-audit/process-and-reporting.md.",
+  "type": "object",
+  "required": ["verdict", "findings", "coverage"],
+  "properties": {
+    "verdict": {"type": "string", "description": "One line."},
+    "overall_severity": {"enum": ["high", "medium", "low"], "description": "Never above the worst confirmed finding."},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "bucket", "title", "file", "line"],
+        "properties": {
+          "id": {"type": "string"},
+          "bucket": {"enum": ["confirmed", "needs_validation", "rejected"]},
+          "title": {"type": "string"},
+          "file": {"type": "string", "description": "Path relative to the repository root."},
+          "line": {"type": "integer", "minimum": 1},
+          "entry_point": {"type": "string", "description": "Who sends what."},
+          "payload": {"type": "string"},
+          "mechanism": {"type": "string", "description": "How it reaches the sink."},
+          "effect": {"type": "string", "description": "What the attacker gets."},
+          "severity": {"enum": ["high", "medium", "low"], "description": "Confirmed findings only."},
+          "likelihood": {"enum": ["high", "medium", "low"]},
+          "fix": {"type": "string", "description": "Smallest fix at the last point where the data is trusted."},
+          "regression_test": {"type": "string", "description": "A test that fails before the fix and passes after."},
+          "question": {"type": "string", "description": "needs_validation: the fact you cannot see."},
+          "who_can_answer": {"type": "string"},
+          "control": {"type": "string", "description": "rejected: the control that stops it."}
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["read", "ran", "not_checked", "classes"],
+      "properties": {
+        "read": {"type": "array", "items": {"type": "string"}},
+        "ran": {"type": "array", "items": {"type": "string"}},
+        "not_checked": {"type": "array", "items": {"type": "string"}},
+        "classes": {"type": "object", "additionalProperties": {"enum": ["clean", "not_applicable", "finding", "unverified"]}}
+      }
+    }
+  }
+}

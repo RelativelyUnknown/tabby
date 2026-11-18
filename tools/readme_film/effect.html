@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
-  The README's "Measured effect" card, animated once: the two score bars grow while their numbers count up, the two gains
-  pop in, then the per-case bar fills (better, about the same, worse). It plays once and holds the last frame.
+  The README's "Measured effect" card, animated as a loop: the two score bars grow while their numbers count up, the two gains
+  pop in, then the per-case bar fills (better, about the same, worse); the finished card holds, fades out and starts again.
   Every frame is a pure function of time: window.render(t). The numbers are in RESULTS below: update them after a full run.
 -->
 <html><head><meta charset="utf-8">
@@ -87,5 +87,18 @@ window.render = (t) => {
     g.globalAlpha = 1;
   }
 };
+// Loop: hold the finished card, fade the content out to the empty panel, fade the next pass in. The seam is an empty panel.
+(() => {
+  const ANIM = window.DUR, HOLD = 1.8, FADE = .5, IN = .3, draw = window.render;
+  window.DUR = ANIM + HOLD + FADE;
+  window.render = (t) => {
+    draw(Math.min(t, ANIM));
+    const a = Math.min(clamp(t / IN), 1 - clamp((t - (window.DUR - FADE)) / FADE));
+    if (a < 1) {
+      g.setTransform(SCALE, 0, 0, SCALE, 0, 0); g.globalAlpha = 1 - a; g.fillStyle = C.panel;
+      g.beginPath(); g.roundRect(3, 3, W - 6, H - 6, 20); g.fill(); g.globalAlpha = 1;
+    }
+  };
+})();
 Promise.all([document.fonts.load("700 20px Fredoka"), document.fonts.load("500 20px Fredoka")]).then(() => { window.render(0); window.READY = true; });
 </script></body></html>

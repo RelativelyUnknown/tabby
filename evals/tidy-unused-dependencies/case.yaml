@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: tidy-unused-dependencies
+expected_outcome: |
+  Removes the one dependency nothing uses (rich) and keeps the three that look unused by name but are used (pillow imported as PIL, pyyaml imported as yaml, uvicorn started only from the Dockerfile) and requests, after checking imports and the Dockerfile rather than package names.
+context:
+  scaffold_script: fixture.sh

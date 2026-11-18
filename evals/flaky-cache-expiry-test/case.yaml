@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: flaky-cache-expiry-test
+expected_outcome: |
+  Finds that the test depends on real elapsed time (a sleep that races the ttl), measures the failure rate by repeating it, replaces the real clock with an injected or patched one so no test sleeps, keeps both behaviours tested (valid before expiry, gone after), adds no retry, rerun or flaky marker and does not just lengthen the margin, repeats the run to show zero failures, and names the cause.
+context:
+  scaffold_script: fixture.sh

@@ -8,7 +8,7 @@ Flags only lines the diff adds (or, for tests, removes):
 - `Any`, `cast(` in non-test code
 - `pytest.mark.skip` / `xfail` without `reason=`
 - a bare `except:` or `except Exception: pass`
-- in test files: fewer assertions than before, or a deleted test function
+- in test files: fewer assertions than before, or a deleted test function (a test whose only assertions cannot fail, such as `assert True`, `isinstance` or `is not None`, may be deleted)
 """
 import re
 import sys
@@ -19,6 +19,7 @@ CAST = re.compile(r"\bcast\(")
 MARK = re.compile(r"pytest\.mark\.(skip|xfail|skipif)\b")
 BARE = re.compile(r"^\s*except\s*(\(?\s*BaseException\s*\)?(\s+as\s+\w+)?)?\s*:\s*(pass\s*)?$|^\s*except\s*\(?\s*Exception\s*\)?(\s+as\s+\w+)?\s*:\s*pass\s*$")
 ASSERT = re.compile(r"^\s*(assert\b|self\.assert\w+\(|with\s+pytest\.raises\b)")
+VACUOUS = re.compile(r"^\s*assert\s+(?:True|1|isinstance\(.*\)|[\w.()]+\s+is\s+not\s+None|callable\(.*\))\s*(?:,.*)?$")
 TESTDEF = re.compile(r"^\s*(?:async\s+)?def\s+(test\w*)\(")
 
 
@@ -48,6 +49,19 @@ def parse(diff):
         yield path, add, rem
 
 
+def vacuous_tests(rem):
+    """Names of removed test functions whose assertions are all ones that cannot fail (`assert True`, `isinstance`, `is not None`)."""
+    blocks, name = {}, None
+    for ln in rem:
+        m = TESTDEF.match(ln)
+        if m:
+            name = m.group(1)
+            blocks[name] = []
+        elif name and ASSERT.match(ln):
+            blocks[name].append(ln)
+    return {n for n, asserts in blocks.items() if asserts and all(VACUOUS.match(a) for a in asserts)}
+
+
 def check_diff(diff):
     out = []
     for path, add, rem in parse(diff):
@@ -66,9 +80,10 @@ def check_diff(diff):
                 out.append(f"{path}: bare or swallowed exception; catch the narrow error and handle it")
         if test:
             gone = {m.group(1) for ln in rem if (m := TESTDEF.match(ln))} - {m.group(1) for ln in add if (m := TESTDEF.match(ln))}
+            gone -= vacuous_tests(rem)
             for name in sorted(gone):
                 out.append(f"{path}: test `{name}` deleted; leave existing tests, report one that contradicts the spec")
-            fewer = sum(bool(ASSERT.match(ln)) for ln in rem) - sum(bool(ASSERT.match(ln)) for ln in add)
+            fewer = sum(bool(ASSERT.match(ln)) and not VACUOUS.match(ln) for ln in rem) - sum(bool(ASSERT.match(ln)) for ln in add)
             if fewer > 0 and not gone:
                 out.append(f"{path}: {fewer} assertion(s) removed from an existing test; do not weaken tests to get green")
     return list(dict.fromkeys(out))

@@ -2,7 +2,7 @@
 
 Change the structure, not the behaviour. Behaviour here means public interfaces, failure behaviour, ordering, output bytes and compatibility.
 
-1. **Understand before touching.** Before removing or reshaping something, find out why it is there: callers, tests, `git log -S` or `git blame` on the lines. If you cannot say why a check or branch exists, keep it and flag it; do not "fix" a quirk you do not understand.
+1. **Understand before touching (Chesterton's fence).** Before removing or reshaping something odd, find out why it is there: callers, tests, `git log -S<text>` or `git blame` on the lines, and the commit message or issue it names. Write the answer in one line in the report or, if it was not obvious, as a comment where it lives. If you cannot say why a check or branch exists, keep it and flag it; do not "fix" a quirk you do not understand.
 2. **Pin the behaviour first.** No tests around the code? Write characterization tests from the current behaviour (a few realistic and edge inputs, including the odd ones), run them green, and only then change structure. Without any way to run code, say so and refactor only what you can verify by reading.
 3. **Pick the highest safety rung you can reach.** Existing tests green; else characterization tests; else a before-and-after comparison on recorded input; else a read-only plan. Say which rung you stood on.
 4. **One ownership boundary at a time.** Extract, move or merge one thing per step, keep the project buildable and the tests green after each step, and keep feature changes out of the refactor.

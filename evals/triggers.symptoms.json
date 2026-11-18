@@ -65,15 +65,15 @@
  },
  {
   "query": "Review this diff before I merge it: git diff main...feature",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Write a README for this package",
-  "expect": "tabby-docs"
+  "expect": "docs"
  },
  {
   "query": "Draw a diagram of how our services talk to each other",
-  "expect": "tabby-diagrams"
+  "expect": "diagrams"
  },
  {
   "query": "What is the difference between a list and a tuple in Python?",
@@ -81,7 +81,7 @@
  },
  {
   "query": "Build a landing page for the project with a dark mode toggle",
-  "expect": "tabby-frontend"
+  "expect": "frontend"
  },
  {
   "query": "Explain what this traceback means: TypeError: 'NoneType' object is not subscriptable",
@@ -89,10 +89,10 @@
  },
  {
   "query": "Audit this repo for security problems",
-  "expect": "tabby-review"
+  "expect": "review"
  },
  {
   "query": "Summarise the last five commits for the changelog",
-  "expect": "tabby-docs"
+  "expect": "docs"
  }
 ]

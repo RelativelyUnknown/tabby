@@ -1,6 +1,6 @@
 # Security basics
 
-Security bugs come from one mistake: data crossing into something that interprets it (SQL, a shell, a deserializer, a template, a URL fetcher) or a secret crossing out. Ask of each boundary: who controls this value, and what will it be treated as? Keep data as data (parameters, argument lists, safe parsers) and keep secrets out of code, logs and URLs. These are the rules to write by; the audit side is in `tabby-review`. Web services also read [api-security-owasp.md](../application/apis/shared/api-security-owasp.md).
+Security bugs come from one mistake: data crossing into something that interprets it (SQL, a shell, a deserializer, a template, a URL fetcher) or a secret crossing out. Ask of each boundary: who controls this value, and what will it be treated as? Keep data as data (parameters, argument lists, safe parsers) and keep secrets out of code, logs and URLs. These are the rules to write by; the audit side is in `review`. Web services also read [api-security-owasp.md](../application/apis/shared/api-security-owasp.md).
 
 Environment variables, settings and the project's own constants are trusted. Request data, uploads, headers, cookies, queue messages from other parties and anything another user wrote are not.
 
@@ -39,7 +39,7 @@ A URL from outside is fetched only after: an allowlist of hosts when you can hav
 - A balance, stock count, coupon or counter changes in one statement or one locked transaction: `UPDATE ... SET balance = balance - :n WHERE id = :id AND balance >= :n`, or `SELECT ... FOR UPDATE`. A `threading.Lock` protects one process only. Locks taken in a fixed order do not deadlock.
 - The server computes prices, totals and discounts. A quantity or amount is checked for sign and range; use `Decimal` or integers for money.
 - A retry-safe endpoint stores its idempotency key with a unique constraint; read-then-insert races with itself.
-- Status fields change through one function that checks the allowed transitions ([state-machines.md](../../../tabby-review/state-machines.md)).
+- Status fields change through one function that checks the allowed transitions ([state-machines.md](../../../review/state-machines.md)).
 
 ## Secrets and errors
 

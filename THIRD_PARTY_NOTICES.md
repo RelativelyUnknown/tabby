@@ -1,14 +1,38 @@
 # Third-party notices
 
-Skills in this repository were adapted from the work of other authors. The adapted wshobson material is credited below with its copyright line, and `provenance/development-SOURCE.md` records (upstream URL, pinned commit, what changed); other adapted material keeps its licence and `SOURCE.md` next to it. Everything below is MIT-licensed; the MIT licence requires its copyright and permission notice to travel with every copy or substantial portion, which is why the licence text sits next to each adapted skill.
+Tabby's own text, code and pictures are MIT-licensed (see `LICENSE`). It was written after reading a lot of other people's work and using a lot of other people's tools, and this page says what came from where.
 
-The rest of this repository is MIT (see `LICENSE`).
+There are three kinds of debt, and the page is ordered by how much each one binds us:
 
-## wshobson/agents (python-development plugin)
+1. **Files shipped with the package.** Two fonts and an icon set. Their licences travel with them, in the folders named below.
+2. **Text adapted from another project.** One source, wshobson/agents. Its copyright line is repeated here, and the MIT licence requires that notice to stay with any copy of the adapted pages.
+3. **Ideas only.** Everything else. Each idea was restated in Tabby's own words for Python (and Rust, C, C++ and Zig behind it); no text, example, image or code was copied. The sources are listed as credit, not because a licence asks for it.
 
-- Upstream: https://github.com/wshobson/agents
-- Author and licence: Copyright (c) 2024 Seth Hobson, MIT License
-- Commit: 4bde3168b43c0655c4d00ea2726e631719908a6d (5 November 2026)
+A fourth section lists the tools used to build and check the package. None of them is a dependency of Tabby or ships in it.
+
+## At a glance
+
+| Kind | Source | Licence | Where it shows up |
+| --- | --- | --- | --- |
+| Shipped | Fredoka (font) | SIL OFL 1.1 | `assets/src/fonts/`, used to render the banner |
+| Shipped | JetBrains Mono (font) | SIL OFL 1.1 | `assets/src/fonts/`, used to render the banner |
+| Shipped | Tabler Icons (outline set) | MIT | `diagrams/assets/icons/` |
+| Adapted text | wshobson/agents, python-development plugin | MIT | thirteen pages under `tabby/development/` |
+| Ideas | many repositories, guides and talks | various | the pages named in sections 3 and 4 |
+
+## 1. Shipped with the package
+
+- **Fredoka** (SIL Open Font License 1.1, copyright 2016 The Fredoka Project Authors, https://github.com/hafontia/Fredoka-One). File: `assets/src/fonts/Fredoka-Variable.ttf`; licence: `assets/src/fonts/OFL-Fredoka.txt`. It renders the lettering in the README banner and the animated cards, and nothing else.
+- **JetBrains Mono** (SIL Open Font License 1.1, copyright 2020 The JetBrains Mono Project Authors, https://github.com/JetBrains/JetBrainsMono). File: `assets/src/fonts/JetBrainsMono-Variable.ttf`; licence: `assets/src/fonts/OFL-JetBrainsMono.txt`. It renders the terminal text in the banner and logo. The ASCII cat is original.
+- **Tabler Icons** (MIT, copyright (c) 2020-2026 Pawel Kuna, https://github.com/tabler/tabler-icons). The outline set is vendored as one JSON file, `diagrams/assets/icons/tabler-outline.json`, with its licence in `diagrams/assets/icons/LICENSE.tabler`. The diagram builder draws its icon tiles from it.
+
+An earlier version of the banner used "Pizza is my FAVORITE Font" by Kimberly Geswein (freeware). It is no longer used and the font file was never in the repository.
+
+## 2. Text adapted from wshobson/agents
+
+- Upstream: https://github.com/wshobson/agents, the `python-development` plugin.
+- Copyright (c) 2024 Seth Hobson, MIT License. Read at commit `4bde3168b43c0655c4d00ea2726e631719908a6d`.
+- `provenance/development-SOURCE.md` records the upstream URL, the pinned commit and what changed on each page. The unmodified upstream skills are not in this repository.
 
 | Upstream skill | Adapted into |
 | --- | --- |
@@ -21,149 +45,109 @@ The rest of this repository is MIT (see `LICENSE`).
 | `python-resilience` | `tabby/development/application/shared/retries-timeouts-circuit-breakers.md` |
 | `python-error-handling` | `tabby/development/code/errors-validation-logging.md` |
 | `python-design-patterns` | `tabby/development/architecture/design-patterns-and-layers.md` (three principles) |
-| `python-testing-patterns` | one section of `tabby/development/testing/test-mocking.md`; the rest was already covered (see `provenance/development-SOURCE.md`) |
-| `python-performance-optimization` | `tabby/development/performance/performance-profiling.md`; the profiler tutorial was not copied (see `provenance/development-SOURCE.md`) |
-| `python-packaging`, `python-project-structure` | `tabby/development/library/shared/package-layout-and-versioning.md`, `build-and-lint-tooling.md`; the rest was already covered (see `provenance/development-SOURCE.md`) |
-| `python-code-style` | pointer only; nothing copied (see `provenance/development-SOURCE.md`) |
+| `python-testing-patterns` | one section of `tabby/development/testing/test-mocking.md`; the rest was already covered |
+| `python-performance-optimization` | `tabby/development/performance/performance-profiling.md`; the profiler tutorial was not copied |
+| `python-packaging`, `python-project-structure` | `tabby/development/library/shared/package-layout-and-versioning.md` and `build-and-lint-tooling.md`; the rest was already covered |
+| `python-code-style` | a pointer only; nothing copied |
 
-## cloudflare/security-audit-skill
+## 3. Ideas from other skill collections and agent repositories
 
-- Upstream: https://github.com/cloudflare/security-audit-skill
-- Author and licence: Cloudflare, Inc., MIT
-- Used as an approach only; no text copied. `tabby/review/security-audit/` restates, in new words and for Python, the boundary-and-result requirement, the source-to-sink trace, the attempt to disprove each candidate, the confirmed / needs-validation / rejected buckets with severity only for confirmed findings, and the fix with a regression test.
+Each entry says what idea was taken and where it went. Licences are as the repository states them; where none is stated, only the idea was taken.
 
-## Ideas only (no text copied)
+### Writing less, and reviewing what was written
 
-- DietrichGebert/ponytail (MIT) and JuliusBrussee/caveman (Apache-2.0): the rules in the `tabby/development` front door and `code/minimalism-reuse-names.md` that comments say only what is not obvious, replies stay short, and negations ("not", "never", "only", "except") are never dropped. Names, installers, proxies and telemetry are not used.
+- **DietrichGebert/ponytail** (MIT): ask first whether the code needs to exist; a list of what minimalism never cuts; code that is moved keeps its checks; review against the expected load; a marked shortcut is a decision, not a defect; audit order (bug, risk, load, test, speed, lean); a ledger of shortcut markers. In `tabby/development/code/minimalism-reuse-names.md`, `tabby/development/workflow/refactoring.md`, `review/changes/self-review.md`, `review/repo-audit.md` and the `debt` skill.
+- **JuliusBrussee/caveman** (Apache-2.0): when short replies must become full sentences; existing comments are not yours to shorten; why-first commit messages. In `tabby/development/workflow/planning-scope-and-shipping.md`, `tabby/development/code/minimalism-reuse-names.md` and `docs/readme-changelog-commits.md`.
+- **joe-bell/cva `deslop`** (Apache-2.0), **pedronauck/skills `deslop`**, **boraoztunc/skills `adversarial-review`** (the last two state no licence): the accidental-complexity list and what to keep; assume the change is broken, distrust tests and comments, end with what was not verified. In `code/minimalism-reuse-names.md` and `review/changes/self-review.md`.
+- **CodeAesthetic and ArjanCodes videos**: flatten nesting with early returns and a depth ceiling; named constants and conditions instead of comments; abstraction is coupling, so abstract at the third variant; code smells and low coupling. In `tabby/development/code/code-smells.md`, the rubric in `tools/eval/judge.py` and the nesting metric in `tools/eval/quality.py`. See section 6 for how these were read.
 
-## Read, nothing taken
+### Security, bugs and debugging
 
-blader/humanizer (MIT), softaworks/agent-toolkit `writing-clearly-and-concisely` (MIT), addyosmani/agent-skills (MIT), morganlinton/BeautifulRust (MIT), heydamir/unslop (CC BY 4.0), vercel-labs/agent-skills (no LICENSE file), mukul975/Anthropic-Cybersecurity-Skills (Apache-2.0), ComposioHQ/awesome-claude-skills, github/awesome-copilot (MIT). (cathrynlavery/diagram-design, caru-ini/stack-diagram and pbakaus/impeccable were listed here by mistake; they were reread on 2026-11-11 and are credited in the design section below.) They were read for ideas; where a baseline case showed the model already does the thing, nothing was added. Earlier unmodified copies of humanizer, writing-clearly-and-concisely and the wshobson Python skills were removed from the repository; the adapted wshobson material is in `tabby/development` with its pinned commit.
+- **cloudflare/security-audit-skill** (MIT): the boundary-and-result requirement, a source-to-sink trace, an attempt to disprove each candidate, confirmed / needs-validation / rejected buckets with severity only for confirmed findings, a fix with a regression test; CI configuration as authorisation code; the boundary table and FFI bug classes behind `review/native-boundary.md`. In `review/security-audit/`.
+- **getsentry/skills** (Apache-2.0, copyright 2025 Functional Software, Inc.): confidence tiers; attacker-controlled against server-controlled data; a check in any layer counts but must hold on every path; the outsider threat model for CI; expression injection only inside `run:`; pin third-party actions only where the job is privileged. In `review/security-audit/`, `review/bug-hunt.md` and the CI pages.
+- **trailofbits/skills** (the plugins state CC BY-SA 4.0 in their README; ideas only, restated): differential review, false-positive checks, variant analysis, post-patch validation, sharp edges and insecure defaults, mutation and property-based testing, constant-time and zeroisation review for native code. In `review/`, `tabby/development/testing/test-rigor-property-and-release.md`, `workflow/debugging.md` and `code/input-and-secrets-security.md`.
+- **anthropics/claude-code-security-review** (MIT, copyright (c) 2025 Anthropic): report only confident, newly added problems, with an exclusion list for low-value findings.
+- **stas00/the-art-of-debugging** (CC BY-SA 4.0, ideas only): a fast one-command reproduction loop with inline environment variables, confirming that the code you edited is the code that runs, bisecting, the timing effect of observing, post-mortem debugging. In `tabby/development/workflow/debugging.md`.
+- **adamentwistle/fable-skills `edge-case-sweep`** (MIT, copyright 2026 Adam Entwistle): handle, reject loudly or note each foreseeable failure; "handled" needs an observed run; do not guard inputs the code cannot receive; the checklist families. In `tabby/development/code/foreseeable-failures.md`. **getsentry/warden** (Functional Source License) confirmed three high-signal Python patterns; nothing copied.
+- **TigerBeetle** (Apache-2.0): pair assertions, bounds on everything, deterministic simulation and fault injection, one core with many callers. In `tabby/development/testing/test-rigor-property-and-release.md`, `architecture/design-under-real-limits.md` and `library/native/native-extension-architecture.md`.
 
-## Read for ideas, rewritten (added 2026-11-09)
+### Native extensions
 
-No text copied; ideas restated in new words for the native-extension and router work. Licences noted for credit.
+- **OoriData/Amara `python-c`** (Apache-2.0): when to go native, interface choice, a visible pure-Python fallback, modern C-API hygiene.
+- **pganssle/dotfiles** (Apache-2.0): CPython C review rules (fallible calls, borrowed references, GC lifecycle slots). The persona framing is not used.
+- **VincentChuWaiChow/vanguard-frontier-agentic `python-native-extension-interop`** (Apache-2.0): severity-ordered review of reference ownership, buffers and exception translation.
+- **morganlinton/BeautifulRust** (MIT): rules for a PyO3-free core crate, listing observable behaviour including the quiet parts, porting the tests first, keeping and flagging the original's bugs, and a lints block (run under clippy). In `tabby/development/library/native/native-rust.md`, `native-porting-a-function.md` and `tabby/development/assets/native/Cargo.lints.toml`.
+- **wjakob/nanobind** and **pybind/pybind11** (BSD-3-Clause): the C++ page was written from their documentation. In `native-cpp.md`.
+- **NumPy** and **pandas** (BSD-3-Clause): C error paths, overflow-checked sizes, `Python.h` first, banned borrowed-reference calls, the sanitizer and `-Werror` CI split. In `native-c.md` and `native-ci-wheels.md`.
+- **Linux kernel documentation** (GPL-2.0; only the process and dev-tools pages were read, nothing copied): goto cleanup, return conventions, no `strcpy` or VLAs, disclosure rules for generated content. In `native-c.md` and `docs/readme-changelog-commits.md`.
+- **ghostty-org/ghostty** (MIT): what a large Zig codebase does (tests everywhere, `errdefer`, arenas), uniform C-API rules (result codes with out-parameters, NULL handles return an error, enum values fixed, a max-value sentinel), data layout (offsets instead of pointers, zero as a valid empty state, a generation number on handles), and a targeted-test form for the `commands:` line of project memory. In `native-zig.md`, `native-c.md` and `native-extension-architecture.md`. Its AI policy was not adopted.
+- **Layouts and CI practice studied, file trees and build files only**: astral-sh/uv and ruff, pola-rs/polars, pydantic/pydantic-core, ijl/orjson, pyca/cryptography, jcrist/msgspec.
 
-- OoriData/Amara `python-c` (Apache-2.0): when to go native, interface choice, a visible pure-Python fallback, modern C-API hygiene.
-- pganssle/dotfiles `consensus-cpp-and-native` and `pablogsal-cpp-and-ml` (Apache-2.0): CPython C review rules (fallible calls, borrowed references, GC lifecycle slots). The persona framing is not used.
-- VincentChuWaiChow/vanguard-frontier-agentic `python-native-extension-interop` (Apache-2.0): severity-ordered review of reference ownership, buffers and exception translation.
-- affaan-m/ECC `cpp-coding-standards` (MIT) and ericrisco/rsc-harness `cpp` (MIT): C++ Core Guidelines digests, read, nothing taken yet.
-- addyosmani/agent-skills `interview-me`, `spec-driven-development` (MIT) and pbakaus/impeccable `init` and `shape` (Apache-2.0): interview cadence, explore-first, confirm-then-stop; used for the `tabby` router.
-- cloudflare/security-audit-skill `MEMORY-SAFETY-AND-BINARY.md` (MIT): the boundary table and FFI bug classes behind `tabby/review/native-boundary.md`.
-- Layouts and CI practice studied (file trees and build files only; nothing copied): astral-sh/uv, astral-sh/ruff, pola-rs/polars, pydantic/pydantic-core, ijl/orjson, pyca/cryptography, pandas-dev/pandas, numpy/numpy, jcrist/msgspec.
+### Planning, workflow and project memory
 
-## Fonts
+- **addyosmani/agent-skills** (MIT): observable behaviour becomes contract; a state-dependent record as a union; when to write an ADR; details that must survive an edit; a timeout is an unknown outcome; a short spec with boundaries and success criteria; thin vertical slices; deprecation questions (advisory against compulsory, strangler, code nobody owns); interview cadence for the `interview` skill. In `tabby/development/library/shared/public-api-design.md`, `workflow/specs-and-slices.md`, `workflow/deprecation-and-migration.md`, `application/shared/retries-timeouts-circuit-breakers.md`, `docs/project-docs.md` and `docs/voice-and-style.md`.
+- **pbakaus/impeccable** (Apache-2.0): context before visuals; a list of known defaults to refuse; a detector that runs in code with exit codes; critique split into judgment and detector assessments. In `frontend/interfaces/` and `review/design.md`.
+- **Leonxlnx/unlazy** (MIT): acceptance gates written before the work, each with a runnable check and an expected result; gates that cannot fail are linted; the request is re-read and every claim re-measured before reporting. In `tabby/development/workflow/multi-outcome-gates.md`.
+- **github/awesome-copilot** (MIT): a refactor plan with rollback and risks; both sides of a docs mismatch. In `workflow/refactoring.md` and `docs/drift.md`.
+- **mukul975/Anthropic-Cybersecurity-Skills** (Apache-2.0): dependency-confusion and typosquat checks, as pointers. In `review/security-audit/supply-chain.md`.
+- **Skill-authoring guidance**: Anthropic's skill authoring best practices and community guides on skill loading. The lesson: pointers written as conditions ("before the first edit, read X when the task does Y"), not a topic menu, and no hedged "if needed" wording.
 
-The Tabby title image is rendered from "Pizza is my FAVORITE Font" by Kimberly Geswein (freeware; commercial use requires a donation; https://www.fontspace.com/pizza-is-my-favorite-font-f11293). The font file is not in this repository.
+### Diagrams, animation and interfaces
 
-## Second review (2026-11-10)
+- **cathrynlavery/diagram-design** and **caru-ini/stack-diagram** (MIT): node treatment by role; connector rules (orthogonal elbows, a gap before labels, no overlaps, one attach point per connector); per-type node budgets; a 4 px grid; labelled group containers; a node is its tile plus its text; a pictogram for an abstract node, never emoji; mechanical geometry and accessibility checks; render in both themes and look before delivering. In `diagrams/diagrams/` and `diagrams/assets/diagram/`.
+- **Leonxlnx/taste-skill** (MIT): diagrams as small specs with a few layouts (hub, lanes, fan-in, sync, timeline); every motion gets a written purpose or is cut; a finish gate that runs the checker in a real browser, with documented waivers; a copy-slop vocabulary. In `diagrams/animation/` and `frontend/interfaces/`.
+- **lemomo-ai/lemo-opuscar** (docs CC BY-NC 4.0, code MIT; ideas only): each frame is a pure function of time and recorded frame by frame; one timeline drives every move; anticipation, action and follow-through; a hook early in the loop. In `tools/readme_film/`.
 
-Every source was cloned again at the commit below and read for ideas Tabby did not yet use. No text was copied; each idea is restated for Python and its native languages. The table below records, per source, what was found and what was adopted.
+### Process ideas used for this package's own pages
 
-| Source (commit) | Licence | Idea taken | Where it went |
-| --- | --- | --- | --- |
-| DietrichGebert/ponytail (`96608e0`) | MIT | ask first whether the code needs to exist; a list of what minimalism never cuts; moved code keeps its checks; review against the expected load; a marked shortcut is a decision | `development/code/minimalism-reuse-names.md`, `workflow/refactoring.md`, `review/changes/self-review.md` |
-| JuliusBrussee/caveman (`3dc497a`) | Apache-2.0 | when short replies must become full sentences; existing comments are not yours to shorten; why-first commit messages | `development/workflow/planning-scope-and-shipping.md`, `code/minimalism-reuse-names.md`, `documentation/commits.md` |
-| morganlinton/BeautifulRust (`b971843`) | MIT | rules for the PyO3-free core crate (error enum, invariants in types, trait contracts, lossy casts, map order) | `development/library/native/native-rust.md` |
-| cloudflare/security-audit-skill (`c1c8a8c`) | MIT | CI configuration as authorization code; integrity across build, test and publish | `review/security-audit/supply-chain.md` |
-| addyosmani/agent-skills (`301b02b`) | MIT | observable behaviour becomes contract; state-dependent fields as a union; when to write an ADR and matching the project's ADR convention; details that must survive an edit; a timeout is an unknown outcome | `library/shared/public-api-design.md`, `code/type-annotations.md`, `documentation/history/adr.md`, `documentation/concision.md`, `application/shared/retries-timeouts-circuit-breakers.md` |
-| cathrynlavery/diagram-design (`f2496ac`), caru-ini/stack-diagram (`5af3b09`) | MIT | draw only when a table or sentence will not do; a node and line budget; three kinds of connection; accessible SVG; verify by rendering and looking | `design/diagrams/choosing.md` |
-| github/awesome-copilot (`227949a`), `docs-sync-audit` | MIT | both sides of a docs mismatch; definite-answer checks first | `documentation/drift.md` |
-| mukul975/Anthropic-Cybersecurity-Skills (`54a7988`) | Apache-2.0 | dependency-confusion and typosquat checks, as pointers | `review/security-audit/supply-chain.md` |
+- **Proof-based testing** (`tabby/development/testing/proof-based-testing.md`): laws written as if-and-only-if before the code, from Bend 2's `LAWS.bend` and Microsoft/GitHub Next's PDD Kit.
+- The pages added with the coupling, test-quality, flaky-test, dependency and migration guidance draw on well-known ideas, listed in section 4.
 
-Read again, nothing taken: heydamir/unslop (`97daa3e`, interface restyling; its copy rules are already in `documentation/ai-patterns.md`), vercel-labs/agent-skills (`1a2c79d`, React and deployment rules; its one-rule-per-file layout was weighed against Tabby's smells lists and not adopted), ComposioHQ/awesome-claude-skills (`be2a406`, application connectors).
+## 4. Ideas from books, articles and tool documentation
 
-The C++ leaf (`development/library/native/native-cpp.md`) was written from the documentation in wjakob/nanobind (`af676a3`, BSD-3-Clause) and pybind/pybind11 (`3beb376`, BSD-3-Clause); no text copied.
+Written from general knowledge of these ideas and from the tools' own documentation; nothing copied. The names are credit.
 
-## Gap fill (2026-11-10)
+| Idea | Credit | Page |
+| --- | --- | --- |
+| Connascence, as a vocabulary for kinds of coupling | Meilir Page-Jones; popularised by Jim Weirich | `tabby/development/architecture/coupling-and-connascence.md` |
+| Architectural fitness functions | Neal Ford, Rebecca Parsons and Patrick Kua, *Building Evolutionary Architectures* | `architecture-fitness-functions.md` |
+| Parse, don't validate; making illegal states unrepresentable | Alexis King; Yaron Minsky | `parse-dont-validate.md` |
+| Sans-I/O protocol cores | the sans-io project; the h11, wsproto and h2 libraries as examples | `sans-io-core.md` |
+| Hyrum's law | Hyrum Wright | `tabby/development/library/shared/public-surface-budget.md` |
+| Expand and contract (parallel change) | Joshua Kerievsky; common database-migration practice | `workflow/deprecation-and-migration.md` |
+| Walking skeleton and tracer bullet | Alistair Cockburn; Andrew Hunt and David Thomas | `workflow/specs-and-slices.md` |
+| Chesterton's fence | G. K. Chesterton | `workflow/refactoring.md` |
+| Pre-mortem | Gary Klein | `workflow/planning-scope-and-shipping.md` |
+| Mutation testing as a test-quality check | the mutation-testing literature; the tools below | `testing/test-quality-scorecard.md` |
 
-Ideas restated for Tabby; no text copied. `provenance/development-SOURCE.md` lists the leaves.
+## 5. Tools used to build and check the package
 
-| Source (commit) | Licence | Idea taken | Where it went |
-| --- | --- | --- | --- |
-| morganlinton/BeautifulRust (`b971843`) `rust-port` | MIT | list the observable behaviour including the quiet parts, port the tests first, keep and flag the original's bugs, mapping tables | `development/library/native/native-porting-a-function.md` (the arithmetic and sorting rows were run with Python 3.13, rustc and g++) |
-| addyosmani/agent-skills (`301b02b`) `spec-driven-development`, `incremental-implementation`, `planning-and-task-breakdown` | MIT | a short spec with boundaries and success criteria, thin vertical slices, checkpoints | `development/workflow/specs-and-slices.md` |
-| github/awesome-copilot (`227949a`) `refactor-plan` | MIT | a plan with rollback and risks before a multi-file refactor | `development/workflow/refactoring.md` |
-| DietrichGebert/ponytail (`96608e0`) `ponytail-audit`, `ponytail-debt` | MIT | audit order (bug, risk, load, test, speed, lean), a debt ledger of shortcut markers | `review/repo-audit.md` |
-| cloudflare/security-audit-skill (`c1c8a8c`), addyosmani `doubt-driven-development` | MIT | a fresh verifier tries to refute each candidate | `review/security-audit/reporting.md` |
-| addyosmani `deprecation-and-migration` | MIT | the questions before deprecating, advisory against compulsory, strangler, zombie code | `development/workflow/deprecation-and-migration.md` |
-| morganlinton/BeautifulRust `lints/` | MIT | a lints block with the suppression and panic lints | `development/assets/native/Cargo.lints.toml` (run under clippy 0.1.97) |
+Not dependencies and not shipped. They were run here to make and verify the pages and the cards, and commands quoted on the pages were run with them.
 
-## Design skills, read in full and adapted (2026-11-11)
+| Tool | Licence | Used for |
+| --- | --- | --- |
+| Claude Code and `claude plugin eval` | Anthropic's terms | running the eval cases, with and without Tabby |
+| Playwright with Chromium | Apache-2.0 | rendering the animated README cards and the logo |
+| FFmpeg with libwebp | LGPL-2.1+ / BSD | encoding the animated WebP files (looping forever) |
+| CPython 3.13, gcc, rustc and clippy | PSF, GPL, MIT/Apache-2.0 | running the Python, C and Rust behaviours cited on the review and native pages |
+| uv and pytest | MIT / Apache-2.0 | the project runner and the test runner in fixtures and checks |
+| Hypothesis (6.170.15) | MPL-2.0 | the property-testing examples |
+| CrossHair (crosshair-tool 0.0.113) | MIT | the solver-search example in `proof-based-testing.md` |
+| hypothesis-crosshair (0.0.32) | see its repository | the Hypothesis backend that runs CrossHair, same page |
+| mutmut (3.8.1) | BSD-3-Clause | the mutation audit in `proof-based-testing.md` |
+| import-linter (2.16) | BSD-2-Clause | the layering contracts in `architecture-fitness-functions.md` |
+| deptry (0.25.1) and vulture (2.16) | MIT | the dependency and dead-code checks in `dependency-hygiene.md` |
+| griffe (2.4.1) | ISC | the public-API comparison in `public-surface-budget.md` |
 
-The earlier entries for diagram-design, stack-diagram and impeccable said "nothing taken", and taste-skill and unlazy were not listed; that was wrong. Each was cloned and read in full at the commit below. No text, example, icon or diagram was copied; the ideas are restated in new words for Tabby's diagrams, animations, interfaces and completion gates. `tabby/design/SOURCE.md` lists them per leaf.
+Versions are the ones the quoted output came from. The GitHub Actions behaviour, Semgrep's file-size skipping and Python 3.14 `pdb` attach were not run and are marked as such on their pages.
 
-| Source (commit) | Licence | Idea taken | Where it went |
-| --- | --- | --- | --- |
-| cathrynlavery/diagram-design (`f2496ac`) | MIT | node treatment by role; six connector rules (orthogonal elbows, label gap, no overlaps, one attach point per connector, no transit behind a box, label mask before node); per-type budgets; a 4 px grid; choosing a semantic pattern before the visual type; mechanical geometry and accessibility checks as scripts; animation modes with budgets, a complete static frame and reduced motion | `design/diagrams/`, `design/animation/`, `design/assets/diagram/check.py` |
-| caru-ini/stack-diagram (`5af3b09`) | MIT | labelled group containers; a node is its tile plus its text, so connectors anchor to the box boundary; edge labels with a halo; a pictogram for an abstract node, never text or emoji; render to PNG in both themes and look before delivering | `design/diagrams/connectors.md`, `design/assets/diagram/render.mjs` |
-| Leonxlnx/taste-skill (`f6b7657`) | MIT | diagrams as small specs with a few layouts (hub, lanes, fan-in, sync, timeline); every motion gets a written purpose or is cut; a finish gate that runs the checker in a real browser with documented waivers; a copy-slop vocabulary | `design/diagrams/types/`, `design/animation/motion.md`, `design/interfaces/` |
-| pbakaus/impeccable (`c1e0e54`, and the docs at impeccable.style) | Apache-2.0 | context before visuals; visitor modes (persuade, operate, read); a list of known defaults to refuse; a detector that runs in code with exit codes 0, 2 and 1; a critique split into two isolated assessments (judgment and detector) with a banner when they cannot be isolated; a motion thesis and one authored moment | `design/interfaces/`, `review/design.md`, `design/animation/motion.md` |
-| Leonxlnx/unlazy (`1667149`) | MIT | acceptance gates written before the work, each with a runnable check and an expected result; gates that cannot fail are linted and given a negative control; the request is re-read and every claim re-measured before reporting; an unmet or abandoned gate is reported as a handoff | `development/workflow/multi-outcome-gates.md` |
+## 6. How the sources were read
 
-## Icons
+- Most repositories were cloned and the files named above were opened and read in full. Shallow clones were used for the large ones (TigerBeetle, NumPy, pandas, Linux, Ghostty); for Linux only the process and dev-tools documentation was checked out.
+- Not read, and so not used: orchestration code, report generators and runners of the Trail of Bits plugins; the compiler-pipeline pages of `zeroize-audit`; smart-contract references; CodeQL and SARIF skills.
+- The CodeAesthetic and ArjanCodes material was read through third-party summaries and an example repository, not by watching the videos, so details may be off. Two of those items had no usable source and nothing was taken. Five Tsoding Daily and aarthificial streams had no transcript or write-up anywhere public, so nothing was taken from them. YouTube blocks transcript requests from the build network, and no block-evasion was attempted.
+- Where a source claim was wrong, or could not be confirmed by running it, it was left out. Where a source and a run disagreed, the run won (the Python bytecode table in the constant-time material is one example). Claims that were run are marked "checked" on their pages.
 
-The diagram icon set is Tabler Icons (MIT, Copyright (c) 2020-2026 Pawel Kuna; https://github.com/tabler/tabler-icons), outline style, vendored as one JSON file at `tabby/design/assets/icons/tabler-outline.json` with its licence in `tabby/design/assets/icons/LICENSE.tabler`.
+### Read, nothing taken
 
-
-## Security, bug-hunt, testing and slop ideas (12 November 2026)
-
-No text is copied and no third-party file is shipped here. The files below were opened and read in full with the file reader (not summarised by another tool), and their techniques were restated, merged and sorted into Tabby's own pages in its own words. Where a source claim was wrong or could not be confirmed it was left out; claims that were run are marked "checked" on the pages. Licences are as stated in the files read; where the repository states none, nothing was taken beyond ideas.
-
-**getsentry/skills** (Apache-2.0, Copyright 2025 Functional Software, Inc. dba Sentry). Read: `security-review` (SKILL, 17 references, Python, JavaScript and Docker language pages), `django-access-review`, `find-bugs`, `code-review`, `gha-security-review` (SKILL and its 9 references). Went into `tabby-review/security-audit/*`, `bug-hunt.md`, `ci-workflows.md`, `ci-agents.md`. Ideas: confidence tiers; attacker-controlled against server-controlled data; a check in any layer counts but must hold on every path; only flag the escape hatches of auto-escaping frameworks; the outsider threat model for CI; expression injection only in `run:`; `author_association` checks; third-party action pinning only where the job is privileged.
-
-**trailofbits/skills** (the plugins read state CC BY-SA 4.0 in their README; the repository carries its own licence file). Read in full: `differential-review`, `fp-check`, `variant-analysis`, `post-patch-validation`, `regression-hunt`, `audit-context-building`, `vulnerability-triage-brocards`, `patching-bugs`, `sharp-edges`, `insecure-defaults`, `agentic-actions-auditor` (SKILL and 12 references), `supply-chain-risk-auditor` (SKILL, README), `c-review` (SKILL, AGENTS, README, worker, the class catalogue and prompts in the workflow), `rust-review` (SKILL, README, worker, 17 cluster prompts, 55 finder prompts), `constant-time-analysis` (SKILL, README, 8 language references), `zeroize-audit` (SKILL, README, detection strategy, Rust patterns), `property-based-testing`, `mutation-testing`, `testing-handbook-skills` (README), `entry-point-analyzer` (SKILL, README), `cvss-scoring`, `semgrep-rule-creator`, `semgrep-rule-variant-creator` (SKILL) and the `static-analysis` README, scan modes and `semgrep` skill. Went into `tabby-review/` (audit, native boundary, bug hunt, self-review, reporting) and `tabby/development/testing/test-rigor-property-and-release.md`, `workflow/debugging.md`, `code/input-and-secrets-security.md`. Not read, with the reason: orchestration code (workflow scripts, runners, tests, SARIF and report generators), the compiler-pipeline reference pages and agent role prompts of `zeroize-audit`, the per-language references of `entry-point-analyzer` (smart contracts), the CodeQL and SARIF skills, and the remaining `semgrep-rule-variant-creator` references. Where a source conflicted with itself or with a run, the run won (for example the Python bytecode table in the constant-time reference).
-
-**anthropics/claude-code-security-review** (MIT, Copyright (c) 2025 Anthropic). Read: README, the review command, `prompts.py`, `findings_filter.py`. Idea: report only confident, newly added problems, and the exclusion list for low-value findings.
-
-**stas00/the-art-of-debugging** (the repository states CC BY-SA 4.0). Read in full: `SKILL.md`, `README.md`, the methodology chapter and the Python chapter. Not read: the Unix and compiled-programs chapters (their summaries in `SKILL.md` were read) and the PyTorch chapter. Ideas, in `workflow/debugging.md`: a fast one-command loop with inline environment variables, confirming the code that runs, resource emulation, bisect options, the timing effect of observing, post-mortem debugging.
-
-**joe-bell/cva** (`.agents/skills/deslop`, Apache-2.0), **pedronauck/skills** (`deslop`) and **boraoztunc/skills** (`adversarial-review`): the repositories state no licence for the second and third. Read: the three SKILL files. Their README and workflow script were not. Ideas only: the accidental-complexity list and what to keep (`tabby/development/code/minimalism-reuse-names.md`, `tabby-review/changes/self-review.md`); assume the change is broken, read the project's invariants, distrust tests and comments, end with what was not verified.
-
-Verification in this repository: the Python, C and Rust behaviours cited on the audit pages were run with CPython 3.13, gcc, rustc 1.97 and Hypothesis; the GitHub Actions behaviour, Semgrep's file-size skipping and Python 3.14 `pdb` attach were not run and are marked as such.
-
-## Skill-authoring guidance (13 November 2026)
-
-Ideas only, no text copied: pointers written as conditions ("before the first edit, read X when the task does Y") instead of a topic menu, and no hedged "if needed" wording. From Anthropic's [skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) and community guides ([skills.sh load tips](https://www.skills.sh/pedronauck/skills/skill-load-tips), [mdskills](https://www.mdskills.ai/docs/skill-best-practices)).
-
-## CodeAesthetic and ArjanCodes videos (13 November 2026)
-
-Ideas only, restated in Tabby's words; no video was watched and no text was copied. Read through third-party summary pages (finechat-ai and recapio digests) and listings, so details may be off. From CodeAesthetic: "Why You Shouldn't Nest Your Code" (flatten with early returns and extraction, a depth ceiling), "Don't Write Comments" (named constants, named conditions, optional types instead of sentinels), "Abstraction Can Make Your Code Worse" (abstraction is coupling; a new variant beside the old one; abstract at three variants). ArjanCodes was consulted by title only (code smells, low coupling). Adopted in `tabby/development/code/code-smells.md`, the rubric in `tools/eval/judge.py` and the nesting metric in `tools/eval/quality.py`.
-
-Update, same day: one agent per video looked for non-YouTube sources (YouTube blocks transcript requests from this network, and no block-evasion was attempted). Used: the full caption transcript of "The Flaws of Inheritance" (about 85 to 90% confidence), summaries of "Dependency Injection, The Best Pattern", "Naming Things in Code" and "Premature Optimization" (about 70 to 85%), and ArjanCodes' own example repository for "7 Python Features That Make Your Code Worse" (github.com/ArjanCodes/examples, items read in code). Not usable: no source for "Stop Checking for None Everywhere", "Your Codebase Is Too Fragile", "You Think This Is Good OOP", "How to Stop Third-Party APIs", "Ditch the Dictionaries"; "7 Things AI Coding Agents Get Wrong" gave 4 of 7 items, already covered. Rules adopted are restated in `code/code-smells.md`.
-
-Tsoding Daily and aarthificial (13 November 2026): five streams (Reusable Undo System, Parsing XML without a Library, Issue Tracker in C; Bevy Refactor & Chill, Save System) were looked up and no transcript, summary or write-up exists on the open web, so nothing was taken from them. The C-core guidance in `library/native/native-c.md` and `assets/native/c_core/` is written from general C practice (overflow-checked sizes, arenas, pointer-plus-length views, status returns), with Tsoding's public projects (such as `nob.h`) noted as the prompt to look into C style, not as a source read.
-
-## ghostty-org/ghostty (13 November 2026)
-
-- Upstream: https://github.com/ghostty-org/ghostty (MIT licence), read at commit `cf3a8a6` (shallow clone, 12 November 2026). Nothing vendored and no text copied; ideas restated in Tabby's words.
-- Read: `AGENTS.md`, `HACKING.md`, `AI_POLICY.md`, `src/lib/enum.zig`, `include/ghostty/vt/` (the C API), and counts over `src/` (617 Zig files, 4,714 `test` blocks, 5,279 `testing.allocator` uses, 723 `errdefer`, 346 arena uses).
-- Adopted: a "What a large Zig codebase does" section in `library/native/native-zig.md`; the uniform C-API rules in `library/native/native-c.md` (result codes with out-parameters, NULL handles return an error, optional allocator, zero means none, enum values fixed, `_MAX_VALUE` sentinel); the targeted-test form in the `commands:` line of the project-memory template (its `AGENTS.md` says to prefer `-Dtest-filter` because the suite is slow).
-- Not adopted: its AI policy (disclosure and contributor rules are the project's own); Tabby already commits and pushes only when asked.
-
-## TigerBeetle, NumPy, pandas, Linux, and deeper Ghostty (13 November 2026)
-
-Ideas only, restated in Tabby's words; nothing vendored and no text copied. Shallow clones read at: `tigerbeetle/tigerbeetle` `a2a3c70` (Apache-2.0), `numpy/numpy` `768d7ef` (BSD-3-Clause), `pandas-dev/pandas` `e37bffd` (BSD-3-Clause), `torvalds/linux` `7e1392a` (GPL-2.0; only `Documentation/process` and `Documentation/dev-tools` were checked out), `ghostty-org/ghostty` `cf3a8a6` (MIT). Nine read-only study agents covered them; claims used here were spot-checked against the files.
-
-- TigerBeetle: `docs/TIGER_STYLE.md` (pair assertions, bounds on everything, units last in names), the simulation and fuzzing setup (`src/vopr.zig`, `src/fuzz_tests.zig`), and the C client plus generated bindings (`src/clients/`). Adopted in `testing/test-rigor-property-and-release.md` ("Determinism and fault injection"), `design-under-real-limits.md`, and `library/native/native-extension-architecture.md` ("One core, many callers").
-- NumPy and pandas: C error paths, overflow-checked sizes, `Python.h` first, banned borrowed-reference calls, and the sanitizer and `-Werror` CI split (`.github/workflows`, `tools/ci/check_c_api_usage.py`, `tools/check_python_h_first.py`). Adopted in `library/native/native-c.md` and `native-ci-wheels.md`.
-- Linux: `coding-style.rst`, `deprecated.rst`, and the dev-tools pages (goto cleanup, return conventions, no `strcpy` or VLAs), and `coding-assistants.rst` and `generated-content.rst` (disclosure; only a human certifies sign-off). Adopted in `native-c.md` and `tabby-docs/commits.md`.
-- Ghostty: terminal-state, renderer and build studies informed the data-layout bullets in `native-extension-architecture.md` (offsets instead of pointers, zero as a valid empty state, hard capacity, a generation number on handles).
-
-## Foreseeable-failures checklist (17 November 2026)
-
-- `adamentwistle/fable-skills`, skill `edge-case-sweep` (MIT, copyright 2026 Adam Entwistle). Adapted into `tabby/development/code/foreseeable-failures.md`: the three outcomes for each failure (handle, reject loudly, note), the rule that "handled" needs an observed run, the rule not to guard inputs the code cannot receive, and the checklist families (absent against empty, boundaries, duplicates, called twice or concurrently, stale state, time, a dependency failing). Rewritten in Tabby's words and joined to Python-specific guards and packages.
-- `getsentry/warden`, `code-review/references/python.md` (Functional Source License): read for ideas only, no text copied. It confirmed the patterns "falsey fallback", "used-up iterator" and "mutable default" as high-signal.
-- Read, nothing taken: `olshansk/agent-skills` `cmd-pr-edgecase` (a PR review procedure, not a guard list), `wshobson` `python-anti-patterns` (already covered by `code-smells.md`).
-
-## Fredoka (README title)
-
-The README banner's lettering is set in Fredoka (SIL Open Font License 1.1, copyright 2016 The Fredoka Project Authors, https://github.com/hafontia/Fredoka-One). The font file is `assets/src/fonts/Fredoka-Variable.ttf` with its licence in `assets/src/fonts/OFL-Fredoka.txt`; it is used only to render the banner.
-
-## JetBrains Mono (README banner terminal)
-
-The terminal text in the README banner and logo is set in JetBrains Mono (SIL Open Font License 1.1, copyright 2020 The JetBrains Mono Project Authors, https://github.com/JetBrains/JetBrainsMono). The font file is `assets/src/fonts/JetBrainsMono-Variable.ttf` with its licence in `assets/src/fonts/OFL-JetBrainsMono.txt`; it is used only to render the banner. The ASCII cat is original.
-
-## lemomo-ai/lemo-opuscar (README banner, 17 November 2026)
-
-Read for ideas only; no text, code or images copied (its docs are CC BY-NC 4.0, its code MIT). Taken as practice for `tools/readme_film/`: each frame is a pure function of time recorded frame by frame, one timeline drives every move, moves get anticipation, action and follow-through, a hook early in the loop, and no default fades.
+blader/humanizer (MIT), softaworks/agent-toolkit `writing-clearly-and-concisely` (MIT), heydamir/unslop (CC BY 4.0; its copy rules are already in `docs/voice-and-style.md`), vercel-labs/agent-skills (no licence file; its one-rule-per-file layout was weighed against Tabby's smells lists and not adopted), ComposioHQ/awesome-claude-skills, olshansk/agent-skills `cmd-pr-edgecase`, and wshobson `python-anti-patterns` (already covered by `code-smells.md`). Earlier unmodified copies of humanizer, writing-clearly-and-concisely and the wshobson Python skills were removed from the repository.

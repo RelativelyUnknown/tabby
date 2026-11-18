@@ -49,4 +49,4 @@ Keep the logic in plain C with no Python headers, and make the binding a thin la
 - Fuzz parsers of untrusted bytes (libFuzzer or AFL++). Test every error path, not only success.
 - Run the same inputs through the pure-Python reference and compare.
 
-Reviewing someone else's C extension: `native-boundary.md` in the `tabby-review` skill (`../tabby-review/`).
+Reviewing someone else's C extension: `native-boundary.md` in the `review` skill (`../review/`).

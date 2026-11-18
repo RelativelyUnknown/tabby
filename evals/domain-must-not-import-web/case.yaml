@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: domain-must-not-import-web
+expected_outcome: |
+  Adds describe_discount to the domain package without importing the web layer (it formats money itself or takes it as a parameter), shows it in the view, adds a test, and adds an automated check (an import-linter contract, or a test that parses imports) so a later import of the web layer from the domain fails the build, and says so.
+context:
+  scaffold_script: fixture.sh
