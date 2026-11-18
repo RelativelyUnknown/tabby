@@ -136,7 +136,7 @@ The core rules in [`core/TABBY-CORE.md`](core/TABBY-CORE.md) are always on. In C
 ## The rules it holds
 
 - **Done means verified.** The real problem is solved and the code has been run. Passing tests are evidence, not the goal.
-- **Tests are not yours to bend.** It never edits, deletes, skips or loosens an existing test to get green.
+- **Tests are not yours to bend.** It never edits, deletes, skips or loosens an existing test to get green. The one exception is a request to review or tidy the tests: a test that cannot fail (`assert True`, `isinstance` only, `is not None` only) may be rewritten or removed, named in the reply.
 - **Cause before fix.** No special-casing inputs, no sleeps or retries to hide a symptom.
 - **No silencing.** No `# type: ignore`, `# noqa`, `Any` or looser config to make a tool quiet.
 - **Small diff.** No new dependency, public API change, commit or push unless you ask.

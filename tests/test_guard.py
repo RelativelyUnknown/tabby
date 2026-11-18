@@ -47,6 +47,16 @@ class Guard(unittest.TestCase):
         self.assertTrue(check_diff(diff("tests/test_a.py", ["    assert f()"], ["    assert f() == 1", "    assert g() == 2"])))
         self.assertEqual(check_diff(diff("tests/test_a.py", ["    assert f() == 2"], ["    assert f() == 1"])), [])
 
+    def test_deleting_a_test_that_cannot_fail_is_allowed(self):
+        self.assertEqual(check_diff(diff("tests/test_a.py", [], ["def test_type():", "    assert isinstance(f(), bool)"])), [])
+        self.assertEqual(check_diff(diff("tests/test_a.py", [], ["def test_x():", "    assert f() is not None"])), [])
+        self.assertEqual(check_diff(diff("tests/test_a.py", [], ["def test_t():", "    assert True"])), [])
+        # one real assertion, or none at all, keeps the flag
+        self.assertTrue(check_diff(diff("tests/test_a.py", [], ["def test_x():", "    assert f() is not None", "    assert f() == 1"])))
+        self.assertTrue(check_diff(diff("tests/test_a.py", [], ["def test_x():", "    f()"])))
+        # removing a vacuous assertion from a test that keeps its real one is not weakening
+        self.assertEqual(check_diff(diff("tests/test_a.py", ["    assert f() == 1"], ["    assert f() is not None", "    assert f() == 1"])), [])
+
     def test_non_python_ignored(self):
         self.assertEqual(check_diff(diff("README.md", ["# noqa"])), [])
 
