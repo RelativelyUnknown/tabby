@@ -1,6 +1,6 @@
 # Async code
 
-The Python target decides whether `TaskGroup` and `asyncio.timeout` (3.11+) exist; the test plugin the project uses (`pytest-asyncio`, `anyio`) is part of its defaults. Behaviour below was run on Python 3.13.
+The Python target decides whether `TaskGroup` and `asyncio.timeout` (3.11+) exist; the test plugin the project uses (`pytest-asyncio`, `anyio`) is part of its defaults.
 
 ## When async
 
@@ -23,7 +23,7 @@ Shared HTTP clients, one database session per task and other service-level async
 
 ## Async patterns
 
-Each block runs as written on Python 3.12 or later (checked on 3.13, 7 November 2026).
+Each block runs as written on Python 3.12 or later.
 
 ### Structured concurrency and except*
 

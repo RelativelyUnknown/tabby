@@ -14,7 +14,7 @@ Debugging is testing a hypothesis about a cause, not trying changes until the sy
 
 - Cut the input and the code path in half until the failure is the smallest case. A regression with a known good commit: `git bisect run pytest path::test -q`; 1,024 commits take ten steps. A commit that cannot be tested (a different bug in the range, an API change) is `git bisect skip`; to find the commit that *fixed* something, name the states so they cannot be confused: `git bisect start --term-old=broken --term-new=fixed`. Dependencies may differ across the range, so reinstall the right ones before trusting a verdict.
 - A debugger, a `print`, a forced-synchronous flag or `PYTHONASYNCIODEBUG` changes timing, so a race or deadlock can vanish when observed. For those use a tracer that does not stop the process (`py-spy dump --pid`, `strace -f -p PID`, logging with thread ids) and note which tool made the failure disappear; that is evidence about the cause.
-- To debug a failure that already happened, run under the debugger and let the exception stop it: `python -m pdb -c continue prog.py` ends in a post-mortem prompt at the failing frame (checked). `pytest --pdb` does the same for a test.
+- To debug a failure that already happened, run under the debugger and let the exception stop it: `python -m pdb -c continue prog.py` ends in a post-mortem prompt at the failing frame. `pytest --pdb` does the same for a test.
 
 | Symptom | First tool |
 | --- | --- |

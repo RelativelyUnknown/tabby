@@ -58,8 +58,8 @@ class Detect(unittest.TestCase):
     def test_empty_repo_does_not_fail(self):
         with tempfile.TemporaryDirectory() as d:
             out = detect(d)
-        self.assertIn("house rules: none found", out)
-        self.assertIn("existing helpers", out)
+        self.assertNotIn("none found", out)
+        self.assertIn("project memory: no ## Tabby section", out)
 
 
 if __name__ == "__main__":

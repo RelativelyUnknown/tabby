@@ -1,6 +1,5 @@
 # Template for a C++ extension built with nanobind and scikit-build-core.
-# NOT BUILT HERE: nanobind was not installed in the session that wrote this. Check it against
-# the nanobind docs for the version you pin (docs/api_cmake.rst, docs/packaging.rst) before use.
+# Check it against the nanobind docs for the version you pin (docs/api_cmake.rst, docs/packaging.rst) before use.
 cmake_minimum_required(VERSION 3.18)
 project(${SKBUILD_PROJECT_NAME} LANGUAGES CXX)
 

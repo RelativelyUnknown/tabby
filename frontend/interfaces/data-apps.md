@@ -1,6 +1,6 @@
 # Data apps: Streamlit, Dash, Gradio
 
-The framework draws most of the interface. Set the theme through the framework's own settings, then spend the effort on the charts and the layout of what the user sees first. Facts below were read from each framework's documentation on 11 November 2026; check the installed version.
+The framework draws most of the interface. Set the theme through the framework's own settings, then spend the effort on the charts and the layout of what the user sees first. Check the installed version.
 
 ## Streamlit
 

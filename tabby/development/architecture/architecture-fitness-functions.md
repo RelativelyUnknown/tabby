@@ -6,7 +6,7 @@ Add one when you create a boundary the design depends on (layers, a core with no
 
 ## Import rules: import-linter
 
-Declare the contracts in `pyproject.toml`, run `lint-imports` in the check command and in CI. Checked on a small project: with the contracts below kept it prints `Contracts: 2 kept, 0 broken.`; after `shop/domain/pricing.py` imported `shop.web.views` it printed `BROKEN` for both and `shop.domain.pricing -> shop.web.views (l.3)`.
+Declare the contracts in `pyproject.toml`, run `lint-imports` in the check command and in CI. With the contracts below kept it prints `Contracts: 2 kept, 0 broken.`; when `shop/domain/pricing.py` imports `shop.web.views` it prints `BROKEN` for both and `shop.domain.pricing -> shop.web.views (l.3)`.
 
 ```toml
 [tool.importlinter]

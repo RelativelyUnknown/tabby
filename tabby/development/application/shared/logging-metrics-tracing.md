@@ -1,6 +1,6 @@
 # Observability
 
-Use the stack the project already has (stdlib `logging`, structlog, Prometheus, an OpenTelemetry collector); add a library only when asked. Checked on Python 3.13 with prometheus-client 0.26.0 and OpenTelemetry 1.45.2 on 7 November 2026.
+Use the stack the project already has (stdlib `logging`, structlog, Prometheus, an OpenTelemetry collector); add a library only when asked.
 
 ## Logs
 

@@ -59,7 +59,7 @@ See also [design-under-real-limits.md](../../architecture/design-under-real-limi
 
 ## The core crate
 
-The crate without PyO3 is ordinary Rust, and its mistakes surface in Python as wrong results. Checked against the Rust API Guidelines and the digests in BeautifulRust (read 10 November 2026):
+The crate without PyO3 is ordinary Rust, and its mistakes surface in Python as wrong results. From the Rust API Guidelines:
 
 - One error enum for the crate, implementing `Display` and `std::error::Error` and keeping the cause (`source()`); no `String`, `()` or `Box<dyn Error>` as a public error, and no `map_err(|_| ...)` that drops what failed. The binding crate turns it into a Python exception in one place.
 - Put invariants in types: a newtype for each id or unit, an enum instead of a `bool` flag or a "must be X when Y" comment, a constructor that validates once. `#[non_exhaustive]` on a public enum or struct that will grow.

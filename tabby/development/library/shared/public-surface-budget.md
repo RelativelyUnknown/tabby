@@ -14,7 +14,7 @@ Pair this page with [public-api-design.md](public-api-design.md) for the rules o
 
 ## Notice when it changes
 
-Compare the current public API with the last release in CI or before tagging. With `griffe` (checked: `griffe check shop -s src -a v0.1.0` against a git tag printed `price(x): Parameter was added as required` after a parameter was added):
+Compare the current public API with the last release in CI or before tagging. With `griffe` (`griffe check shop -s src -a v0.1.0` against a git tag prints `price(x): Parameter was added as required` after a parameter is added):
 
 ```
 griffe check <package> -s src -a <last-release-tag>

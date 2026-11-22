@@ -6,7 +6,7 @@ Read with [choosing-dependencies.md](../../tabby/development/dependencies/choosi
 
 ## Measure, do not recall
 
-Every figure about someone else's project (how many maintainers, downloads, last release, advisories) is a claim to be measured. The tool whose method this follows found that hand-collected counts were wrong: contributors on the code host and people with publish rights on the registry are different populations. Run the scanner or query the registry and quote the output; do not estimate from memory. Three rules from it: unavailable data is not evidence of risk (PyPI publishes no maintainer list, so "unknown" is not "one maintainer"); an absent measurement is not a clean verdict, so state how many dependencies were actually assessed; and check an advisory against the version in the lock file, not the latest release or a range. For a Python project that means advisories for the locked tree (`pip-audit`, OSV), archived or abandoned upstreams for direct dependencies, yanked releases, and which dependencies run code at install: an sdist builds with its `setup.py` or build backend on your machine, which `--only-binary :all:` (pip) or `--no-build` (uv) refuses.
+Every figure about someone else's project (how many maintainers, downloads, last release, advisories) is a claim to be measured. Hand-collected counts are often wrong: contributors on the code host and people with publish rights on the registry are different populations. Run the scanner or query the registry and quote the output; do not estimate from memory. Three rules from it: unavailable data is not evidence of risk (PyPI publishes no maintainer list, so "unknown" is not "one maintainer"); an absent measurement is not a clean verdict, so state how many dependencies were actually assessed; and check an advisory against the version in the lock file, not the latest release or a range. For a Python project that means advisories for the locked tree (`pip-audit`, OSV), archived or abandoned upstreams for direct dependencies, yanked releases, and which dependencies run code at install: an sdist builds with its `setup.py` or build backend on your machine, which `--only-binary :all:` (pip) or `--no-build` (uv) refuses.
 
 ## Where packages come from
 
@@ -18,7 +18,7 @@ Every figure about someone else's project (how many maintainers, downloads, last
 
 ## Triage an advisory, a scanner alert or a report
 
-A CVE, a `pip-audit` or Dependabot alert, a scanner finding or a bug report is a claim, not a verdict. Seven questions, adapted from William Woodruff's "Brocards for vulnerability triage" as cited in the Trail of Bits skill that carries them; stop at the first that dismisses it, and write down which:
+A CVE, a `pip-audit` or Dependabot alert, a scanner finding or a bug report is a claim, not a verdict. Seven questions; stop at the first that dismisses it, and write down which:
 
 1. **Threat model.** Who is the attacker, what can they do, how do they trigger it, what harm results? "An attacker with [capability] can [action] to achieve [impact]." A bug is not a vulnerability. If one element is missing, ask for it.
 2. **Capability against impact.** If triggering it needs a power that already includes the harm (an active man-in-the-middle injecting content, memory corruption through `ctypes`), it adds nothing. Escalation from limited to elevated access is different and counts.

@@ -2,7 +2,7 @@
 
 A port changes the language, not the behaviour. Ask of the original: what does it do that nobody wrote down? Find that before writing a line of the port, because the quiet parts are where ports go wrong. Decide first that it should be native at all ([native-extension-architecture.md](native-extension-architecture.md)); this page starts once it should.
 
-Checked on 10 November 2026 with Python 3.13, rustc and g++ (the arithmetic rows below were run); the build templates are in [`development/assets/native/`](../../assets/native/).
+The build templates are in [`development/assets/native/`](../../assets/native/).
 
 ## Method
 

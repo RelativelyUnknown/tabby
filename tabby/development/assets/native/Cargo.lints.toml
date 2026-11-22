@@ -1,6 +1,5 @@
 # Paste into Cargo.toml (rust-version 1.81 or later for #[expect]). Fix a lint; where one is wrong
 # for a single item use #[expect(clippy::name, reason = "...")] on that item, never a crate-wide allow.
-# Checked with cargo and clippy 0.1.97 on a crate with an unwrap, an index and a cast (10 November 2026).
 [lints.rust]
 unsafe_op_in_unsafe_fn = "warn"
 missing_debug_implementations = "warn"
