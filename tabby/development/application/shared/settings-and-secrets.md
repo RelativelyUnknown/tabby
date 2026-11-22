@@ -1,6 +1,6 @@
 # Configuration
 
-Match the project: a dataclass with `os.environ` and `tomllib` (3.11+) is enough for a handful of settings; use `pydantic-settings` when the project already uses pydantic. Checked on Python 3.13 with pydantic-settings 2.15.0 on 7 November 2026.
+Match the project: a dataclass with `os.environ` and `tomllib` (3.11+) is enough for a handful of settings; use `pydantic-settings` when the project already uses pydantic.
 
 ## Rules
 

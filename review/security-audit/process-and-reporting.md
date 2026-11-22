@@ -4,7 +4,7 @@ Find what an outside party can reach and report only what you can show.
 
 ## Process
 
-Find what an outside party can reach and report only what you can show. Techniques here come from the sources in `THIRD_PARTY_NOTICES.md`, kept where they held up when run or traced.
+Find what an outside party can reach and report only what you can show.
 
 ### 1. Scope and risk
 

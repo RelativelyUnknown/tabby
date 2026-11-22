@@ -10,7 +10,7 @@ A test you cannot make go red is not a test. For each new or relied-on test, cha
 python3 <review folder>/scripts/mutation_probe.py src/pkg/pricing.py --cmd "python -m pytest -q tests/test_pricing.py"
 ```
 
-On a refund rule with five tests it printed `9 changes tried, 8 caught, 1 survived`, the survivor `line 2: 0 -> 1` (the `amount <= 0` boundary was never pinned at 1), and `test_trivial` as never red (it asserted `is not None`). Each survivor is a missing or weak assertion, or an equivalent change you decide is harmless; each never-red test is deleted or given an assertion. For decision logic use the full audit in [proof-based-testing.md](proof-based-testing.md) (mutmut); the probe is the cheap version for a file.
+The report reads like `9 changes tried, 8 caught, 1 survived`, the survivor `line 2: 0 -> 1` (the `amount <= 0` boundary was never pinned at 1), plus any test that is never red (one that asserts only `is not None`). Each survivor is a missing or weak assertion, or an equivalent change you decide is harmless; each never-red test is deleted or given an assertion. For decision logic use the full audit in [proof-based-testing.md](proof-based-testing.md) (mutmut); the probe is the cheap version for a file.
 
 ## Scorecard
 

@@ -1,6 +1,6 @@
 # uv
 
-Applies when `runner` is uv; do not move a poetry, pdm or pip project to uv unasked. Commands below were run with uv 0.11.32 on 7 November 2026; uv changes quickly, so `uv help <command>` wins over this page.
+Applies when `runner` is uv; do not move a poetry, pdm or pip project to uv unasked. uv changes quickly, so `uv help <command>` wins over this page.
 
 ## Pick the mode
 
@@ -25,8 +25,6 @@ Applies when `runner` is uv; do not move a poetry, pdm or pip project to uv unas
 
 ## uv in CI
 
-From the uv documentation (integration guides for GitHub Actions and Docker), checked 7 November 2026. Not run here: the container has no Docker, and CI needs a hosted runner.
-
 ### GitHub Actions
 
 ```yaml
@@ -37,7 +35,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
-          version: "0.13.7"  # pin uv; the commands here were run with 0.11.32
+          version: "0.13.7"  # pin uv
       - run: uv sync --locked
       - run: uv run --no-sync pytest
 ```

@@ -1,6 +1,6 @@
 # Proof-based testing for pure logic
 
-Example tests check the inputs someone thought of. Here the spec is written as laws that must hold for every input, a solver and a generator hunt for a counterexample, and a mutation run checks that the laws are sharp. Python has no proof checker, so the honest label is "searched, no counterexample found", never "proved". The idea comes from Bend 2's `LAWS.bend` and Microsoft/GitHub Next's PDD Kit; the Python form below was run, not just read.
+Example tests check the inputs someone thought of. Here the spec is written as laws that must hold for every input, a solver and a generator hunt for a counterexample, and a mutation run checks that the laws are sharp. Python has no proof checker, so the honest label is "searched, no counterexample found", never "proved".
 
 Use it for pure code whose wrong answer is expensive: authorisation and eligibility rules, money, dates, pricing, parsers, state machines. Skip it for I/O, ORMs, HTTP and C extensions: one thin integration test each.
 

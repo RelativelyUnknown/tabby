@@ -1,6 +1,6 @@
 # Docs sites and README visuals
 
-Documentation is *read* mode: a 60 to 70 character column, navigation that shows where you are, search, code that copies. The theme is set through the docs tool, and the pictures in it come from the `diagrams` skill (`../diagrams/diagrams/choosing.md`). Facts below were read from the tools' documentation on 11 November 2026.
+Documentation is *read* mode: a 60 to 70 character column, navigation that shows where you are, search, code that copies. The theme is set through the docs tool, and the pictures in it come from the `diagrams` skill (`../diagrams/diagrams/choosing.md`).
 
 ## MkDocs Material
 

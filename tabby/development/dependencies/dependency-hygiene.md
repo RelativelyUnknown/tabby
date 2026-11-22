@@ -11,7 +11,7 @@ Every declared dependency is code someone else can change under you, an install 
 | Declared as runtime, used only in tests or tools | ships to every user | `deptry` (DEP004), then move it to a dev group |
 | Dead code (unused functions, imports, variables) | maintenance and review cost | `vulture` (confidence under 100% is a guess; read each) |
 
-Run them inside the project's environment with the package installed (`uv run deptry .`, `uv run vulture src`): in a `src` layout without the package installed, `deptry` reports the project's own package as a transitive dependency. Checked on a small project with `pyyaml` declared and never imported: `deptry .` printed `DEP002 'pyyaml' defined as a dependency but not used in the codebase`; `vulture src` listed an unused import and an unused function with `(90% confidence)` and `(60% confidence)`.
+Run them inside the project's environment with the package installed (`uv run deptry .`, `uv run vulture src`): in a `src` layout without the package installed, `deptry` reports the project's own package as a transitive dependency. With `pyyaml` declared and never imported, `deptry .` prints `DEP002 'pyyaml' defined as a dependency but not used in the codebase`; `vulture src` lists an unused import and an unused function with `(90% confidence)` and `(60% confidence)`.
 
 ## Rules
 

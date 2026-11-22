@@ -1,6 +1,6 @@
 # Hunting bugs
 
-A bug hunt asks the code questions and runs the answers. Reading a function and finding it plausible is how reviews miss things. Built from the review skills listed in `THIRD_PARTY_NOTICES.md` and checked against running code where marked.
+A bug hunt asks the code questions and runs the answers. Reading a function and finding it plausible is how reviews miss things.
 
 **Rules.**
 
@@ -23,7 +23,7 @@ Shapes this finds in Python:
 - A function that returns success without setting what it was meant to set, or sets an out-value on the happy path only.
 - One of two callers runs outside the lock or transaction the callee assumes. Two handlers that read-modify-write the same row with no transaction are coupled even though neither calls the other.
 - A helper whose name and result disagree: `check_restricted(user, perm)` returns `True` when the user *has* the permission; a `return True` on the fall-through path; `or` where `and` was meant; an inverted `if not`.
-- `None == None`: `order.owner_id == current_user.id` is `True` when an anonymous user and a guest order both have no ID (checked).
+- `None == None`: `order.owner_id == current_user.id` is `True` when an anonymous user and a guest order both have no ID.
 - The same adjustment applied in two places for one event (a balance reduced when the exit is requested and again when it is processed).
 
 ## Probes
@@ -69,15 +69,15 @@ Report the pair, not one side: where it is checked, where it is used, and the in
 
 ## Python traps worth probing
 
-Each was run on Python 3.13 except the ones marked (documented), which are documented behaviour that was not run here. Use them as probes: write the input, run it, report what happened.
+Use them as probes: write the input, run it, report what happened.
 
 - `os.environ` values are strings, so `"0"` is truthy; `argparse` `type=bool` turns `"False"` into `True`; JSON turns integer keys into strings and `json.dumps(float("nan"))` writes `NaN`, which is not valid JSON.
-- `asyncio.gather` without `return_exceptions=True` raises the first error and leaves the other tasks running (checked); a blocking call inside `async def` stalls every task (documented); a task nothing references can be garbage-collected (documented).
-- `"{0.cfg.secret}".format(obj)` follows attributes, and through a function it reaches module globals (`{0.__init__.__globals__[__name__]}`): never use a user-supplied string as a `str.format` template (checked). `getattr(obj, name)` with a request-supplied `name` reaches `__class__` and `__dict__` (checked).
-- `json.loads('{"admin": false, "admin": true}')` keeps the last duplicate key (checked), so two parsers that disagree on duplicates can be played against each other; Python's JSON keys are case-sensitive (checked). Plain dict parsing ignores unknown fields; use a model that forbids them.
-- `re.match(r"^admin$", "admin\n")` matches because `$` also matches before a trailing newline; `re.fullmatch` and `\Z` do not (checked). `"İ".lower()` is two code points and `"STRASSE".lower() == "straße".lower()` is false while `casefold()` makes them equal (checked): compare identifiers exactly, or with `casefold()`. `len("👨‍👩‍👧‍👦")` is 7: slicing user text by code points can split a character (checked).
-- `Decimal(0.1)` carries the binary float (`0.1000000000000000055511151231257827…`); write `Decimal("0.1")` (checked). Calling a coroutine without `await` runs nothing and only emits `RuntimeWarning: coroutine ... was never awaited` (checked).
-- `asyncio.CancelledError` is not an `Exception`, so `except Exception` lets cancellation through, while `except BaseException` or a bare `except` that does not re-raise swallows it and the task never ends as cancelled (checked).
+- `asyncio.gather` without `return_exceptions=True` raises the first error and leaves the other tasks running; a blocking call inside `async def` stalls every task; a task nothing references can be garbage-collected.
+- `"{0.cfg.secret}".format(obj)` follows attributes, and through a function it reaches module globals (`{0.__init__.__globals__[__name__]}`): never use a user-supplied string as a `str.format` template. `getattr(obj, name)` with a request-supplied `name` reaches `__class__` and `__dict__`.
+- `json.loads('{"admin": false, "admin": true}')` keeps the last duplicate key, so two parsers that disagree on duplicates can be played against each other; Python's JSON keys are case-sensitive. Plain dict parsing ignores unknown fields; use a model that forbids them.
+- `re.match(r"^admin$", "admin\n")` matches because `$` also matches before a trailing newline; `re.fullmatch` and `\Z` do not. `"İ".lower()` is two code points and `"STRASSE".lower() == "straße".lower()` is false while `casefold()` makes them equal: compare identifiers exactly, or with `casefold()`. `len("👨‍👩‍👧‍👦")` is 7: slicing user text by code points can split a character.
+- `Decimal(0.1)` carries the binary float (`0.1000000000000000055511151231257827…`); write `Decimal("0.1")`. Calling a coroutine without `await` runs nothing and only emits `RuntimeWarning: coroutine ... was never awaited`.
+- `asyncio.CancelledError` is not an `Exception`, so `except Exception` lets cancellation through, while `except BaseException` or a bare `except` that does not re-raise swallows it and the task never ends as cancelled.
 
 ## Report
 

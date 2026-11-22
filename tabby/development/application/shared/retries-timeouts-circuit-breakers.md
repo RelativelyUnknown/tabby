@@ -1,6 +1,6 @@
 # Resilience
 
-Use the retry library the project already has (tenacity, backoff, a client's own retry setting); do not add one for a single call. Checked on Python 3.13 with tenacity 9.2.1, httpx 0.28.1 and requests 2.34.2 on 7 November 2026.
+Use the retry library the project already has (tenacity, backoff, a client's own retry setting); do not add one for a single call.
 
 ## Rules
 

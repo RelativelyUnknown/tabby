@@ -66,7 +66,7 @@ def test_fetch_user_raises_on_server_error(respx_mock):
 
 ## Retries and failure sequences
 
-Script a dependency's failures with `side_effect` as a list: each call returns or raises the next item. Test the three outcomes that matter, and inject the sleep so the test is instant. Run as written under pytest (7 November 2026).
+Script a dependency's failures with `side_effect` as a list: each call returns or raises the next item. Test the three outcomes that matter, and inject the sleep so the test is instant.
 
 ```python
 from unittest.mock import Mock

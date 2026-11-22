@@ -2,7 +2,7 @@
 
 Every object that crosses the boundary has two possible owners, and C++ will not tell you when both think they own it, or neither does. Ask of each binding: who frees this, and what else must stay alive while Python holds it? Read [native-extension-architecture.md](native-extension-architecture.md) first: the seam, the pure-Python reference and the "go native only on evidence" rule apply unchanged.
 
-Checked against the nanobind documentation (3.2 development branch) and the pybind11 documentation (v3) on 10 November 2026; nothing here was compiled. Check the installed version before relying on an option ([checking-apis-and-python-versions.md](../../workflow/checking-apis-and-python-versions.md)).
+Check the installed version before relying on an option ([checking-apis-and-python-versions.md](../../workflow/checking-apis-and-python-versions.md)).
 
 ## Which binding library
 
