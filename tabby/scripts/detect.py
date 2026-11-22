@@ -103,7 +103,9 @@ def lines():
         rules.append("pytest " + " ".join(a for a in str(pt["addopts"]).split() if a.startswith("--strict")))
     if (root / "src").is_dir():
         rules.append("src/ layout")
-    yield "house rules: " + ("; ".join(rules) or "none found") + (f"; no syntax newer than python {proj['requires-python']}" if proj.get("requires-python") else "")
+    floor = [f"no syntax newer than python {proj['requires-python']}"] if proj.get("requires-python") else []
+    if rules or floor:
+        yield "house rules: " + "; ".join(rules + floor)
     skip = {".git", ".venv", "venv", "node_modules", "build", "dist", "__pycache__", ".tox", ".mypy_cache", ".ruff_cache"}
     names = {"utils.py", "_utils.py", "helpers.py", "common.py", "_compat.py", "compat.py", "errors.py", "exceptions.py", "conftest.py"}
     found = []
@@ -111,7 +113,8 @@ def lines():
         rel = p.relative_to(root)
         if p.name in names and not (skip & set(rel.parts)):
             found.append(str(rel))
-    yield "existing helpers (reuse before writing new): " + (", ".join(found[:12]) or "none found") + (" ..." if len(found) > 12 else "")
+    if found:
+        yield "existing helpers (reuse before writing new): " + ", ".join(found[:12]) + (" ..." if len(found) > 12 else "")
     mem = text("AGENTS.md") + text("CLAUDE.md")
     nested = sorted(str(q.parent.relative_to(root)) for pat in ("*/AGENTS.md", "*/*/AGENTS.md", "*/*/*/AGENTS.md") for q in root.glob(pat)
                     if not (skip_dirs & set(q.relative_to(root).parts)))
@@ -120,9 +123,11 @@ def lines():
     yield "project memory: " + ("## Tabby section" if "## Tabby" in mem else "no ## Tabby section") + (", ## Python defaults" if "## Python defaults" in mem else "") + (f"; {', '.join(has('AGENTS.md', 'CLAUDE.md'))}" if has("AGENTS.md", "CLAUDE.md") else "; no AGENTS.md or CLAUDE.md")
 
 
+NOTHING = re.compile(r"^[^:]+: none( found)?( \(read the CI steps\))?(; native: none)?$")
 print("Detected from the repo (files only; nothing was run):")
 try:
     for ln in lines():
-        print("- " + ln)
+        if not NOTHING.match(ln):  # a line that found nothing adds tokens, not information
+            print("- " + ln)
 except Exception as e:  # never fail the skill that runs this
     print(f"- (detect.py stopped: {type(e).__name__}; read the repo instead)")
