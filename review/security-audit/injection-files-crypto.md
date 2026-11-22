@@ -34,7 +34,7 @@ For each class: where to look, what makes a hit a finding, what refutes it. Ever
 ### XML
 
 - **Look:** `xml.etree`, `minidom`, `sax`, `lxml` parsing outside data.
-- **Finding:** the standard-library parsers expand internal entities (a small document can grow large). `lxml` 6.1.3 did not resolve an external entity with default settings (`Entity 'xxe' not defined`) and read `file:///etc/hostname` with `resolve_entities=True`; so the finding is `resolve_entities=True`, `load_dtd=True`, or an old `lxml`, not the default. `defusedxml` is the fix for untrusted XML.
+- **Finding:** the standard-library parsers expand internal entities (a small document can grow large). current `lxml` does not resolve external entities with default settings (`Entity 'xxe' not defined`) but reads `file:///etc/hostname` with `resolve_entities=True`; so the finding is `resolve_entities=True`, `load_dtd=True`, or an old `lxml`, not the default. `defusedxml` is the fix for untrusted XML.
 
 ### Type confusion and AI features
 
@@ -55,8 +55,8 @@ Every hit needs the trace from attacker-controlled input to the sink ([process-a
 
 - **Look:** a URL from the request fetched by `requests`, `httpx`, `urllib`, `aiohttp`, a webhook sender, an image or link-preview proxy, a PDF renderer.
 - **Finding:** the caller controls the **host or scheme**. Controlling only the path of a fixed host is not SSRF. The impact is what the server can reach that the caller cannot: internal services that trust localhost, the cloud metadata service (`169.254.169.254`, `169.254.170.2`, `metadata.google.internal`), `file://` or other schemes.
-- **A check is weak when** it inspects the URL string. The OS resolver turns `2130706433`, `0x7f000001`, `0177.0.0.1` and `127.1` into `127.0.0.1` (all four checked), while `ipaddress.ip_address` rejects them; `::ffff:127.0.0.1` is the same host in IPv6 form. It is also weak when it validates, then lets the HTTP library resolve again (rebinding), or follows redirects (`allow_redirects=False` and revalidate each hop).
-- **A check holds when** it resolves with `getaddrinfo`, requires `ip.is_global` for every returned address (private, loopback, link-local, IPv4-mapped and carrier-grade NAT `100.64.0.0/10` are all `is_global == False`), and connects to that address. Rewriting the URL to the IP and sending a `Host` header breaks TLS verification (`SSLError`, checked); keep the hostname and force the connection address instead.
+- **A check is weak when** it inspects the URL string. The OS resolver turns `2130706433`, `0x7f000001`, `0177.0.0.1` and `127.1` into `127.0.0.1`, while `ipaddress.ip_address` rejects them; `::ffff:127.0.0.1` is the same host in IPv6 form. It is also weak when it validates, then lets the HTTP library resolve again (rebinding), or follows redirects (`allow_redirects=False` and revalidate each hop).
+- **A check holds when** it resolves with `getaddrinfo`, requires `ip.is_global` for every returned address (private, loopback, link-local, IPv4-mapped and carrier-grade NAT `100.64.0.0/10` are all `is_global == False`), and connects to that address. Rewriting the URL to the IP and sending a `Host` header breaks TLS verification (`SSLError`); keep the hostname and force the connection address instead.
 
 ### Cryptography and secrets
 

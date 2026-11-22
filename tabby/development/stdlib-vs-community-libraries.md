@@ -28,7 +28,7 @@ What a senior engineer knows without looking it up: for each job, what the langu
 ## Three runtime facts that decide designs
 
 - **Import time counts.** A command-line tool pays it on every run. Measure with `python -X importtime -c "import json"` (it prints per-module microseconds; run). Import heavy libraries inside the function that needs them.
-- **The GIL.** Threads do not run Python bytecode in parallel in the default build: use processes for CPU-bound work, threads or asyncio for waiting on I/O. Free-threaded builds exist from 3.13 (`sys._is_gil_enabled()` reports which you have; it printed `True` on the default build used here); a library supports them only if its extension modules say so.
+- **The GIL.** Threads do not run Python bytecode in parallel in the default build: use processes for CPU-bound work, threads or asyncio for waiting on I/O. Free-threaded builds exist from 3.13 (`sys._is_gil_enabled()` reports which you have); a library supports them only if its extension modules say so.
 - **What crosses a process boundary must be picklable.** `pickle.dumps(lambda x: x)` raises `PicklingError`, so a lambda or a local function cannot go to a `ProcessPoolExecutor`. Pass module-level functions and plain data.
 
 ## Other languages
