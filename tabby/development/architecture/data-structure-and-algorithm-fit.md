@@ -47,4 +47,4 @@ Real code that follows this method, to look up when a choice is unclear (each st
 
 ## Same choices in other languages
 
-Names to look up, not verified here. C++: `std::bitset<N>` (size fixed at compile time), `boost::dynamic_bitset` (sized at run time), LLVM `SmallVector`. Rust: `bitflags`, `smallvec`, `slotmap`, `bumpalo`, `indexmap`. C: arrays plus indices, arena allocators, `uint64_t` arrays as bitsets. Python: an `int` as a bitmask or `enum.IntFlag`, `array`, `memoryview`, `__slots__`.
+Names to look up: C++: `std::bitset<N>` (size fixed at compile time), `boost::dynamic_bitset` (sized at run time), LLVM `SmallVector`. Rust: `bitflags`, `smallvec`, `slotmap`, `bumpalo`, `indexmap`. C: arrays plus indices, arena allocators, `uint64_t` arrays as bitsets. Python: an `int` as a bitmask or `enum.IntFlag`, `array`, `memoryview`, `__slots__`.

@@ -18,7 +18,7 @@ Every figure about someone else's project (how many maintainers, downloads, last
 
 ## Triage an advisory, a scanner alert or a report
 
-A CVE, a `pip-audit` or Dependabot alert, a scanner finding or a bug report is a claim, not a verdict. Seven questions, adapted from William Woodruff's "Brocards for vulnerability triage" as cited in the Trail of Bits skill that carries them; stop at the first that dismisses it, and write down which:
+A CVE, a `pip-audit` or Dependabot alert, a scanner finding or a bug report is a claim, not a verdict. Seven questions; stop at the first that dismisses it, and write down which:
 
 1. **Threat model.** Who is the attacker, what can they do, how do they trigger it, what harm results? "An attacker with [capability] can [action] to achieve [impact]." A bug is not a vulnerability. If one element is missing, ask for it.
 2. **Capability against impact.** If triggering it needs a power that already includes the harm (an active man-in-the-middle injecting content, memory corruption through `ctypes`), it adds nothing. Escalation from limited to elevated access is different and counts.

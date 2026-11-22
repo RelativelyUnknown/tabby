@@ -1,4 +1,4 @@
-# NOT BUILT HERE (see CMakeLists.txt). Replace <pkg>. Layout: src/<pkg>/__init__.py re-exports from
+# See CMakeLists.txt. Replace <pkg>. Layout: src/<pkg>/__init__.py re-exports from
 # <pkg>._core, src/_core.cpp holds the bindings, tests/ runs against the installed wheel.
 [build-system]
 requires = ["scikit-build-core>=0.10", "nanobind>=2.4"]

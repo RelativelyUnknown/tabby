@@ -25,7 +25,7 @@ On a function with `if pct == 77: return price + 1` (a planted bug) and a Hypoth
 - `pytest --hypothesis-profile=crosshair` found it and shrank to `discount(0, 77)`.
 - `crosshair check` on the module reported the same input from the `icontract` postcondition.
 
-Setup (dev dependencies; a new dependency follows the ladder and `ask-first:`; versions checked: crosshair-tool 0.0.113, hypothesis-crosshair 0.0.32, Hypothesis 6.170.15):
+Setup (dev dependencies; a new dependency follows the ladder and `ask-first:`):
 
 ```python
 # tests/conftest.py
@@ -42,7 +42,7 @@ crosshair check --per_condition_timeout=10 src/pkg/core.py    # contracts: icont
 - A green run means "no counterexample found in the budget". Say that. A red run is a real input: reproduce it with plain Python before reporting it.
 - Contracts (`icontract`, `deal`) put the law next to the function and run on every call, so a hot path pays for them. Use them where the project already does, or ask first. Otherwise keep the laws as Hypothesis properties in the test module: no new dependency, and CrossHair runs them through the profile. `deal` was not run here; `icontract` was.
 
-## Mutation settings that exist (mutmut 3.8.1)
+## Mutation settings that exist
 
 Read from `[tool.mutmut]` in `pyproject.toml` or `[mutmut]` in `setup.cfg`:
 
